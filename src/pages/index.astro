@@ -1,6 +1,48 @@
 ---
 // Main comparison table page
 import '../styles/global.css';
+import type { Agent } from '../agents/featureSetSchema';
+import { categoryDisplayNames, featureDisplayNames } from '../agents/featureDisplayNames';
+
+// Load all agent feature sets dynamically
+const agentModules = import.meta.glob('../agents/*/featureSet.ts', { eager: true });
+const agents: Agent[] = Object.values(agentModules).map((module: any) => module.agent);
+
+// Helper function to get status symbol
+function getStatusSymbol(status: string): string {
+  switch (status) {
+    case 'supported':
+      return '✓';
+    case 'partially-supported':
+      return '◐';
+    case 'not-supported':
+      return '✗';
+    default:
+      return '';
+  }
+}
+
+// Helper function to get status class
+function getStatusClass(status: string): string {
+  switch (status) {
+    case 'supported':
+      return 'supported';
+    case 'partially-supported':
+      return 'partially-supported';
+    case 'not-supported':
+      return 'not-supported';
+    default:
+      return '';
+  }
+}
+
+// Define category order and feature order
+const categoryOrder: (keyof Agent['features'])[] = ['planning', 'reasoning', 'tests'];
+const featureOrder: Record<string, string[]> = {
+  planning: ['multi-step-planning', 'plan-editing', 'plan-execution'],
+  reasoning: ['explanation-in-natural-language', 'step-by-step-view'],
+  tests: ['test-generation', 'integrates-with-ci', 'editor-plugins-available'],
+};
 ---
 
 <html lang="en">
@@ -20,80 +62,36 @@ import '../styles/global.css';
           <thead>
             <tr>
               <th></th>
-              <th>Agent A</th>
-              <th>Agent B</th>
-              <th>Agent C</th>
-              <th>Agent D</th>
+              {agents.map((agent) => (
+                <th key={agent.id}>{agent.name}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            <tr class="category-header">
-              <td colspan="5">Planning</td>
-            </tr>
-            <tr>
-              <td>Multi-step planning</td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-            </tr>
-            <tr>
-              <td>Plan editing</td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-            </tr>
-            <tr>
-              <td>Plan execution</td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-            </tr>
-            
-            <tr class="category-header">
-              <td colspan="5">Reasoning</td>
-            </tr>
-            <tr>
-              <td>Explanation in natural language</td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol partially-supported">◐</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol supported">✓</span></td>
-            </tr>
-            <tr>
-              <td>Step-by-step view</td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol supported">✓</span></td>
-            </tr>
-            
-            <tr class="category-header">
-              <td colspan="5">Tests</td>
-            </tr>
-            <tr>
-              <td>Test generation</td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-            </tr>
-            <tr>
-              <td>Integrates with CI</td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-            </tr>
-            <tr>
-              <td>Editor plugins available</td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-              <td><span class="symbol supported">✓</span></td>
-              <td><span class="symbol not-supported">✗</span></td>
-            </tr>
+            {categoryOrder.flatMap((categoryKey) => {
+              const category = categoryKey as keyof Agent['features'];
+              const features = featureOrder[category];
+              return [
+                <tr class="category-header">
+                  <td colspan={agents.length + 1}>{categoryDisplayNames[category]}</td>
+                </tr>,
+                ...features.map((featureKey) => (
+                  <tr key={featureKey}>
+                    <td>{featureDisplayNames[featureKey]}</td>
+                    {agents.map((agent) => {
+                      const status = agent.features[category][featureKey as keyof typeof agent.features[typeof category]];
+                      return (
+                        <td key={agent.id}>
+                          <span class={`symbol ${getStatusClass(status)}`}>
+                            {getStatusSymbol(status)}
+                          </span>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              ];
+            })}
           </tbody>
         </table>
       </div>

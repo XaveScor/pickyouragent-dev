@@ -1,0 +1,225 @@
+---
+description: Project structure and architecture documentation for pickyouragent.dev
+alwaysApply: true
+---
+
+# Project Structure Documentation
+
+## Overview
+
+This project is a comparison tool for coding agents built with Astro. It dynamically generates a feature comparison table by loading agent data from TypeScript files. The structure ensures type safety and consistency across all agents.
+
+## Directory Structure
+
+```
+src/
+├── agents/                    # Agent feature definitions
+│   ├── featureSetSchema.ts   # Type definitions and schema
+│   ├── featureDisplayNames.ts # Display name mappings
+│   ├── agent-a/              # Agent A directory
+│   │   └── featureSet.ts     # Agent A's feature set
+│   ├── agent-b/              # Agent B directory
+│   │   └── featureSet.ts     # Agent B's feature set
+│   ├── agent-c/              # Agent C directory
+│   │   └── featureSet.ts     # Agent C's feature set
+│   └── agent-d/              # Agent D directory
+│       └── featureSet.ts     # Agent D's feature set
+├── pages/
+│   └── index.astro          # Main comparison table page
+└── styles/
+    └── global.css            # Global styles
+```
+
+## Core Files
+
+### `src/agents/featureSetSchema.ts`
+
+**Purpose**: Defines the TypeScript types and schema for agent feature sets.
+
+**Exports**:
+- `FeatureStatus`: Union type for feature support status
+  - `'supported'`: Feature is fully supported
+  - `'partially-supported'`: Feature is partially supported
+  - `'not-supported'`: Feature is not supported
+
+- `FeatureSet`: Type definition for the complete feature set structure
+  - Organized by categories: `planning`, `reasoning`, `tests`
+  - Each category contains specific feature keys mapped to `FeatureStatus`
+
+- `Agent`: Type definition for a complete agent object
+  - `id`: string - Unique identifier (e.g., 'agent-a')
+  - `name`: string - Display name (e.g., 'Agent A')
+  - `features`: FeatureSet - The agent's feature set
+
+**Usage**: Imported by all agent feature set files to ensure type safety.
+
+### `src/agents/featureDisplayNames.ts`
+
+**Purpose**: Maps feature keys and category keys to human-readable display names.
+
+**Exports**:
+- `categoryDisplayNames`: Maps category keys to display names
+  - `'planning'` → `'Planning'`
+  - `'reasoning'` → `'Reasoning'`
+  - `'tests'` → `'Tests'`
+
+- `featureDisplayNames`: Maps feature keys to display names
+  - `'multi-step-planning'` → `'Multi-step planning'`
+  - `'plan-editing'` → `'Plan editing'`
+  - `'plan-execution'` → `'Plan execution'`
+  - `'explanation-in-natural-language'` → `'Explanation in natural language'`
+  - `'step-by-step-view'` → `'Step-by-step view'`
+  - `'test-generation'` → `'Test generation'`
+  - `'integrates-with-ci'` → `'Integrates with CI'`
+  - `'editor-plugins-available'` → `'Editor plugins available'`
+
+**Usage**: Used by `index.astro` to display readable names in the table.
+
+### `src/agents/{agent-name}/featureSet.ts`
+
+**Purpose**: Defines a specific agent's feature set.
+
+**Structure**: Each file exports a single `agent` constant that:
+- Imports the `Agent` type from `../featureSetSchema`
+- Exports an object with `id`, `name`, and `features` properties
+- Uses `satisfies Agent` for type safety
+
+**Example**:
+```typescript
+import type { Agent } from '../featureSetSchema';
+
+export const agent = {
+  id: 'agent-a',
+  name: 'Agent A',
+  features: {
+    planning: {
+      'multi-step-planning': 'supported' as const,
+      'plan-editing': 'supported' as const,
+      'plan-execution': 'supported' as const,
+    },
+    reasoning: {
+      'explanation-in-natural-language': 'supported' as const,
+      'step-by-step-view': 'supported' as const,
+    },
+    tests: {
+      'test-generation': 'not-supported' as const,
+      'integrates-with-ci': 'supported' as const,
+      'editor-plugins-available': 'supported' as const,
+    },
+  },
+} satisfies Agent;
+```
+
+**Naming Convention**: Agent directories use kebab-case (e.g., `agent-a`, `agent-b`).
+
+### `src/pages/index.astro`
+
+**Purpose**: Main page that dynamically generates the comparison table.
+
+**Key Features**:
+1. **Dynamic Agent Loading**: Uses `import.meta.glob()` to automatically load all agent feature sets
+   ```typescript
+   const agentModules = import.meta.glob('../agents/*/featureSet.ts', { eager: true });
+   const agents: Agent[] = Object.values(agentModules).map((module: any) => module.agent);
+   ```
+
+2. **Table Generation**: 
+   - Dynamically generates table header with agent names
+   - Iterates over categories and features to generate rows
+   - Maps feature status to visual symbols (✓, ◐, ✗)
+   - Updates colspan dynamically based on number of agents
+
+3. **Helper Functions**:
+   - `getStatusSymbol()`: Converts status string to symbol
+   - `getStatusClass()`: Converts status string to CSS class
+
+4. **Ordering**: Uses `categoryOrder` and `featureOrder` arrays to control display order
+
+## Feature Categories
+
+### Planning
+- `multi-step-planning`: Multi-step planning capability
+- `plan-editing`: Ability to edit plans
+- `plan-execution`: Ability to execute plans
+
+### Reasoning
+- `explanation-in-natural-language`: Provides explanations in natural language
+- `step-by-step-view`: Shows step-by-step reasoning
+
+### Tests
+- `test-generation`: Can generate tests
+- `integrates-with-ci`: Integrates with CI/CD systems
+- `editor-plugins-available`: Has editor plugins available
+
+## How It Works
+
+1. **Schema Definition**: `featureSetSchema.ts` defines the structure all agents must follow
+2. **Agent Data**: Each agent directory contains a `featureSet.ts` file that implements the schema
+3. **Dynamic Loading**: `index.astro` uses Astro's `import.meta.glob()` to automatically discover and load all agents
+4. **Table Generation**: The page iterates over categories and features, generating table rows dynamically
+5. **Type Safety**: TypeScript ensures all agents have the same feature set structure
+
+## Adding a New Agent
+
+To add a new agent:
+
+1. Create a new directory under `src/agents/` (e.g., `src/agents/agent-e/`)
+2. Create `featureSet.ts` inside the new directory
+3. Copy the structure from an existing agent file
+4. Update the `id` and `name` fields
+5. Set feature statuses according to the agent's capabilities
+6. The table will automatically include the new agent (no code changes needed)
+
+**Example**:
+```typescript
+// src/agents/agent-e/featureSet.ts
+import type { Agent } from '../featureSetSchema';
+
+export const agent = {
+  id: 'agent-e',
+  name: 'Agent E',
+  features: {
+    planning: {
+      'multi-step-planning': 'supported' as const,
+      'plan-editing': 'not-supported' as const,
+      'plan-execution': 'supported' as const,
+    },
+    reasoning: {
+      'explanation-in-natural-language': 'supported' as const,
+      'step-by-step-view': 'supported' as const,
+    },
+    tests: {
+      'test-generation': 'supported' as const,
+      'integrates-with-ci': 'supported' as const,
+      'editor-plugins-available': 'not-supported' as const,
+    },
+  },
+} satisfies Agent;
+```
+
+## Adding a New Feature
+
+To add a new feature:
+
+1. Update `featureSetSchema.ts` to add the feature to the appropriate category
+2. Update `featureDisplayNames.ts` to add the display name mapping
+3. Update all existing agent `featureSet.ts` files to include the new feature
+4. Update `featureOrder` in `index.astro` to include the new feature in the display order
+
+**Note**: All agents must have the same feature set structure, so adding a feature requires updating all agents.
+
+## Type Safety
+
+The project uses TypeScript's type system to ensure:
+- All agents implement the same `FeatureSet` structure
+- Feature status values are limited to valid options
+- Display names exist for all features and categories
+- The table generation code is type-safe
+
+## Status Symbols
+
+- `✓` (supported): Feature is fully supported
+- `◐` (partially-supported): Feature is partially supported  
+- `✗` (not-supported): Feature is not supported
+
+These symbols are automatically mapped from the `FeatureStatus` type values.
