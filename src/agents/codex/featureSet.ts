@@ -1,6 +1,6 @@
 import { declareSchema, FeatureStatus } from "../featureSetSchema";
 
-export const agent = declareSchema(
+export const codex = declareSchema(
   {
     id: "codex",
     name: "Codex",

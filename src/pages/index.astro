@@ -4,10 +4,10 @@ import '../styles/global.css';
 import { z } from 'zod';
 import type { Agent, FeatureStatus } from '../agents/featureSetSchema';
 import { featuresRegistry, featureSetSchema } from '../agents/featureSetSchema';
+import { allAgents } from '../agents/allAgents';
 
-// Load all agent feature sets dynamically
-const agentModules = import.meta.glob('../agents/*/featureSet.ts', { eager: true });
-const agents: Agent[] = Object.values(agentModules).map((module: any) => module.agent);
+// Load all agents from allAgents.ts
+const agents: Agent[] = allAgents;
 
 // Extract display names from registry
 function formatDisplayName(key: string): string {
