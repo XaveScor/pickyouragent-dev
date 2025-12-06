@@ -134,7 +134,9 @@ function getStatusClass(status: FeatureStatus | string): string {
               return [
                 <tr class="category-row" data-category={category}>
                   <td class="category-cell" style={`--category-color: ${categoryColor}`}>
-                    <span class="category-name">{categoryDisplayNames[category]}</span>
+                    <a href={`/features/${category}`} class="category-name category-link" style={`--category-color: ${categoryColor}`}>
+                      {categoryDisplayNames[category]}
+                    </a>
                   </td>
                   {agents.map((agent) => {
                     // Show first feature status in category header
@@ -153,7 +155,9 @@ function getStatusClass(status: FeatureStatus | string): string {
                 ...features.slice(1).map((featureKey) => (
                   <tr class="feature-row" data-category={category}>
                     <td class="feature-cell" style={`--category-color: ${categoryColor}`}>
-                      <span class="feature-name">{featureDisplayNames[featureKey]}</span>
+                      <a href={`/features/${category}#${featureKey}`} class="feature-name feature-link">
+                        {featureDisplayNames[featureKey]}
+                      </a>
                     </td>
                     {agents.map((agent) => {
                       const status = agent.features[category][featureKey as keyof typeof agent.features[typeof category]];
