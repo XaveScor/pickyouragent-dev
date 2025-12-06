@@ -21,8 +21,8 @@ function formatDisplayName(key: string): string {
 const categoryDisplayNames: Record<string, string> = {};
 const featureDisplayNames: Record<string, string> = {};
 
-// Extract category names from featureSetSchema
-const categoryOrder: (keyof Agent['features'])[] = ['planning', 'reasoning', 'tests'];
+const categoryOrderEnum = featureSetSchema.keyof().enum;
+const categoryOrder = Object.values(categoryOrderEnum) as (keyof typeof categoryOrderEnum)[];
 for (const categoryKey of categoryOrder) {
   const categorySchema = featureSetSchema.shape[categoryKey];
   const categoryMeta = featuresRegistry.get(categorySchema);
@@ -37,7 +37,7 @@ for (const categoryKey of categoryOrder) {
   if (categorySchema instanceof z.ZodObject) {
     const featureKeys = Object.keys(categorySchema.shape);
     for (const featureKey of featureKeys) {
-      const featureSchema = categorySchema.shape[featureKey];
+      const featureSchema = (categorySchema.shape as Record<string, z.ZodType>)[featureKey];
       const featureMeta = featuresRegistry.get(featureSchema);
       featureDisplayNames[featureKey] = featureMeta?.name 
         ? formatDisplayName(featureMeta.name) 
@@ -53,16 +53,23 @@ const featureOrder: Record<string, string[]> = {
   tests: ['test-generation', 'integrates-with-ci', 'editor-plugins-available'],
 };
 
-// Helper function to get status symbol
-function getStatusSymbol(status: FeatureStatus | string): string {
+// Category colors for the left border
+const categoryColors: Record<string, string> = {
+  planning: 'var(--category-planning)',
+  reasoning: 'var(--category-reasoning)',
+  tests: 'var(--category-tests)',
+};
+
+// Helper function to get status text
+function getStatusText(status: FeatureStatus | string): string {
   const statusStr = String(status);
   switch (statusStr) {
     case 'supported':
-      return '✓';
+      return 'yes';
     case 'partially-supported':
-      return '◐';
+      return 'partial';
     case 'not-supported':
-      return '✗';
+      return 'no';
     default:
       return '';
   }
@@ -88,41 +95,73 @@ function getStatusClass(status: FeatureStatus | string): string {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Compare coding agents based on their features and capabilities" />
-    <title>Compare coding agents</title>
+    <meta name="description" content="A feature-by-feature comparison of AI coding agents for developers" />
+    <title>Pick Your Agent - Compare AI Coding Agents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
   </head>
   <body>
+    <nav class="navbar">
+      <a href="/" class="logo">pickyouragent.dev</a>
+      <div class="nav-links">
+        <a href="/about">About</a>
+        <a href="/docs">Docs</a>
+      </div>
+    </nav>
+
     <main>
-      <h1>Compare coding agents</h1>
-      <p class="subtitle">Compare coding agents based on their features and capabilities</p>
+      <section class="hero">
+        <h1>Pick your coding agent<br/>with confidence</h1>
+        <p class="subtitle">A feature-by-feature comparison of AI coding agents for developers.</p>
+      </section>
       
-      <div class="table-container">
+      <div class="table-card">
         <table>
           <thead>
             <tr>
-              <th></th>
+              <th class="feature-col">Feature</th>
               {agents.map((agent) => (
-                <th>{agent.meta.name}</th>
+                <th class="agent-col">{agent.meta.name}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {categoryOrder.flatMap((categoryKey) => {
-              const category = categoryKey as keyof Agent['features'];
+            {categoryOrder.flatMap((categoryKey: keyof Agent['features']) => {
+              const category = categoryKey;
               const features = featureOrder[category];
+              const categoryColor = categoryColors[category];
               return [
-                <tr class="category-header">
-                  <td colspan={agents.length + 1}>{categoryDisplayNames[category]}</td>
+                <tr class="category-row" data-category={category}>
+                  <td class="category-cell" style={`--category-color: ${categoryColor}`}>
+                    <span class="category-name">{categoryDisplayNames[category]}</span>
+                  </td>
+                  {agents.map((agent) => {
+                    // Show first feature status in category header
+                    const firstFeature = features[0];
+                    const status = agent.features[category][firstFeature as keyof typeof agent.features[typeof category]];
+                    return (
+                      <td>
+                        <span class={`badge ${getStatusClass(status)}`}>
+                          <span class="badge-icon">{status === 'not-supported' ? '✕' : '✓'}</span>
+                          {getStatusText(status)}
+                        </span>
+                      </td>
+                    );
+                  })}
                 </tr>,
-                ...features.map((featureKey) => (
-                  <tr key={featureKey}>
-                    <td>{featureDisplayNames[featureKey]}</td>
+                ...features.slice(1).map((featureKey) => (
+                  <tr class="feature-row" data-category={category}>
+                    <td class="feature-cell" style={`--category-color: ${categoryColor}`}>
+                      <span class="feature-name">{featureDisplayNames[featureKey]}</span>
+                    </td>
                     {agents.map((agent) => {
                       const status = agent.features[category][featureKey as keyof typeof agent.features[typeof category]];
                       return (
-                        <td key={agent.meta.id}>
-                          <span class={`symbol ${getStatusClass(status)}`}>
-                            {getStatusSymbol(status)}
+                        <td>
+                          <span class={`badge ${getStatusClass(status)}`}>
+                            <span class="badge-icon">{status === 'not-supported' ? '✕' : '✓'}</span>
+                            {getStatusText(status)}
                           </span>
                         </td>
                       );
@@ -134,16 +173,6 @@ function getStatusClass(status: FeatureStatus | string): string {
           </tbody>
         </table>
       </div>
-      
-      <div class="legend">
-        <p><strong>Legend:</strong></p>
-        <ul>
-          <li><span class="symbol supported">✓</span> Fully supported</li>
-          <li><span class="symbol partially-supported">◐</span> Partially supported</li>
-          <li><span class="symbol not-supported">✗</span> Not supported</li>
-        </ul>
-      </div>
     </main>
   </body>
 </html>
-
