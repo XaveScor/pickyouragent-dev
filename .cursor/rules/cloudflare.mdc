@@ -27,35 +27,50 @@ Deployment is handled by `.github/workflows/deploy.yml`:
 
 ### Caching Strategy
 
-The caching strategy is configured via `public/_headers` file, which is automatically copied to `dist/` during build and read by Cloudflare Pages.
+The caching strategy is implemented using a **Cloudflare Pages Function** middleware (`public/functions/_middleware.ts`). This approach provides programmatic control over caching and ensures Cloudflare actually caches HTML files (which doesn't happen by default with just `_headers`).
 
-#### HTML Files (`/*.html`)
-- **Cloudflare Edge Cache**: 1 year (`s-maxage=31536000`)
+The middleware:
+- Intercepts all requests before they're served
+- Uses Cloudflare's Cache API to explicitly cache responses
+- Sets appropriate `Cache-Control` headers based on content type
+- Adds `CDN-Cache-Control` header to force Cloudflare edge caching
+
+#### HTML Files
+- **Cloudflare Edge Cache**: 1 year (via Cache API + `CDN-Cache-Control`)
 - **Browser Cache**: No caching (`max-age=0, must-revalidate`)
 - **Result**: Browsers always fetch fresh HTML, while Cloudflare serves cached versions for performance
+- **Cache Status**: `cf-cache-status: HIT` (after first request)
 
-#### All Other Files (`/*`)
-- **Cloudflare Edge Cache**: 1 year (`s-maxage=31536000`)
-- **Browser Cache**: 1 year (`max-age=31536000`)
-- **Result**: Static assets (CSS, JS, images, etc.) are cached by both Cloudflare and browsers
+#### Static Assets (CSS, JS, images, etc.)
+- **Cloudflare Edge Cache**: 1 year (via Cache API + `CDN-Cache-Control`)
+- **Browser Cache**: 1 year (`max-age=31536000, immutable`)
+- **Result**: Both Cloudflare and browsers cache static assets for maximum performance
+- **Cache Status**: `cf-cache-status: HIT` (after first request)
 
 ### Cache-Control Headers
 
-The `_headers` file contains:
-```
-/*.html
-  Cache-Control: public, s-maxage=31536000, max-age=0, must-revalidate
+The middleware sets headers dynamically:
 
-/*
-  Cache-Control: public, s-maxage=31536000, max-age=31536000
+**HTML Files**:
+```
+Cache-Control: public, s-maxage=31536000, max-age=0, must-revalidate
+CDN-Cache-Control: public, max-age=31536000
+```
+
+**Static Assets**:
+```
+Cache-Control: public, s-maxage=31536000, max-age=31536000, immutable
+CDN-Cache-Control: public, max-age=31536000
 ```
 
 **Key Directives**:
 - `public`: Allows caching by shared caches (Cloudflare edge) and browsers
 - `s-maxage=31536000`: Cloudflare edge cache duration (1 year in seconds)
 - `max-age=0`: For HTML - browsers must revalidate (no cache)
-- `max-age=31536000`: For other files - browsers cache for 1 year
+- `max-age=31536000`: For assets - browsers cache for 1 year
+- `immutable`: For assets - indicates content never changes
 - `must-revalidate`: For HTML - browsers must check with server before using cached content
+- `CDN-Cache-Control`: Cloudflare-specific header that takes precedence over `Cache-Control` for edge caching
 
 ### Cache Purging
 
@@ -68,13 +83,31 @@ The cache purge step:
 
 ### How It Works
 
-1. **Build Process**: Astro copies `public/_headers` to `dist/_headers` during build
+1. **Build Process**: 
+   - Astro builds static HTML files to `dist/`
+   - Astro copies `public/functions/` to `dist/functions/` (Pages Functions)
 2. **Deployment**: GitHub Actions deploys `dist/` to Cloudflare Pages
 3. **Cache Purge**: Cloudflare cache is purged to ensure fresh content
-4. **Cloudflare Processing**: Cloudflare Pages automatically reads `_headers` file
-5. **Request Handling**:
-   - HTML requests: Cloudflare serves from cache, browsers always fetch fresh
-   - Asset requests: Both Cloudflare and browsers serve from cache
+4. **Request Handling**:
+   - **First Request**: Middleware intercepts, checks cache (miss), fetches from origin, sets headers, stores in cache
+   - **Subsequent Requests**: Middleware intercepts, finds cached response, returns immediately
+   - HTML requests: Cloudflare serves from cache (`cf-cache-status: HIT`), browsers always fetch fresh
+   - Asset requests: Both Cloudflare and browsers serve from cache (`cf-cache-status: HIT`)
+
+### Pages Functions Middleware
+
+The middleware (`public/functions/_middleware.ts`) uses Cloudflare's Cache API to explicitly cache responses:
+
+1. **Cache Check**: Uses `caches.default.match()` to check if response is cached
+2. **Cache Miss**: Fetches from origin via `context.next()`, modifies headers, stores in cache
+3. **Cache Hit**: Returns cached response immediately
+4. **Header Setting**: Sets both `Cache-Control` (for browsers) and `CDN-Cache-Control` (for Cloudflare edge)
+
+**Why Pages Functions?**
+- Cloudflare Pages doesn't cache HTML by default, even with `_headers` file
+- The `_headers` file only sets headers but doesn't force edge caching
+- Pages Functions middleware gives full programmatic control over caching behavior
+- Using the Cache API explicitly tells Cloudflare to cache everything, including HTML
 
 ### Benefits
 
@@ -117,22 +150,60 @@ The `CLOUDFLARE_API_TOKEN` must have the following permissions:
 
 ### Verification
 
-After deployment, verify headers using:
+After deployment, verify caching is working:
+
 ```bash
-# Check HTML file headers
+# First request (should be MISS or EXPIRED)
+curl -I https://pickyouragent.dev/
+
+# Second request (should be HIT)
 curl -I https://pickyouragent.dev/
 
 # Check asset file headers
-curl -I https://pickyouragent.dev/styles/global.css
+curl -I https://pickyouragent.dev/_astro/global.css
 ```
 
-Expected headers:
-- HTML files: `Cache-Control: public, s-maxage=31536000, max-age=0, must-revalidate`
-- Asset files: `Cache-Control: public, s-maxage=31536000, max-age=31536000`
+**Expected Results**:
+
+**First Request**:
+- `cf-cache-status: MISS` or `EXPIRED`
+- `Cache-Control: public, s-maxage=31536000, max-age=0, must-revalidate` (for HTML)
+- `CDN-Cache-Control: public, max-age=31536000`
+
+**Subsequent Requests**:
+- `cf-cache-status: HIT` ✅ (This confirms caching is working!)
+- Same `Cache-Control` headers as above
+
+**For Assets**:
+- `cf-cache-status: HIT` (after first request)
+- `Cache-Control: public, s-maxage=31536000, max-age=31536000, immutable`
+- `CDN-Cache-Control: public, max-age=31536000`
+
+**Troubleshooting**:
+- If you see `cf-cache-status: DYNAMIC`, the middleware isn't working - check that `dist/functions/_middleware.ts` exists after build
+- If you see duplicate `Cache-Control` headers, there may be conflicting `_headers` file (should be removed)
+
+### File Structure
+
+```
+public/
+└── functions/
+    └── _middleware.ts    # Pages Function middleware for caching
+
+dist/  (after build)
+├── functions/
+│   └── _middleware.ts    # Automatically copied by Astro
+├── index.html
+└── ...
+```
+
+**Important**: The `functions` directory must be in `public/` so Astro copies it to `dist/` during build. Cloudflare Pages looks for `functions/` in the root of the deployed directory.
 
 ### Notes
 
-- The `/*.html` pattern must come before the `/*` catch-all pattern in `_headers`
-- Cloudflare Pages automatically processes `_headers` files - no additional configuration needed
-- Changes to `_headers` require a new deployment to take effect
-- The `_headers` file format follows Cloudflare Pages specification
+- **Pages Functions Location**: Must be in `public/functions/` (not project root) so Astro copies it to `dist/functions/` during build
+- **Middleware Execution**: The middleware runs on every request before serving content
+- **Cache API**: Uses Cloudflare's `caches.default` API to explicitly store and retrieve cached responses
+- **CDN-Cache-Control**: This header takes precedence over `Cache-Control` for Cloudflare edge caching
+- **Deployment**: Changes to the middleware require a new deployment to take effect
+- **No `_headers` File**: The `_headers` file is not needed (and was removed) since the middleware handles all caching logic
