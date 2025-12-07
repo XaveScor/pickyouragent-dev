@@ -6,10 +6,8 @@ export const codex = declareSchema(
     name: "Codex",
   },
   {
-    planning: {
-      "multi-step-planning": FeatureStatus.Supported,
-      "plan-editing": FeatureStatus.Supported,
-      "plan-execution": FeatureStatus.Supported,
+    planMode: {
+      "dual-model": FeatureStatus.NotSupported,
     },
     reasoning: {
       "explanation-in-natural-language": FeatureStatus.Supported,

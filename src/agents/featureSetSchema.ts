@@ -21,10 +21,8 @@ function feature<T extends Record<string, z.ZodType>>(meta: FeatureMeta, subfeat
 }
 
 export const featureSetSchema = z.object({
-  planning: feature({name: 'planning'}, {
-    'multi-step-planning': subfeature('multi-step-planning'),
-    'plan-editing': subfeature('plan-editing'),
-    'plan-execution': subfeature('plan-execution'),
+  planMode: feature({name: 'Plan Mode'}, {
+    'dual-model': subfeature('dual-model'),
   }),
   reasoning: feature({name: 'reasoning'}, {
     'explanation-in-natural-language': subfeature('explanation-in-natural-language'),

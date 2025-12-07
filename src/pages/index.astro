@@ -2,8 +2,8 @@
 // Main comparison table page
 import '../styles/global.css';
 import { z } from 'zod';
-import type { Agent, FeatureStatus } from '../agents/featureSetSchema';
-import { featuresRegistry, featureSetSchema } from '../agents/featureSetSchema';
+import type { Agent } from '../agents/featureSetSchema';
+import { FeatureStatus, featuresRegistry, featureSetSchema } from '../agents/featureSetSchema';
 import { allAgents } from '../agents/allAgents';
 
 // Load all agents from allAgents.ts
@@ -48,16 +48,23 @@ for (const categoryKey of categoryOrder) {
 
 // Define feature order
 const featureOrder: Record<string, string[]> = {
-  planning: ['multi-step-planning', 'plan-editing', 'plan-execution'],
+  planMode: ['dual-model'],
   reasoning: ['explanation-in-natural-language', 'step-by-step-view'],
   tests: ['test-generation', 'integrates-with-ci', 'editor-plugins-available'],
 };
 
 // Category colors for the left border
 const categoryColors: Record<string, string> = {
-  planning: 'var(--category-planning)',
+  planMode: 'var(--category-planMode)',
   reasoning: 'var(--category-reasoning)',
   tests: 'var(--category-tests)',
+};
+
+// Category slugs for URL generation (content collection slugs)
+const categorySlugs: Record<string, string> = {
+  planMode: 'planmode',
+  reasoning: 'reasoning',
+  tests: 'tests',
 };
 
 // Helper function to get status text
@@ -87,6 +94,24 @@ function getStatusClass(status: FeatureStatus | string): string {
       return 'not-supported';
     default:
       return '';
+  }
+}
+
+// Helper function to aggregate feature statuses
+function aggregateStatus(statuses: (FeatureStatus | string)[]): FeatureStatus {
+  if (statuses.length === 0) {
+    return FeatureStatus.NotSupported;
+  }
+  
+  const allSupported = statuses.every(s => String(s) === 'supported');
+  const allNotSupported = statuses.every(s => String(s) === 'not-supported');
+  
+  if (allSupported) {
+    return FeatureStatus.Supported;
+  } else if (allNotSupported) {
+    return FeatureStatus.NotSupported;
+  } else {
+    return FeatureStatus.PartiallySupported;
   }
 }
 ---
@@ -134,28 +159,30 @@ function getStatusClass(status: FeatureStatus | string): string {
               return [
                 <tr class="category-row" data-category={category}>
                   <td class="category-cell" style={`--category-color: ${categoryColor}`}>
-                    <a href={`/features/${category}`} class="category-name category-link" style={`--category-color: ${categoryColor}`}>
+                    <a href={`/features/${categorySlugs[category] || category}`} class="category-name category-link" style={`--category-color: ${categoryColor}`}>
                       {categoryDisplayNames[category]}
                     </a>
                   </td>
                   {agents.map((agent) => {
-                    // Show first feature status in category header
-                    const firstFeature = features[0];
-                    const status = agent.features[category][firstFeature as keyof typeof agent.features[typeof category]];
+                    // Aggregate all feature statuses in this category
+                    const statuses = features.map((featureKey) => {
+                      return agent.features[category][featureKey as keyof typeof agent.features[typeof category]];
+                    });
+                    const aggregatedStatus = aggregateStatus(statuses);
                     return (
                       <td>
-                        <span class={`badge ${getStatusClass(status)}`}>
-                          <span class="badge-icon">{status === 'not-supported' ? '✕' : '✓'}</span>
-                          {getStatusText(status)}
+                        <span class={`badge ${getStatusClass(aggregatedStatus)}`}>
+                          <span class="badge-icon">{aggregatedStatus === FeatureStatus.NotSupported ? '✕' : '✓'}</span>
+                          {getStatusText(aggregatedStatus)}
                         </span>
                       </td>
                     );
                   })}
                 </tr>,
-                ...features.slice(1).map((featureKey) => (
+                ...features.map((featureKey) => (
                   <tr class="feature-row" data-category={category}>
                     <td class="feature-cell" style={`--category-color: ${categoryColor}`}>
-                      <a href={`/features/${category}#${featureKey}`} class="feature-name feature-link">
+                      <a href={`/features/${categorySlugs[category] || category}#${featureKey}`} class="feature-name feature-link">
                         {featureDisplayNames[featureKey]}
                       </a>
                     </td>

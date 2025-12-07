@@ -6,10 +6,8 @@ export const claudeCode = declareSchema(
     name: "Claude Code",
   },
   {
-    planning: {
-      "multi-step-planning": FeatureStatus.NotSupported,
-      "plan-editing": FeatureStatus.NotSupported,
-      "plan-execution": FeatureStatus.Supported,
+    planMode: {
+      "dual-model": FeatureStatus.Supported,
     },
     reasoning: {
       "explanation-in-natural-language": FeatureStatus.PartiallySupported,

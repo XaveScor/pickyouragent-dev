@@ -1,0 +1,98 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  class?: string;
+}
+
+const { src, alt, caption, class: className } = Astro.props;
+
+// Get the original image URL - use getImage without transformations
+// This returns the original image at its natural size
+const originalImage = getImage({ src });
+const originalImageUrl = originalImage?.src || src.src;
+
+// Responsive breakpoints for srcset
+const widths = [320, 640, 768, 1024, 1280, 1536];
+
+// Sizes attribute for responsive behavior
+// This tells the browser which image size to use at different viewport widths
+const sizes = "(max-width: 768px) 100vw, (max-width: 1100px) 800px, 800px";
+---
+
+<figure class={`responsive-image-figure ${className || ''}`}>
+  <a 
+    href={originalImageUrl} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    class="responsive-image-link"
+    aria-label={`View full size: ${alt}`}
+  >
+    <Picture
+      src={src}
+      alt={alt}
+      widths={widths}
+      sizes={sizes}
+      formats={['webp', 'png']}
+      class="responsive-image-picture"
+      loading="lazy"
+      decoding="async"
+    />
+  </a>
+  {caption && (
+    <figcaption class="responsive-image-caption">{caption}</figcaption>
+  )}
+</figure>
+
+<style>
+  .responsive-image-figure {
+    width: 100%;
+    margin: 2rem 0;
+  }
+
+  .responsive-image-link {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .responsive-image-link:hover {
+    opacity: 0.95;
+  }
+
+  .responsive-image-link:focus {
+    outline: 2px solid var(--category-planMode, #3b82f6);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
+  .responsive-image-figure :global(picture) {
+    width: 100%;
+    display: block;
+  }
+
+  .responsive-image-figure :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+  }
+
+  .responsive-image-caption {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--text-secondary, #666666);
+    text-align: center;
+    line-height: 1.5;
+  }
+</style>
+

@@ -1,0 +1,68 @@
+---
+title: Plan Mode
+description: Features related to task planning and execution strategies
+categoryKey: planMode
+---
+
+import ResponsiveImage from "../../components/ResponsiveImage.astro";
+import planModePreview from "./plan-mode-example.png";
+
+# Plan mode
+
+Let your agent craft the perfect prompt for you.
+
+Plan mode (also known as architect mode) is a multistep workflow where:
+
+1. The agent (LLM) creates a step-by-step plan for solving your task.
+2. The agent executes each step in the plan, one by one.
+
+### Why it works
+
+Modern LLMs are now made to follow step-by-step instructions. You can see this in many press releases (like [GPT-5.1](https://openai.com/index/gpt-5-1/) or [Gemini](https://blog.google/products/gemini/gemini-3/#plan-anything)), and in third-party tests like the [Scale AI leaderboard](https://scale.com/leaderboard/instruction_following).
+
+Also, the [Aider benchmark](https://aider.chat/2024/09/26/architect.html) shows clear improvements in code quality when using architect (plan) mode.
+
+There is no reason not to use this mode in your daily work.
+
+<ResponsiveImage
+  src={planModePreview}
+  alt="Screenshot of plan mode: an agent generates a list of numbered coding steps, then executes each step in sequence, showing progress and task descriptions in a clear workflow."
+  caption="Plan mode in Cursor. The agent splits a big task into steps, so you can check and agree with the plan before it runs."
+/>
+
+### Why it matters
+
+- You can review and approve the exact steps before execution.
+- You can confirm that the LLM has correctly understood your intent.
+- You can edit and refine the workflow ahead of time.
+- You save time because a precise plan upfront means you won’t need to constantly correct the LLM during execution.
+- You can run multiple tasks concurrently, since the LLM can complete each task without requiring your ongoing attention.
+
+### How to use it
+
+Cursor: open agent model and change "agent" to plan. You can also use Shift+Tab to rotate over the modes list
+
+Codex: Not implemented
+
+Claude Code: press Shift+Tab to choose a mode
+
+### Multi-step Planning
+
+Multi-step planning enables an agent to decompose a complex coding task into smaller, sequential steps before execution. Instead of attempting to solve everything at once, the agent creates a roadmap of actions.
+
+## Dual Model
+
+Dual model lets you choose one AI model for planning and another for execution. This means you can use a smarter, more expensive model to plan the steps, but save money by using a cheaper model to carry out the tasks. Each model gets to do what it does best.
+
+**Advantages:**
+
+- Save money by not using an expensive model for every step
+- Take advantage of different strengths—some models are better at planning, others at doing
+
+### How to use it
+
+Cursor: Not implemented
+
+Codex: Not implemented
+
+Claude Code: https://www.threads.com/@boris_cherny/post/DNTYPVMJpPs?xmt=AQF0H_HQD_tqVqdMLV8wlkbRIulBx_-WM9lkEZ1w2vjEOg

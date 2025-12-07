@@ -15,12 +15,12 @@ const { Content } = await entry.render();
 
 // Category colors for styling
 const categoryColors: Record<string, string> = {
-  planning: 'var(--category-planning)',
+  planMode: 'var(--category-planMode)',
   reasoning: 'var(--category-reasoning)',
   tests: 'var(--category-tests)',
 };
 
-const categoryColor = categoryColors[entry.data.categoryKey] || 'var(--category-planning)';
+const categoryColor = categoryColors[entry.data.categoryKey] || 'var(--category-planMode)';
 ---
 
 <html lang="en">
