@@ -1,0 +1,6 @@
+---
+description: How to write a css code 
+alwaysApply: false
+---
+
+You should use scoped CSS in Astro components. Astro automatically generates separate CSS files per component, which enables efficient CDN caching. This approach ensures that unused CSS isn't loaded, and allows CDNs to cache all CSS assets for maximum performance and cacheability.
