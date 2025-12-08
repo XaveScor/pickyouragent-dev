@@ -8,6 +8,7 @@
   
   /* Category colors */
   --category-planMode: #3b82f6;
+  --category-documentation: #8b5cf6;
   --category-reasoning: #f97316;
   --category-tests: #84cc16;
   
@@ -226,6 +227,10 @@ td {
 /* Category-specific tinted backgrounds */
 .category-row[data-category="planMode"] {
   background-color: rgba(59, 130, 246, 0.06);
+}
+
+.category-row[data-category="documentation"] {
+  background-color: rgba(139, 92, 246, 0.06);
 }
 
 .category-row[data-category="reasoning"] {
