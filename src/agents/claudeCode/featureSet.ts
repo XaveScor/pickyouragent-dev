@@ -9,6 +9,14 @@ export const claudeCode = declareSchema(
     planMode: {
       "dual-model": FeatureStatus.Supported,
     },
+    documentation: {
+      "filesystem": FeatureStatus.Supported,
+      "tree": FeatureStatus.Supported,
+      "multi-file": FeatureStatus.NotSupported,
+      "llms-txt": FeatureStatus.NotSupported,
+      "auto-merge": FeatureStatus.NotSupported,
+      "partial": FeatureStatus.NotSupported,
+    },
     reasoning: {
       "explanation-in-natural-language": FeatureStatus.PartiallySupported,
       "step-by-step-view": FeatureStatus.NotSupported,

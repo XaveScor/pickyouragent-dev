@@ -1,0 +1,164 @@
+---
+title: Documentation
+description: Features related to documentation generation and management
+categoryKey: documentation
+---
+
+## Documentation
+
+The easiest way to tell the LLM how to use libraries, APIs, and other resources.
+
+### Filesystem
+
+You can create an `AGENTS.md` file in the root of your project to tell the LLM how to use the agents.
+
+Your agent will include this file in the context for each session. It acts as the system context for the project.
+You can declare anything in it: how to call local tools, what steps to create in [plan mode](./planmode), which files to generate, or any instructions you want.
+
+More info: https://agents.md/
+
+Note: Claude Code doesn't support this feature. Instead, it uses a different filename, `CLAUDE.md`.
+
+Note: Cursor also supports a `.cursor/rules/` folder, which is a similar feature. More info: https://cursor.com/docs/context/rules
+
+---
+
+### Tree
+
+If a file isn't part of the context, you don't need its documentation included either.
+
+If your agent adds a file to the context, it will also include any documentation files from the same directory.
+
+For example:
+
+```
+root
+├── lib1
+│   ├── Claude.md
+│   └── lib1.source
+├── lib2
+│   ├── Claude.md
+│   └── lib2.source
+└── code.source
+```
+
+If `root/code.source` only uses `root/lib1/lib1.source`, then only `root/lib1/Claude.md` is added to the context. `root/lib2/Claude.md` is skipped.
+
+Only this agents supports this feature:
+
+- Claude Code
+- Cursor
+
+---
+
+### Multi-file
+
+Put docs for the same folder in separate files.
+
+Sometimes it is better to split the documentation into multiple files.
+For example:
+
+```
+root
+├── .cursor
+│   └── rules
+│       └── deploy.mdc // describes how to deploy the project
+│       └── lint.mdc // describes how to lint the project
+│       └── test.mdc // describes how to test the project
+├── lib1
+│   ├── .cursor
+│   │   └── rules
+│   │       └── wasm.mdc // describes how to use the wasm library
+│   │       └── js.mdc // describes how to use the js library
+│   └── lib1.source
+├── lib2
+│   ├── Claude.md
+│   └── lib2.source
+└── code.source
+```
+
+---
+
+If `root/code.source` uses `root/lib1/lib1.source`, the system context will be like:
+
+```
+<root/.cursor/rules/deploy.mdc>
+<root/.cursor/rules/lint.mdc>
+<root/.cursor/rules/test.mdc>
+
+<root/lib1/.cursor/rules/wasm.mdc>
+<root/lib1/.cursor/rules/js.mdc>
+```
+
+`root/lib2/Claude.md` is skipped because it is not part of imported files.
+
+Only this agents supports this feature:
+
+- Cursor
+
+### LLMS-txt
+
+Let the author of the service provide the docs
+
+Our code relies on many external sources, such as libraries and APIs. Only the service authors truly know how to use them most effectively.
+
+The community has introduced a useful format: [llms-txt](https://llmstxt.org). For example:
+
+- Cloudflare API: https://developers.cloudflare.com/llms-full.txt
+- Bun: https://bun.sh/llms-full.txt
+- OpenAI: https://cdn.openai.com/API/docs/txt/llms-full.txt
+  etc.
+
+However, these files are typically very large and cannot be fully loaded into an LLM's context. Some agents natively support selective inclusion of these files in context.
+
+One approach is RAG (https://en.wikipedia.org/wiki/Retrieval-augmented_generation), which allows the agent to include only the relevant sections from the entire llms-full.txt file as needed.
+
+Only this agents supports this feature natively:
+
+- Cursor
+
+---
+
+### Auto-merge
+
+Let the agent pick the right docs for you.
+
+There are many llms-txt files available across the web—for example, https://github.com/SecretiveShell/Awesome-llms-txt.
+Users often aren't aware that some of these files exist. Ideally, the agent should be proactive and suggest helpful files. For example:
+
+```
+# User request:
+Add a new feature to the 'example.astro' file.
+```
+
+The agent should suggest including the Astro llms-txt file in the context.
+
+```
+# Agent response:
+I see you're using the Astro framework. Would you like to add their llms-txt file to your context?
+```
+
+None of the tested agents supports this feature.
+
+---
+
+### Partial
+
+Let the agent decide what part of you local docs should be included in the context.
+
+Sometimes you have a lot of local docs, but you don't need all of them. For example:
+
+```
+root
+├── .cursor
+│   └── rules
+│       └── deploy.mdc // describes how to deploy the project
+│       └── lint.mdc // describes how to lint the project
+│       └── test.mdc // describes how to test the project
+```
+
+If you want only to tune the deployment process, you don't need to include the lint and test docs into the context.
+
+Only this agents supports this feature:
+
+- Cursor

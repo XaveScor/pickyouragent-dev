@@ -49,6 +49,7 @@ for (const categoryKey of categoryOrder) {
 // Define feature order
 const featureOrder: Record<string, string[]> = {
   planMode: ['dual-model'],
+  documentation: ['filesystem', 'tree', 'multi-file', 'llms-txt', 'auto-merge', 'partial'],
   reasoning: ['explanation-in-natural-language', 'step-by-step-view'],
   tests: ['test-generation', 'integrates-with-ci', 'editor-plugins-available'],
 };
@@ -56,6 +57,7 @@ const featureOrder: Record<string, string[]> = {
 // Category colors for the left border
 const categoryColors: Record<string, string> = {
   planMode: 'var(--category-planMode)',
+  documentation: 'var(--category-documentation)',
   reasoning: 'var(--category-reasoning)',
   tests: 'var(--category-tests)',
 };
@@ -63,6 +65,7 @@ const categoryColors: Record<string, string> = {
 // Category slugs for URL generation (content collection slugs)
 const categorySlugs: Record<string, string> = {
   planMode: 'planmode',
+  documentation: 'documentation',
   reasoning: 'reasoning',
   tests: 'tests',
 };

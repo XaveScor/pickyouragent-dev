@@ -24,9 +24,13 @@ export const featureSetSchema = z.object({
   planMode: feature({name: 'Plan Mode'}, {
     'dual-model': subfeature('dual-model'),
   }),
-  reasoning: feature({name: 'reasoning'}, {
-    'explanation-in-natural-language': subfeature('explanation-in-natural-language'),
-    'step-by-step-view': subfeature('step-by-step-view'),
+  documentation: feature({name: 'Documentation'}, {
+    'filesystem': subfeature('filesystem-documentation'),
+    'tree': subfeature('hierarchical-tree'),
+    'multi-file': subfeature('multi-file'),
+    'llms-txt': subfeature('llms-txt'),
+    'auto-merge': subfeature('auto-merge'),
+    'partial': subfeature('partial'),
   }),
   tests: feature({name: 'tests'}, {
     'test-generation': subfeature('test-generation'),
