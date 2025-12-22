@@ -115,6 +115,7 @@ const multiFileDesc = await resolveMd('content/documentation/multi-file/multi-fi
 const llmsTxtDesc = await resolveMd('content/documentation/llms-txt/llms-txt.md');
 const autoMergeDesc = await resolveMd('content/documentation/auto-merge/auto-merge.md');
 const skillsDesc = await resolveMd('content/documentation/skills/skills.md');
+const webToDocsDesc = await resolveMd('content/documentation/web-to-docs/web-to-docs.md');
 const searchEngineDesc = await resolveMd('content/tools/search-engine/search-engine.md');
 const fetchDataDesc = await resolveMd('content/tools/fetch-data/fetch-data.md');
 const browserDesc = await resolveMd('content/tools/browser/browser.md');
@@ -169,6 +170,10 @@ export const featureSetSchema = z.object({
     'skills': subfeature({
       name: 'Partial/Skills.md',
       description: skillsDesc,
+    }),
+    'web-to-docs': subfeature({
+      name: 'web-to-docs',
+      description: webToDocsDesc,
     }),
   }),
   tools: feature({

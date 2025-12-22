@@ -14,6 +14,7 @@ export const codex = declareSchema(
       "llms-txt": SubFeatureStatus.NotSupported,
       "auto-merge": SubFeatureStatus.NotSupported,
       skills: SubFeatureStatus.NotVerified,
+      "web-to-docs": SubFeatureStatus.NotSupported,
     },
     reasoning: {
       "explanation-in-natural-language": SubFeatureStatus.Supported,

@@ -18,6 +18,7 @@ export const cursor = declareSchema(
       "llms-txt": SubFeatureStatus.Supported,
       "auto-merge": SubFeatureStatus.NotSupported,
       skills: SubFeatureStatus.Supported,
+      "web-to-docs": SubFeatureStatus.Supported,
     },
     tools: {
       "search-engine": SubFeatureStatus.Supported,
