@@ -1,4 +1,4 @@
-import { declareSchema, SubFeatureStatus } from "../featureSetSchema";
+import { declareSchema, FeatureStatus, SubFeatureStatus } from "../featureSetSchema";
 
 export const codex = declareSchema(
   {
@@ -6,11 +6,7 @@ export const codex = declareSchema(
     name: "Codex",
   },
   {
-    planMode: {
-      "dual-model": SubFeatureStatus.NotSupported,
-      questions: SubFeatureStatus.NotSupported,
-      "plan-editing": SubFeatureStatus.NotSupported,
-    },
+    planMode: FeatureStatus.NotSupported,
     documentation: {
       filesystem: SubFeatureStatus.Supported,
       tree: SubFeatureStatus.NotSupported,
