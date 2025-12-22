@@ -24,6 +24,7 @@ export const cursor = declareSchema(
       // https://forum.cursor.com/t/agent-cant-web-search-properly/132658/17
       "fetch-data": SubFeatureStatus.NotSupported,
       "browser": SubFeatureStatus.PartiallySupported,
+      "linters": SubFeatureStatus.PartiallySupported,
     },
   },
 );

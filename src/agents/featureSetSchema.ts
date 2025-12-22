@@ -118,6 +118,7 @@ const skillsDesc = await resolveMd('content/documentation/skills/skills.md');
 const searchEngineDesc = await resolveMd('content/tools/search-engine/search-engine.md');
 const fetchDataDesc = await resolveMd('content/tools/fetch-data/fetch-data.md');
 const browserDesc = await resolveMd('content/tools/browser/browser.md');
+const lintersDesc = await resolveMd('content/tools/linters/linters.md');
 
 export const featureSetSchema = z.object({
   planMode: feature({
@@ -187,6 +188,10 @@ export const featureSetSchema = z.object({
     'browser': subfeature({
       name: 'browser',
       description: browserDesc,
+    }),
+    'linters': subfeature({
+      name: 'linters',
+      description: lintersDesc,
     }),
   }),
 });

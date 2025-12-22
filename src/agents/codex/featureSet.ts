@@ -23,6 +23,7 @@ export const codex = declareSchema(
       "search-engine": SubFeatureStatus.Supported,
       "fetch-data": SubFeatureStatus.NotSupported,
       "browser": SubFeatureStatus.NotSupported,
+      "linters": SubFeatureStatus.NotSupported,
     },
   },
 );
