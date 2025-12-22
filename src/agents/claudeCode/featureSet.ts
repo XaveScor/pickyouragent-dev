@@ -9,6 +9,7 @@ export const claudeCode = declareSchema(
     planMode: {
       "dual-model": SubFeatureStatus.Supported,
       questions: SubFeatureStatus.NotSupported,
+      "plan-editing": SubFeatureStatus.NotSupported,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,

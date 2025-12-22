@@ -9,6 +9,7 @@ export const codex = declareSchema(
     planMode: {
       "dual-model": SubFeatureStatus.NotSupported,
       questions: SubFeatureStatus.NotSupported,
+      "plan-editing": SubFeatureStatus.NotSupported,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,

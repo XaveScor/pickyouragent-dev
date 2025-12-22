@@ -9,6 +9,7 @@ export const cursor = declareSchema(
     planMode: {
       "dual-model": SubFeatureStatus.NotSupported,
       questions: SubFeatureStatus.Supported,
+      "plan-editing": SubFeatureStatus.Supported,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,
