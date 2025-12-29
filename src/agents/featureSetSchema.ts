@@ -95,6 +95,8 @@ const searchEngineDesc = await resolveMd('subfeatures/tools/search-engine');
 const fetchDataDesc = await resolveMd('subfeatures/tools/fetch-data');
 const browserDesc = await resolveMd('subfeatures/tools/browser');
 const lintersDesc = await resolveMd('subfeatures/tools/linters');
+const cliCallingInfiniteTasksTimeoutDesc = await resolveMd('subfeatures/cliCalling/infinite-tasks-timeout');
+const cliCallingProcessesExplorerDesc = await resolveMd('subfeatures/cliCalling/processes-explorer');
 
 export const featureSetSchema = z.object({
   planMode: feature({
@@ -180,6 +182,21 @@ export const featureSetSchema = z.object({
     secondaryColor: '#34d399',
     slug: 'commands',
   }, {}),
+  cliCalling: feature({
+    name: 'CLI Calling',
+    mainColor: '#f97316',
+    secondaryColor: '#fb923c',
+    slug: 'cli-calling',
+  }, {
+    'infinite-tasks-timeout': subfeature({
+      name: 'infinite-tasks-timeout',
+      description: cliCallingInfiniteTasksTimeoutDesc,
+    }),
+    'processes-explorer': subfeature({
+      name: 'processes-explorer',
+      description: cliCallingProcessesExplorerDesc,
+    }),
+  }),
 });
 
 type AgentMeta = {

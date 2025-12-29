@@ -31,5 +31,6 @@ export const claudeCode = declareSchema(
       "linters": SubFeatureStatus.NotVerified,
     },
     commands: FeatureStatus.Supported,
+    cliCalling: FeatureStatus.NotVerified,
   },
 );

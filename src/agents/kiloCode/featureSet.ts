@@ -27,5 +27,6 @@ export const kiloCode = declareSchema(
       linters: SubFeatureStatus.NotVerified,
     },
     commands: FeatureStatus.NotVerified,
+    cliCalling: FeatureStatus.NotVerified,
   },
 );

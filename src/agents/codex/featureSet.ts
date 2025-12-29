@@ -27,5 +27,6 @@ export const codex = declareSchema(
       "linters": SubFeatureStatus.NotSupported,
     },
     commands: FeatureStatus.Supported,
+    cliCalling: FeatureStatus.NotVerified,
   },
 );

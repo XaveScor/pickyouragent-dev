@@ -28,5 +28,6 @@ export const cursor = declareSchema(
       "linters": SubFeatureStatus.PartiallySupported,
     },
     commands: FeatureStatus.Supported,
+    cliCalling: FeatureStatus.NotVerified,
   },
 );
