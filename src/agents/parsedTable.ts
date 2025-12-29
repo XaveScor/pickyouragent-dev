@@ -242,7 +242,7 @@ export class ParsedTable {
             subfeatureName,
             subfeatureKey, // Use key as slug for subfeatures
             statusByAgent,
-            subfeatureMeta.description
+            subfeatureMeta.description as CollectionEntry<'subfeatures'>
           )
         );
       }

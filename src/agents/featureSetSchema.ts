@@ -33,57 +33,31 @@ export const subfeaturesRegistry = z.registry<SubfeatureMeta>();
 
 /**
  * Resolves a markdown file path to a ContentEntryModule.
- * Path should be relative to project root (e.g., 'content/planMode/dual-model/dual-model.md').
- * Files are actually stored in content/subfeatures/ directory for the collection.
- * Throws an error if the file does not exist, failing the build.
- * 
+ * Path should be relative to the content directory (e.g., 'subfeatures/planMode/dual-model/dual-model.md').
+ * The filename (last part) should match the subfeatureName in frontmatter.
+ * Throws an error if file does not exist, failing the build.
+ *
  * Note: This function must be called at the top level with await for Astro's static analysis.
  */
 export async function resolveMd(path: string): Promise<CollectionEntry<'subfeatures'>> {
-  // Convert path from content/<featureName>/<subFeatureName>/<subFeatureName>.md
-  // to collection entry ID: <featureName>/<subFeatureName>/<subFeatureName>
-  // Files are stored at content/subfeatures/<featureName>/<subFeatureName>/<subFeatureName>.md
-  const pathWithoutContent = path.replace(/^content\//, '');
-  const pathWithoutExt = pathWithoutContent.replace(/\.mdx?$/, '');
-  
   // Extract featureName and subFeatureName from path
-  // Path format: <featureName>/<subFeatureName>/<subFeatureName>
-  const parts = pathWithoutExt.split('/');
-  if (parts.length < 2) {
-    throw new Error(`Invalid path format for resolveMd: ${path}. Expected format: content/<featureName>/<subFeatureName>/<subFeatureName>.md`);
+  // Path format: subfeatures/<featureName>/<subFeatureName>/<filename>.md
+  const parts = path.split('/');
+  if (parts.length < 3) {
+    throw new Error(`Invalid path format for resolveMd: ${path}. Expected format: subfeatures/<featureName>/<subFeatureName>/<filename>.md`);
   }
   
-  // Try to find the entry by matching the file path
-  // First try direct getEntry with the path
-  let entry = await getEntry('subfeatures', pathWithoutExt).catch(() => null);
-  
-  // If that doesn't work, try without the duplicate filename
-  if (!entry && parts.length === 3 && parts[1] === parts[2]) {
-    entry = await getEntry('subfeatures', `${parts[0]}/${parts[1]}`).catch(() => null);
-  }
-  
-  // If still not found, search through all entries to find a match
-  if (!entry) {
-    const allEntries = await getCollection('subfeatures');
-    // Try to find by matching the data fields or file path
-    entry = allEntries.find(e => {
-      // Match by featureName and subfeatureName from frontmatter
-      const matchesData = e.data.featureName === parts[0] && 
-                         (e.data.subfeatureName === parts[1] || e.data.subfeatureName === parts[2]);
-      // Or match by entry ID
-      const matchesId = e.id === pathWithoutExt || 
-                       e.id === `${parts[0]}/${parts[1]}` ||
-                       e.id.endsWith(`/${parts[1]}`) ||
-                       e.id.endsWith(`/${parts[2]}`);
-      return matchesData || matchesId;
-    }) || null;
-  }
+  // Get all entries and find by matching frontmatter data
+  const allEntries = await getCollection('subfeatures');
+  const entry = allEntries.find(e => {
+    // Match by featureName and subfeatureName from frontmatter
+    return e.data.featureName === parts[1] &&
+           e.data.subfeatureName === parts[2].replace(/\.mdx?$/, '');
+  });
   
   if (!entry) {
-    // Get all entry IDs for debugging
-    const allEntries = await getCollection('subfeatures');
-    const allIds = allEntries.map(e => e.id).join(', ');
-    throw new Error(`Subfeature markdown file not found: ${path}. Tried entry IDs: ${pathWithoutExt}${parts.length === 3 && parts[1] === parts[2] ? `, ${parts[0]}/${parts[1]}` : ''}. Available entry IDs: ${allIds}. Expected file at src/content/subfeatures/${pathWithoutExt}.md`);
+    const allData = allEntries.map(e => `  ${e.id}: featureName=${e.data.featureName}, subfeatureName=${e.data.subfeatureName}`).join('\n');
+    throw new Error(`Subfeature markdown file not found: ${path}. Looking for featureName=${parts[1]}, subfeatureName=${parts[2].replace(/\.mdx?$/, '')}.\n\nAvailable entries:\n${allData}`);
   }
   
   return entry;
@@ -91,7 +65,8 @@ export async function resolveMd(path: string): Promise<CollectionEntry<'subfeatu
 
 function subfeature(config: { name: string; description: CollectionEntry<'subfeatures'> }) {
   const subfeatureSchema = z.nativeEnum(SubFeatureStatus);
-  subfeaturesRegistry.add(subfeatureSchema, { name: config.name, description: config.description });
+  // Type assertion to work around Astro version compatibility issue with render() method signature
+  subfeaturesRegistry.add(subfeatureSchema, { name: config.name, description: config.description as any });
   return subfeatureSchema;
 }
 
@@ -106,20 +81,20 @@ function feature<T extends Record<string, z.ZodType>>(meta: FeatureMeta, subfeat
 }
 
 // Resolve all subfeature descriptions at module level
-const dualModelDesc = await resolveMd('content/planMode/dual-model/dual-model.md');
-const questionsDesc = await resolveMd('content/planMode/questions/questions.mdx');
-const planEditingDesc = await resolveMd('content/planMode/plan-editing/plan-editing.md');
-const filesystemDesc = await resolveMd('content/documentation/filesystem/filesystem.md');
-const treeDesc = await resolveMd('content/documentation/tree/tree.md');
-const multiFileDesc = await resolveMd('content/documentation/multi-file/multi-file.md');
-const llmsTxtDesc = await resolveMd('content/documentation/llms-txt/llms-txt.md');
-const autoMergeDesc = await resolveMd('content/documentation/auto-merge/auto-merge.md');
-const skillsDesc = await resolveMd('content/documentation/skills/skills.md');
-const webToDocsDesc = await resolveMd('content/documentation/web-to-docs/web-to-docs.md');
-const searchEngineDesc = await resolveMd('content/tools/search-engine/search-engine.md');
-const fetchDataDesc = await resolveMd('content/tools/fetch-data/fetch-data.md');
-const browserDesc = await resolveMd('content/tools/browser/browser.md');
-const lintersDesc = await resolveMd('content/tools/linters/linters.md');
+const dualModelDesc = await resolveMd('subfeatures/planMode/dual-model');
+const questionsDesc = await resolveMd('subfeatures/planMode/questions');
+const planEditingDesc = await resolveMd('subfeatures/planMode/plan-editing');
+const filesystemDesc = await resolveMd('subfeatures/documentation/filesystem');
+const treeDesc = await resolveMd('subfeatures/documentation/tree');
+const multiFileDesc = await resolveMd('subfeatures/documentation/multi-file');
+const llmsTxtDesc = await resolveMd('subfeatures/documentation/llms-txt');
+const autoMergeDesc = await resolveMd('subfeatures/documentation/auto-merge');
+const skillsDesc = await resolveMd('subfeatures/documentation/skills');
+const webToDocsDesc = await resolveMd('subfeatures/documentation/web-to-docs');
+const searchEngineDesc = await resolveMd('subfeatures/tools/search-engine');
+const fetchDataDesc = await resolveMd('subfeatures/tools/fetch-data');
+const browserDesc = await resolveMd('subfeatures/tools/browser');
+const lintersDesc = await resolveMd('subfeatures/tools/linters');
 
 export const featureSetSchema = z.object({
   planMode: feature({
@@ -220,4 +195,3 @@ export function declareSchema<T extends z.infer<typeof featureSetSchema>>(meta: 
 }
 
 export type Agent = ReturnType<typeof declareSchema>;
-

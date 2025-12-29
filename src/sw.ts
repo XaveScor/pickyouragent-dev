@@ -24,6 +24,7 @@ registerRoute(
 // Handle skip waiting message
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
+    // @ts-ignore - skipWaiting is available on ServiceWorkerGlobalScope
     self.skipWaiting();
   }
 });
