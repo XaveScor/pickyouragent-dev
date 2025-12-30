@@ -31,5 +31,8 @@ export const codex = declareSchema(
       "infinite-tasks-timeout": SubFeatureStatus.NotVerified,
       "processes-explorer": SubFeatureStatus.NotVerified,
     },
+    modelManagement: {
+      filtering: SubFeatureStatus.NotSupported,
+    },
   },
 );

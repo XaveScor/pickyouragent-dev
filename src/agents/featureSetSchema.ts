@@ -97,6 +97,7 @@ const browserDesc = await resolveMd('subfeatures/tools/browser');
 const lintersDesc = await resolveMd('subfeatures/tools/linters');
 const cliCallingInfiniteTasksTimeoutDesc = await resolveMd('subfeatures/cliCalling/infinite-tasks-timeout');
 const cliCallingProcessesExplorerDesc = await resolveMd('subfeatures/cliCalling/processes-explorer');
+const modelManagementFilteringDesc = await resolveMd('subfeatures/modelManagement/filtering/filtering.md');
 
 export const featureSetSchema = z.object({
   planMode: feature({
@@ -195,6 +196,17 @@ export const featureSetSchema = z.object({
     'processes-explorer': subfeature({
       name: 'processes-explorer',
       description: cliCallingProcessesExplorerDesc,
+    }),
+  }),
+  modelManagement: feature({
+    name: 'Model management',
+    mainColor: '#ec4899',
+    secondaryColor: '#f472b6',
+    slug: 'model-management',
+  }, {
+    'filtering': subfeature({
+      name: 'filtering',
+      description: modelManagementFilteringDesc,
     }),
   }),
 });

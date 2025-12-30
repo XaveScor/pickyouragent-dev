@@ -31,5 +31,8 @@ export const kiloCode = declareSchema(
       "infinite-tasks-timeout": SubFeatureStatus.NotSupported,
       "processes-explorer": SubFeatureStatus.NotSupported,
     },
+    modelManagement: {
+      filtering: SubFeatureStatus.NotSupported,
+    },
   },
 );

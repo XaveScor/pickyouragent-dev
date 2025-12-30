@@ -31,5 +31,8 @@ export const claudeCode = declareSchema(
       "infinite-tasks-timeout": SubFeatureStatus.NotVerified,
       "processes-explorer": SubFeatureStatus.NotVerified,
     },
+    modelManagement: {
+      filtering: SubFeatureStatus.NotSupported,
+    },
   },
 );

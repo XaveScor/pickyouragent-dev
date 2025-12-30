@@ -32,5 +32,8 @@ export const cursor = declareSchema(
       "infinite-tasks-timeout": SubFeatureStatus.NotSupported,
       "processes-explorer": SubFeatureStatus.NotSupported,
     },
+    modelManagement: {
+      filtering: SubFeatureStatus.Supported,
+    },
   },
 );
