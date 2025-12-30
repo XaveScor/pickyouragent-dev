@@ -1,0 +1,1 @@
+You should run `pnpm build` after each task and fix all the errors
