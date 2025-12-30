@@ -3,6 +3,8 @@ featureName: cliCalling
 subfeatureName: processes-explorer
 ---
 
+Manage stuck processes from your pipeline.
+
 Sometimes agents create zombie or stuck processes while running a pipeline. If these are not cleaned up, they can use resources and interfere with later runs. This feature helps you find and manage such processes created by this pipeline, rather than showing all system processes.
 
 Features:

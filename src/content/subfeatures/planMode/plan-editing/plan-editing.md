@@ -2,17 +2,23 @@
 featureName: planMode
 subfeatureName: plan-editing
 ---
-Make precise, targeted edits directly in the plan instead of running the model
+
+Edit plans directly without running the model.
+
+Make precise, targeted edits directly in the plan instead of running the model.
 
 Sometimes we need to make changes to the plan. We could ask the model, "please, fix the plan: [proposed changes]." However, it's often easier and more efficient to edit the plan directly rather than try to get the model to interpret your intended changes.
 
+**Supported agents:**
 
-### How to use it
+- Cursor (Available in plan mode - you can edit the plan steps directly in the interface before execution)
 
-Cursor: Available in plan mode - you can edit the plan steps directly in the interface before execution
+**Not supported agents:**
 
-Codex: Not implemented
+- Codex (Not implemented)
+- Claude Code (Not implemented)
+- Kilo Code (Not implemented. You need to patch your system prompts to save the prompt into a file)
 
-Claude Code: Not implemented
+**Not verified yet:**
 
-Kilo Code: Not implemented. You need to patch your system prompts to save the prompt into a file
+- None

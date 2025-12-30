@@ -3,9 +3,7 @@ featureName: tools
 subfeatureName: web-search-engine
 ---
 
-Find the missing information in the web.
-
-It's better when the agent verifies things on the web for you.
+Find missing information on the web.
 
 **Supported agents:**
 

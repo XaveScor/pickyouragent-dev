@@ -3,7 +3,7 @@ featureName: documentation
 subfeatureName: llms-txt
 ---
 
-Let the author of the service provide the docs
+Let service authors provide the docs.
 
 Our code relies on many external sources, such as libraries and APIs. Only the service authors truly know how to use them most effectively.
 
@@ -18,7 +18,7 @@ However, these files are typically very large and cannot be fully loaded into an
 
 One approach is RAG (https://en.wikipedia.org/wiki/Retrieval-augmented-generation), which allows the agent to include only the relevant sections from the entire llms-full.txt file as needed.
 
-Only this agents supports this feature natively:
+**Supported agents:**
 
 - Cursor
 

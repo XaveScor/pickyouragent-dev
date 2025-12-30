@@ -17,22 +17,17 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 
 // Get category color from parsed table
-const parsedTable = new ParsedTable(allAgents);
+const parsedTable = await ParsedTable.create(allAgents);
 const feature = parsedTable.getFeature(entry.slug);
 const mainColor = feature?.mainColor || '#3b82f6';
 
-// Render all subfeature descriptions
+// Get all subfeature contents
 const subfeatureContents = feature && feature.getSubfeatures().length > 0
-  ? await Promise.all(
-      feature.getSubfeatures().map(async (subfeature) => {
-        const { Content: SubfeatureContent } = await subfeature.description.render();
-        return {
-          key: subfeature.key,
-          name: subfeature.name,
-          Content: SubfeatureContent,
-        };
-      })
-    )
+  ? feature.getSubfeatures().map((subfeature) => ({
+      key: subfeature.key,
+      name: subfeature.name,
+      Content: subfeature.Content,
+    }))
   : [];
 ---
 

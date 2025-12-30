@@ -2,14 +2,15 @@
 featureName: documentation
 subfeatureName: web-to-docs
 ---
+
 Turn any website into agent-ready documentation.
 
-Only this agent supports this feature:
+**Supported agents:**
 
 - Cursor https://cursor.com/docs/context/mentions#adding-your-own-documentation
 
-Not supported:
+**Not supported agents:**
 
 - Codex
-- Claude code
+- Claude Code
 

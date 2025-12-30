@@ -3,7 +3,7 @@ featureName: documentation
 subfeatureName: tree
 ---
 
-If a file isn't part of the context, you don't need its documentation included either.
+Context-aware documentation inclusion.
 
 If your agent adds a file to the context, it will also include any documentation files from the same directory.
 
@@ -22,7 +22,7 @@ root
 
 If `root/code.source` only uses `root/lib1/lib1.source`, then only `root/lib1/Claude.md` is added to the context. `root/lib2/Claude.md` is skipped.
 
-Only this agents supports this feature:
+**Supported agents:**
 
 - Claude Code
 - Cursor

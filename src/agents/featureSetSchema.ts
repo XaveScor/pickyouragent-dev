@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { getCollection, getEntry } from 'astro:content';
+import { getEntry, getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
 export enum SubFeatureStatus {
@@ -32,39 +32,28 @@ export const featuresRegistry = z.registry<FeatureMeta>();
 export const subfeaturesRegistry = z.registry<SubfeatureMeta>();
 
 /**
- * Resolves a markdown file path to a ContentEntryModule.
- * Path should be relative to the content directory (e.g., 'subfeatures/planMode/dual-model/dual-model.md').
- * The filename (last part) should match the subfeatureName in frontmatter.
- * Throws an error if file does not exist, failing the build.
+ * Resolves a subfeature by its collection ID.
+ * ID should be the path relative to the collection base without extension (e.g., 'planmode/dual-model/dual-model').
+ * Throws an error if the entry does not exist, failing the build.
  *
  * Note: This function must be called at the top level with await for Astro's static analysis.
  */
-export async function resolveMd(path: string): Promise<CollectionEntry<'subfeatures'>> {
-  // Extract featureName and subFeatureName from path
-  // Path format: subfeatures/<featureName>/<subFeatureName>/<filename>.md
-  const parts = path.split('/');
-  if (parts.length < 3) {
-    throw new Error(`Invalid path format for resolveMd: ${path}. Expected format: subfeatures/<featureName>/<subFeatureName>/<filename>.md`);
-  }
-  
-  // Get all entries and find by matching frontmatter data
+export async function resolveSubfeature(id: string): Promise<CollectionEntry<'subfeatures'>> {
+  // Use getCollection and find by ID to ensure entries are processed the same way
+  // as they were with the old implementation
   const allEntries = await getCollection('subfeatures');
-  const entry = allEntries.find(e => {
-    // Match by featureName and subfeatureName from frontmatter
-    return e.data.featureName === parts[1] &&
-           e.data.subfeatureName === parts[2].replace(/\.mdx?$/, '');
-  });
+  const entry = allEntries.find(e => e.id === id);
   
   if (!entry) {
-    const allData = allEntries.map(e => `  ${e.id}: featureName=${e.data.featureName}, subfeatureName=${e.data.subfeatureName}`).join('\n');
-    throw new Error(`Subfeature markdown file not found: ${path}. Looking for featureName=${parts[1]}, subfeatureName=${parts[2].replace(/\.mdx?$/, '')}.\n\nAvailable entries:\n${allData}`);
+    const availableIds = allEntries.map(e => e.id).join('\n  ');
+    throw new Error(`Subfeature entry not found: ${id}\n\nAvailable IDs:\n  ${availableIds}`);
   }
   
   return entry;
 }
 
 function subfeature(config: { name: string; description: CollectionEntry<'subfeatures'> }) {
-  const subfeatureSchema = z.nativeEnum(SubFeatureStatus);
+  const subfeatureSchema = z.enum(SubFeatureStatus);
   // Type assertion to work around Astro version compatibility issue with render() method signature
   subfeaturesRegistry.add(subfeatureSchema, { name: config.name, description: config.description as any });
   return subfeatureSchema;
@@ -80,24 +69,23 @@ function feature<T extends Record<string, z.ZodType>>(meta: FeatureMeta, subfeat
   return featureSchema;
 }
 
-// Resolve all subfeature descriptions at module level
-const dualModelDesc = await resolveMd('subfeatures/planMode/dual-model');
-const questionsDesc = await resolveMd('subfeatures/planMode/questions');
-const planEditingDesc = await resolveMd('subfeatures/planMode/plan-editing');
-const filesystemDesc = await resolveMd('subfeatures/documentation/filesystem');
-const treeDesc = await resolveMd('subfeatures/documentation/tree');
-const multiFileDesc = await resolveMd('subfeatures/documentation/multi-file');
-const llmsTxtDesc = await resolveMd('subfeatures/documentation/llms-txt');
-const autoMergeDesc = await resolveMd('subfeatures/documentation/auto-merge');
-const skillsDesc = await resolveMd('subfeatures/documentation/skills');
-const webToDocsDesc = await resolveMd('subfeatures/documentation/web-to-docs');
-const webSearchEngineDesc = await resolveMd('subfeatures/tools/web-search-engine');
-const fetchDataDesc = await resolveMd('subfeatures/tools/fetch-data');
-const browserDesc = await resolveMd('subfeatures/tools/browser');
-const lintersDesc = await resolveMd('subfeatures/tools/linters');
-const cliCallingInfiniteTasksTimeoutDesc = await resolveMd('subfeatures/cliCalling/infinite-tasks-timeout');
-const cliCallingProcessesExplorerDesc = await resolveMd('subfeatures/cliCalling/processes-explorer');
-const modelManagementFilteringDesc = await resolveMd('subfeatures/modelManagement/filtering/filtering.md');
+const dualModelDesc = await resolveSubfeature('planmode/dual-model/dual-model');
+const questionsDesc = await resolveSubfeature('planmode/questions/questions');
+const planEditingDesc = await resolveSubfeature('planmode/plan-editing/plan-editing');
+const filesystemDesc = await resolveSubfeature('documentation/filesystem/filesystem');
+const treeDesc = await resolveSubfeature('documentation/tree/tree');
+const multiFileDesc = await resolveSubfeature('documentation/multi-file/multi-file');
+const llmsTxtDesc = await resolveSubfeature('documentation/llms-txt/llms-txt');
+const autoMergeDesc = await resolveSubfeature('documentation/auto-merge/auto-merge');
+const skillsDesc = await resolveSubfeature('documentation/skills/skills');
+const webToDocsDesc = await resolveSubfeature('documentation/web-to-docs/web-to-docs');
+const webSearchEngineDesc = await resolveSubfeature('tools/web-search-engine/web-search-engine');
+const fetchDataDesc = await resolveSubfeature('tools/fetch-data/fetch-data');
+const browserDesc = await resolveSubfeature('tools/browser/browser');
+const lintersDesc = await resolveSubfeature('tools/linters/linters');
+const cliCallingInfiniteTasksTimeoutDesc = await resolveSubfeature('clicalling/infinite-tasks-timeout/infinite-tasks-timeout');
+const cliCallingProcessesExplorerDesc = await resolveSubfeature('clicalling/processes-explorer/processes-explorer');
+const modelManagementFilteringDesc = await resolveSubfeature('modelmanagement/filtering/filtering');
 
 export const featureSetSchema = z.object({
   planMode: feature({

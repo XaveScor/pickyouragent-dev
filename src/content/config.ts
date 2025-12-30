@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const featuresCollection = defineCollection({
   type: 'content',
@@ -10,7 +11,7 @@ const featuresCollection = defineCollection({
 });
 
 const subfeaturesCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/!(AGENTS)*.{md,mdx}', base: './src/content/subfeatures' }),
   schema: z.object({
     featureName: z.string(),
     subfeatureName: z.string(),

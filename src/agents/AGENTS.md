@@ -39,13 +39,13 @@ The central schema definition file that establishes the type system for all agen
 
 #### Key Functions
 
-**[`resolveMd(path: string)`](src/agents/featureSetSchema.ts:42)**
+**[`resolveSubfeature(id: string)`](src/agents/featureSetSchema.ts:42)**
 
-Resolves a markdown file path from the `src/content/subfeatures` directory to a ContentEntryModule. The function:
+Resolves a subfeature by its collection ID from the `subfeatures` collection. The function:
 
-- Expects path format: `subfeatures/<featureName>/<subFeatureName>/<filename>.md`
-- Matches entries by `featureName` and `subfeatureName` frontmatter values
-- Throws descriptive errors if the file is not found
+- Expects ID format: `<featureName>/<subFeatureName>/<filename>` (path relative to collection base without extension)
+- Uses `getEntry()` to directly retrieve the entry by ID
+- Throws descriptive errors if the entry is not found
 - Must be called at the top level with `await` for Astro's static analysis
 
 **[`feature(meta, subfeatures)`](src/agents/featureSetSchema.ts:73)**
@@ -292,7 +292,7 @@ Defines the feature set for Kilo Code agent.
 
 The agents directory integrates with Astro's content collection system:
 
-1. **Subfeature Descriptions**: Each subfeature references a markdown file in `src/content/subfeatures/` via the [`resolveMd()`](src/agents/featureSetSchema.ts:42) function
+1. **Subfeature Descriptions**: Each subfeature references a markdown file in `src/content/subfeatures/` via the [`resolveSubfeature()`](src/agents/featureSetSchema.ts:42) function
 2. **Content Schema**: The [`src/content/config.ts`](src/content/config.ts:1) defines the `subfeatures` collection with `featureName` and `subfeatureName` frontmatter fields
 3. **Markdown Resolution**: At build time, markdown files are resolved and linked to their corresponding subfeature schemas
 

@@ -3,7 +3,7 @@ featureName: documentation
 subfeatureName: multi-file
 ---
 
-Put docs for the same folder in separate files.
+Organize docs in separate files.
 
 Sometimes it is better to split the documentation into multiple files.
 For example:
@@ -42,7 +42,7 @@ If `root/code.source` uses `root/lib1/lib1.source`, the system context will be l
 
 `root/lib2/Claude.md` is skipped because it is not part of imported files.
 
-Only this agents supports this feature:
+**Supported agents:**
 
 - Cursor
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { Agent } from './featureSetSchema';
-import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
 import { 
   FeatureStatus, 
   SubFeatureStatus, 
@@ -86,26 +86,30 @@ function getSubfeatureStatus(featureValue: any, featureKey: string): SubFeatureS
   return featureObj[featureKey] || SubFeatureStatus.NotVerified;
 }
 
+/**
+ * Represents a subfeature with pre-rendered content.
+ * All Astro-specific rendering is encapsulated within this class.
+ */
 export class ParsedSubfeature {
   readonly key: string;
   readonly name: string;
   readonly slug: string;
   readonly statusByAgent: Map<string, SubFeatureStatus>;
   readonly aggregatedStatus: FeatureStatus;
-  readonly description: CollectionEntry<'subfeatures'>;
+  readonly Content: import('astro').AstroComponentFactory;
 
   constructor(
     key: string,
     name: string,
     slug: string,
     statusByAgent: Map<string, SubFeatureStatus>,
-    description: CollectionEntry<'subfeatures'>
+    Content: import('astro').AstroComponentFactory
   ) {
     this.key = key;
     this.name = name;
     this.slug = slug;
     this.statusByAgent = statusByAgent;
-    this.description = description;
+    this.Content = Content;
     
     // Aggregate status across all agents
     const statuses = Array.from(statusByAgent.values());
@@ -113,6 +117,10 @@ export class ParsedSubfeature {
   }
 }
 
+/**
+ * Represents a feature with its subfeatures.
+ * Does not directly handle rendering - that's handled at the subfeature level.
+ */
 export class ParsedFeature {
   readonly key: string;
   readonly name: string;
@@ -154,13 +162,37 @@ export class ParsedFeature {
   }
 }
 
+/**
+ * Represents a parsed table of features and agents.
+ * All Astro content rendering is encapsulated within this class.
+ * Use the static `create()` method to instantiate.
+ */
 export class ParsedTable {
   readonly features: ParsedFeature[];
   readonly agents: Agent[];
 
-  constructor(agents: Agent[]) {
+  /**
+   * Creates a new ParsedTable instance with pre-rendered content.
+   * This factory method is async because it renders all subfeature content.
+   */
+  static async create(agents: Agent[]): Promise<ParsedTable> {
+    const table = new ParsedTable(agents);
+    await table.initialize();
+    return table;
+  }
+
+  private constructor(agents: Agent[]) {
     this.agents = agents;
-    this.features = this.parseFeatures();
+    this.features = [];
+    // Initialize features array, will be populated asynchronously
+  }
+
+  /**
+   * Initialize the table by parsing features and rendering content.
+   * This must be called after construction.
+   */
+  private async initialize(): Promise<void> {
+    (this as any).features = await this.parseFeatures();
   }
 
   getFeatures(): ParsedFeature[] {
@@ -175,7 +207,7 @@ export class ParsedTable {
     return this.features.find(f => f.key === key);
   }
 
-  private parseFeatures(): ParsedFeature[] {
+  private async parseFeatures(): Promise<ParsedFeature[]> {
     const features: ParsedFeature[] = [];
     const categoryOrderEnum = featureSetSchema.keyof().enum;
     const categoryOrder = Object.values(categoryOrderEnum) as (keyof typeof categoryOrderEnum)[];
@@ -236,13 +268,15 @@ export class ParsedTable {
           statusByAgent.set(agent.meta.id, status);
         }
 
+        const renderedContent = await render(subfeatureMeta.description);
+
         parsedSubfeatures.push(
           new ParsedSubfeature(
             subfeatureKey,
             subfeatureName,
             subfeatureKey, // Use key as slug for subfeatures
             statusByAgent,
-            subfeatureMeta.description as CollectionEntry<'subfeatures'>
+            renderedContent.Content
           )
         );
       }
@@ -282,4 +316,3 @@ export class ParsedTable {
     return features;
   }
 }
-

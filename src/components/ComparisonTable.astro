@@ -10,7 +10,7 @@ interface Props {
 const { agents } = Astro.props;
 
 // Create parsed table from agents
-const parsedTable = new ParsedTable(agents);
+const parsedTable = await ParsedTable.create(agents);
 const features = parsedTable.getFeatures();
 ---
 

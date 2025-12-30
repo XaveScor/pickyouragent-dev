@@ -3,7 +3,7 @@ featureName: documentation
 subfeatureName: skills
 ---
 
-Let the agent decide what part of you local docs should be included in the context.
+Smart inclusion of relevant docs.
 
 Sometimes you have a lot of local docs, but you don't need all of them. For example:
 
@@ -20,11 +20,11 @@ If you want only to tune the deployment process, you don't need to include the l
 
 Read more about the standard: https://agentskills.io/home
 
-Only this agents supports this feature:
+**Supported agents:**
 
 - Cursor
 
-Not verified:
+**Not verified yet:**
 
 - Codex
-- Claude code
+- Claude Code

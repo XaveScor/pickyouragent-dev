@@ -3,6 +3,8 @@ featureName: documentation
 subfeatureName: filesystem
 ---
 
+Project-specific docs for better context.
+
 Agents can use filesystem-based documentation files to understand project-specific instructions and context.
 
 Common documentation files include:
