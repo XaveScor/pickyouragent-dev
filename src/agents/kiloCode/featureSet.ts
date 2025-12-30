@@ -12,7 +12,7 @@ export const kiloCode = declareSchema(
       "plan-editing": SubFeatureStatus.NotSupported,
     },
     documentation: {
-      filesystem: SubFeatureStatus.NotVerified,
+      filesystem: SubFeatureStatus.Supported,
       tree: SubFeatureStatus.NotVerified,
       "multi-file": SubFeatureStatus.NotVerified,
       "llms-txt": SubFeatureStatus.NotVerified,

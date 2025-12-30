@@ -3,14 +3,17 @@ featureName: documentation
 subfeatureName: filesystem
 ---
 
-You can create an `AGENTS.md` file in the root of your project to tell the LLM how to use the agents.
+Agents can use filesystem-based documentation files to understand project-specific instructions and context.
 
-Your agent will include this file in the context for each session. It acts as the system context for the project.
-You can declare anything in it: how to call local tools, what steps to create in [plan mode](../../../features/planmode), which files to generate, or any instructions you want.
+Common documentation files include:
 
-More info: https://agents.md/
+- `AGENTS.md` - Standard file placed in the project root to tell the LLM how to use the agents. It acts as system context for each session and can declare tool usage, plan mode steps, file generation instructions, or any custom instructions. More info: https://agents.md/
+- `CLAUDE.md` - Claude Code's alternative to AGENTS.md
+- `.cursor/rules/` - Cursor's folder for project-specific rules and context. More info: https://cursor.com/docs/context/rules
 
-Note: Claude Code doesn't support this feature. Instead, it uses a different filename, `CLAUDE.md`.
+**Supported agents:**
 
-Note: Cursor also supports a `.cursor/rules/` folder, which is a similar feature. More info: https://cursor.com/docs/context/rules
-
+- Cursor (supports AGENTS.md, CLAUDE.md and .cursor/rules/)
+- Claude Code (supports CLAUDE.md)
+- Kilo Code (supports AGENTS.md)
+- Codex (supports AGENTS.md)
