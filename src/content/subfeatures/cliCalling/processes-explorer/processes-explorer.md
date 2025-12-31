@@ -15,10 +15,14 @@ Features:
 - Displays resource usage for these processes
 - Helps you identify and stop anything the agent leaves running
 
+**Supported agents:**
+
+None
+
 **Not supported agents:**
 
-- Kilo Code
 - Cursor
+- Kilo Code
 
 **Not verified yet:**
 

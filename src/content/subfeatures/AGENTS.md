@@ -48,6 +48,15 @@ A list of agents that fully support this subfeature. These agents have been test
 - Another Agent
 ```
 
+Optionally, you can add additional information in parentheses to provide context about how each agent supports the feature, what specific implementations they use, or any relevant notes about their support:
+
+```markdown
+**Supported agents:**
+
+- Agent Name (additional details about support)
+- Another Agent (specific implementation notes)
+```
+
 ### 4. Unsupported Agents List
 
 A list of agents that do not support this subfeature. These agents either lack the functionality or have known incompatibilities.
@@ -60,6 +69,15 @@ A list of agents that do not support this subfeature. These agents either lack t
 - Another Agent
 ```
 
+Optionally, you can add additional information in parentheses to explain why an agent doesn't support the feature, what limitations exist, or any relevant context about the lack of support:
+
+```markdown
+**Not supported agents:**
+
+- Agent Name (reason for lack of support)
+- Another Agent (known limitations)
+```
+
 ### 5. Not Verified Agents List
 
 A list of agents where the support status hasn't been verified yet. These agents may or may not support the feature, but testing is incomplete.
@@ -70,6 +88,15 @@ A list of agents where the support status hasn't been verified yet. These agents
 
 - Agent Name
 - Another Agent
+```
+
+Optionally, you can add additional information in parentheses to provide context about the verification status, what testing has been done, or any notes about why verification is pending:
+
+```markdown
+**Not verified yet:**
+
+- Agent Name (testing status or notes)
+- Another Agent (pending verification details)
 ```
 
 ## Available Agents
@@ -97,13 +124,13 @@ It's better when the agent verifies things on the web for you. The agent can sea
 
 **Supported agents:**
 
-- Claude Code
-- Codex
-- Cursor
+- Claude Code (native web search integration)
+- Codex (via web browsing tool)
+- Cursor (built-in web search capabilities)
 
 **Not supported agents:**
 
-- Kilo Code
+- Kilo Code (no web search functionality)
 ```
 
 ## Another Example with All Sections
@@ -132,13 +159,13 @@ This command will run the development server but automatically stop after captur
 
 **Not supported agents:**
 
-- Kilo Code
-- Cursor
+- Kilo Code (commands run indefinitely)
+- Cursor (no timeout mechanism available)
 
 **Not verified yet:**
 
-- Claude Code
-- Codex
+- Claude Code (testing in progress)
+- Codex (needs verification)
 ```
 
 ## Best Practices
@@ -149,6 +176,7 @@ This command will run the development server but automatically stop after captur
 4. **Verify agent support** - Only list agents as "supported" after thorough testing
 5. **Keep lists up to date** - Regularly update agent support status as features evolve
 6. **Match directory names** - Ensure `subfeatureName` in frontmatter matches the directory name exactly
+7. **Add optional agent-specific details** - Optionally include additional information in parentheses for each agent to provide context about their specific implementation, limitations, or support details. This is optional but can be helpful for clarity
 
 ## File Naming Convention
 

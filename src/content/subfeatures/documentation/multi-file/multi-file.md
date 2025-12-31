@@ -46,3 +46,11 @@ If `root/code.source` uses `root/lib1/lib1.source`, the system context will be l
 
 - Cursor
 
+**Not supported agents:**
+
+- Claude Code
+- Codex
+
+**Not verified yet:**
+
+- Kilo Code

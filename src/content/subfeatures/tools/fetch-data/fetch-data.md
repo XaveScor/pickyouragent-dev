@@ -11,14 +11,13 @@ The built-in tool should be able to download the data and extract the useful inf
 **Supported agents:**
 
 - Claude Code
-- Cursor
 
 **Not supported agents:**
 
-- None
+- Codex
+- Cursor
 
 **Not verified yet:**
 
-- Codex
 - Kilo Code
 

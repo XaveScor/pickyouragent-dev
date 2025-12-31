@@ -12,7 +12,7 @@ export const claudeCode = declareSchema(
       "plan-editing": SubFeatureStatus.NotSupported,
     },
     documentation: {
-      filesystem: SubFeatureStatus.NotSupported,
+      filesystem: SubFeatureStatus.Supported,
       tree: SubFeatureStatus.Supported,
       "multi-file": SubFeatureStatus.NotSupported,
       "llms-txt": SubFeatureStatus.NotSupported,

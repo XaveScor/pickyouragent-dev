@@ -13,10 +13,14 @@ For example:
 devserver | head -50
 ```
 
-**Not Supported agents:**
+**Supported agents:**
 
-- Kilo Code
+None
+
+**Not supported agents:**
+
 - Cursor
+- Kilo Code
 
 **Not verified yet:**
 

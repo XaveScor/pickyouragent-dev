@@ -27,3 +27,10 @@ If `root/code.source` only uses `root/lib1/lib1.source`, then only `root/lib1/Cl
 - Claude Code
 - Cursor
 
+**Not supported agents:**
+
+- Codex
+
+**Not verified yet:**
+
+- Kilo Code

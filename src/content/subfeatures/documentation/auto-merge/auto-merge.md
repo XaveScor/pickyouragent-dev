@@ -26,12 +26,11 @@ I see you're using the Astro framework. Would you like to add their llms-txt fil
 
 **Not supported agents:**
 
-- None
+- Cursor
 
 **Not verified yet:**
 
 - Claude Code
 - Codex
-- Cursor
 - Kilo Code
 

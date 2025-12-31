@@ -9,7 +9,7 @@ The agent allows you to hide/show the models from the model list.
 
 **Supported agents:**
 
-- None
+- Cursor
 
 **Not supported agents:**
 
@@ -19,5 +19,4 @@ The agent allows you to hide/show the models from the model list.
 
 - Claude Code
 - Codex
-- Cursor
 - Kilo Code

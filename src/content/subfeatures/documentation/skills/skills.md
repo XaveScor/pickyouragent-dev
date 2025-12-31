@@ -24,7 +24,12 @@ Read more about the standard: https://agentskills.io/home
 
 - Cursor
 
+**Not supported agents:**
+
+None
+
 **Not verified yet:**
 
-- Codex
 - Claude Code
+- Codex
+- Kilo Code
