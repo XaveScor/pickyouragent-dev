@@ -1,0 +1,143 @@
+---
+// 404 error page
+import '../styles/global.css';
+import Head from '../components/Head.astro';
+---
+
+<html lang="en">
+  <head>
+    <Head 
+      title="404 - Page Not Found | Pick Your Agent"
+      description="The page you're looking for doesn't exist. Return to the homepage to compare AI coding agents."
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="logo">pickyouragent.dev</a>
+      <div class="nav-links">
+        <a href="/about">About</a>
+        <a href="/docs">Docs</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero error-hero">
+        <div class="error-content">
+          <h1>404</h1>
+          <p class="subtitle">Page Not Found</p>
+          <p class="error-message">
+            The page you're looking for might have been moved or doesn't exist.
+            Try going back to the homepage or use the navigation above.
+          </p>
+          <a href="/" class="home-button">Return to Homepage</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .error-hero {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-content {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    padding: 3rem 3rem 2.5rem;
+    box-shadow: 
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 4px 12px rgba(0, 0, 0, 0.06);
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .error-hero h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
+  }
+
+  .error-hero .subtitle {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+
+  .error-message {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .home-button {
+    display: inline-block;
+    background-color: var(--main-feature-color);
+    color: white;
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+
+  .home-button:hover {
+    background-color: var(--secondary-feature-color);
+    transform: translateY(-1px);
+  }
+
+  .home-button:active {
+    transform: translateY(0);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .error-content {
+      padding: 2.5rem 2rem 2rem;
+      border-radius: 12px;
+    }
+
+    .error-hero h1 {
+      font-size: 3rem;
+    }
+
+    .error-hero .subtitle {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .error-content {
+      padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .error-hero h1 {
+      font-size: 2.5rem;
+    }
+
+    .error-hero .subtitle {
+      font-size: 1.1rem;
+    }
+
+    .error-message {
+      font-size: 0.95rem;
+    }
+
+    .home-button {
+      width: 100%;
+      text-align: center;
+      padding: 0.875rem 2rem;
+    }
+  }
+</style>
+
