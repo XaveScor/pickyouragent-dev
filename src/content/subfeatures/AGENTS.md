@@ -2,6 +2,10 @@
 
 This document describes the structure and format of subfeature markdown files in the `src/content/subfeatures/` directory.
 
+## Prerequisite Reading
+
+Read the info inside `/src/agents/AGENTS.md` first to understand the system.
+
 ## File Structure
 
 Each subfeature file follows a consistent markdown format with frontmatter metadata and organized content sections.
@@ -27,6 +31,7 @@ subfeatureName: <subfeature-slug>
 A catchy one-line slogan that captures the essence of the subfeature. This should be concise, memorable, and immediately convey the value proposition.
 
 **Example:**
+
 > Find the missing information in the web.
 
 ### 2. Description
@@ -34,6 +39,7 @@ A catchy one-line slogan that captures the essence of the subfeature. This shoul
 A detailed explanation of what the subfeature does. This section should provide context, explain the functionality, and help users understand when and how to use this feature. You may include code examples or use cases to illustrate the feature.
 
 **Example:**
+
 > It's better when the agent verifies things on the web for you. The agent can search the internet to find current information, verify facts, and gather data that isn't available in your local codebase.
 
 ### 3. Supported Agents List
@@ -41,6 +47,7 @@ A detailed explanation of what the subfeature does. This section should provide 
 A list of agents that fully support this subfeature. These agents have been tested and confirmed to work correctly with this feature.
 
 **Format:**
+
 ```markdown
 **Supported agents:**
 
@@ -62,6 +69,7 @@ Optionally, you can add additional information in parentheses to provide context
 A list of agents that do not support this subfeature. These agents either lack the functionality or have known incompatibilities.
 
 **Format:**
+
 ```markdown
 **Not supported agents:**
 
@@ -83,6 +91,7 @@ Optionally, you can add additional information in parentheses to explain why an 
 A list of agents where the support status hasn't been verified yet. These agents may or may not support the feature, but testing is incomplete.
 
 **Format:**
+
 ```markdown
 **Not verified yet:**
 
@@ -98,15 +107,6 @@ Optionally, you can add additional information in parentheses to provide context
 - Agent Name (testing status or notes)
 - Another Agent (pending verification details)
 ```
-
-## Available Agents
-
-The following agents are tracked in the system:
-
-- **Claude Code** - Anthropic's Claude-based coding assistant
-- **Codex** - OpenAI's Codex-powered agent
-- **Cursor** - Cursor AI-powered editor
-- **Kilo Code** - Kilo Code's AI assistant
 
 ## Complete Example
 
@@ -146,9 +146,10 @@ Stop runaway commands before they consume your resources.
 The agent lets you set a timeout for commands. This helps automatically stop commands that might run forever, like a development server. This is particularly useful when you need to run long-running operations but want to prevent them from hanging indefinitely.
 
 For example:
-
 ```
+
 devserver | head -50
+
 ```
 
 This command will run the development server but automatically stop after capturing the first 50 lines of output.
@@ -174,9 +175,47 @@ This command will run the development server but automatically stop after captur
 2. **Be descriptive** - The description should clearly explain the feature's purpose and use cases
 3. **Use code examples** - When applicable, include code snippets to illustrate usage
 4. **Verify agent support** - Only list agents as "supported" after thorough testing
-5. **Keep lists up to date** - Regularly update agent support status as features evolve
+5. **Keep lists in sync** - When updating agent support status, always update both the markdown file AND the corresponding `featureSet.ts` files. See Critical Requirements section below for details
 6. **Match directory names** - Ensure `subfeatureName` in frontmatter matches the directory name exactly
 7. **Add optional agent-specific details** - Optionally include additional information in parentheses for each agent to provide context about their specific implementation, limitations, or support details. This is optional but can be helpful for clarity
+
+## Critical Requirements
+
+### Status Synchronization with featureSet.ts
+
+⚠️ **CRITICAL**: Agent support status in subfeature markdown files MUST match the status in `featureSet.ts` files.
+
+**When updating agent support status:**
+
+1. Update the subfeature markdown file (Supported/Not supported/Not verified sections)
+2. Update ALL agent `featureSet.ts` files that include this subfeature
+3. Keep both sources in sync
+
+**featureSet.ts file locations:**
+
+- `src/agents/claudeCode/featureSet.ts`
+- `src/agents/codex/featureSet.ts`
+- `src/agents/cursor/featureSet.ts`
+- `src/agents/kiloCode/featureSet.ts`
+
+**Status mapping:**
+
+- Markdown "Supported agents:" → `SubFeatureStatus.Supported` or `SubFeatureStatus.PartiallySupported`
+- Markdown "Not supported agents:" → `SubFeatureStatus.NotSupported`
+- Markdown "Not verified yet:" → `SubFeatureStatus.NotVerified`
+
+**Why this matters:**
+
+- `featureSet.ts` files are the source of truth for the comparison table
+- Mismatches cause data integrity issues and user confusion
+- Astro resolves these files at build time
+
+**Partial Support Handling:**
+For `SubFeatureStatus.PartiallySupported`:
+
+- List agent in "Supported agents:" section
+- Add "(partial support)" after agent name
+- Include explanation of limitations
 
 ## File Naming Convention
 
