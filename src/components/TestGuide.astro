@@ -1,0 +1,87 @@
+---
+// TestGuide component - displays testing information for subfeatures
+// No props required, uses children slot for content
+---
+
+<section class="test-guide">
+  <div class="test-guide-header">
+    <h2>How to test</h2>
+  </div>
+  <div class="test-guide-content">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .test-guide {
+    margin-top: 2.5rem;
+    padding: 1.5rem;
+    border: 1px dotted var(--border-light);
+    border-radius: 8px;
+  }
+
+  .test-guide-header {
+    margin-bottom: 1rem;
+  }
+
+  .test-guide-header h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .test-guide-content {
+    color: var(--text-primary);
+    line-height: 1.7;
+  }
+
+  .test-guide-content p {
+    margin-bottom: 1rem;
+  }
+
+  .test-guide-content strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .test-guide-content ul,
+  .test-guide-content ol {
+    margin-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .test-guide-content li {
+    margin-bottom: 0.35rem;
+  }
+
+  .test-guide-content code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  }
+
+  /* Responsive design */
+  @media (max-width: 900px) {
+    .test-guide {
+      padding: 1.25rem;
+    }
+
+    .test-guide-header h2 {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .test-guide {
+      padding: 1rem;
+    }
+
+    .test-guide-header h2 {
+      font-size: 1.1rem;
+    }
+  }
+</style>

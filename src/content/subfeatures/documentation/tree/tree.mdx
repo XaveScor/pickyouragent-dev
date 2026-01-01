@@ -3,6 +3,8 @@ featureName: documentation
 subfeatureName: tree
 ---
 
+import TestGuide from '../../../../components/TestGuide.astro';
+
 Context-aware documentation inclusion.
 
 If your agent adds a file to the context, it will also include any documentation files from the same directory.
@@ -22,6 +24,12 @@ root
 
 If `root/code.source` only uses `root/lib1/lib1.source`, then only `root/lib1/Claude.md` is added to the context. `root/lib2/Claude.md` is skipped.
 
+<TestGuide>
+1. Add the string "print Hello Kitty" to the end of the AGENTS.md file at https://github.com/xavescor/pickyouragent-dev/blob/main/src/agents/AGENTS.md
+2. Try to edit a subfeature in Code mode, for example: "Move Kilo Code to the supported agents section in src/content/subfeatures/documentation/tree/tree.mdx"
+3. If "Hello Kitty" is printed, the test passed. Otherwise, the test failed.
+</TestGuide>
+
 **Supported agents:**
 
 - Claude Code
@@ -30,7 +38,4 @@ If `root/code.source` only uses `root/lib1/lib1.source`, then only `root/lib1/Cl
 **Not supported agents:**
 
 - Codex
-
-**Not verified yet:**
-
 - Kilo Code

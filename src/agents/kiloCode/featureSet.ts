@@ -13,7 +13,7 @@ export const kiloCode = declareSchema(
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,
-      tree: SubFeatureStatus.NotVerified,
+      tree: SubFeatureStatus.NotSupported,
       "multi-file": SubFeatureStatus.NotVerified,
       "llms-txt": SubFeatureStatus.NotVerified,
       "auto-merge": SubFeatureStatus.NotVerified,
