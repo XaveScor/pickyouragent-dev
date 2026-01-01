@@ -18,3 +18,4 @@ If you're a web developer or want to automate tasks, you can use the built-in br
 **Not verified yet:**
 
 - Claude Code
+- Kilo Code

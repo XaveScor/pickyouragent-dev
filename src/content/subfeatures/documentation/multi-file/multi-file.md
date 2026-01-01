@@ -50,7 +50,4 @@ If `root/code.source` uses `root/lib1/lib1.source`, the system context will be l
 
 - Claude Code
 - Codex
-
-**Not verified yet:**
-
 - Kilo Code

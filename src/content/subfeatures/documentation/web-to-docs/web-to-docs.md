@@ -15,7 +15,4 @@ This feature allows you to convert external websites and documentation into a fo
 
 - Claude Code
 - Codex
-
-**Not verified yet:**
-
 - Kilo Code

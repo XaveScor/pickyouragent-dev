@@ -23,6 +23,7 @@ Read more about the standard: https://agentskills.io/home
 **Supported agents:**
 
 - Cursor
+- Kilo Code (https://github.com/Kilo-Org/kilocode/pull/4702)
 
 **Not supported agents:**
 
@@ -32,4 +33,3 @@ None
 
 - Claude Code
 - Codex
-- Kilo Code

@@ -26,7 +26,4 @@ One approach is RAG (https://en.wikipedia.org/wiki/Retrieval-augmented-generatio
 
 - Claude Code
 - Codex
-
-**Not verified yet:**
-
 - Kilo Code

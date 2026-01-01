@@ -14,11 +14,11 @@ export const kiloCode = declareSchema(
     documentation: {
       filesystem: SubFeatureStatus.Supported,
       tree: SubFeatureStatus.NotSupported,
-      "multi-file": SubFeatureStatus.NotVerified,
-      "llms-txt": SubFeatureStatus.NotVerified,
-      "auto-merge": SubFeatureStatus.NotVerified,
-      skills: SubFeatureStatus.NotVerified,
-      "web-to-docs": SubFeatureStatus.NotVerified,
+      "multi-file": SubFeatureStatus.NotSupported,
+      "llms-txt": SubFeatureStatus.NotSupported,
+      "auto-merge": SubFeatureStatus.NotSupported,
+      skills: SubFeatureStatus.Supported,
+      "web-to-docs": SubFeatureStatus.NotSupported,
     },
     tools: {
       "web-search-engine": SubFeatureStatus.NotSupported,
