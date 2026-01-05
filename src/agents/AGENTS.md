@@ -213,6 +213,8 @@ Used for individual subfeatures within a feature.
 
 Each agent has its own directory containing a `featureSet.ts` file that defines the agent's capabilities using the schema.
 
+Each agent directory should also contain an `AGENTS.md` file with a URL to the agent's official documentation. This helps developers quickly find the documentation for each agent.
+
 Available agents:
 
 - `claudeCode/` - Claude Code agent
