@@ -123,6 +123,12 @@ const modelManagementFilteringDesc = await resolveSubfeature(
 const modelManagementRegionTuningDesc = await resolveSubfeature(
   "modelmanagement/region-tuning/region-tuning",
 );
+const agentModeDebugDesc = await resolveSubfeature(
+  "agentmode/debug/debug",
+);
+const agentModeAskDesc = await resolveSubfeature(
+  "agentmode/ask/ask",
+);
 
 export const featureSetSchema = z.object({
   planMode: feature(
@@ -257,6 +263,24 @@ export const featureSetSchema = z.object({
       "region-tuning": subfeature({
         name: "region-tuning",
         description: modelManagementRegionTuningDesc,
+      }),
+    },
+  ),
+  agentMode: feature(
+    {
+      name: "Agent Mode",
+      mainColor: "#ef4444",
+      secondaryColor: "#f87171",
+      slug: "agent-mode",
+    },
+    {
+      debug: subfeature({
+        name: "debug",
+        description: agentModeDebugDesc,
+      }),
+      ask: subfeature({
+        name: "ask",
+        description: agentModeAskDesc,
       }),
     },
   ),

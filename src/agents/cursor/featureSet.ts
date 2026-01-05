@@ -37,5 +37,9 @@ export const cursor = declareSchema(
       filtering: SubFeatureStatus.Supported,
       "region-tuning": SubFeatureStatus.PartiallySupported,
     },
+    agentMode: {
+      debug: SubFeatureStatus.Supported,
+      ask: SubFeatureStatus.Supported,
+    },
   },
 );

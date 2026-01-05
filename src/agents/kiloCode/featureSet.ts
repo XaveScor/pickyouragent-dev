@@ -36,5 +36,9 @@ export const kiloCode = declareSchema(
       filtering: SubFeatureStatus.NotSupported,
       "region-tuning": SubFeatureStatus.Supported,
     },
+    agentMode: {
+      debug: SubFeatureStatus.Supported,
+      ask: SubFeatureStatus.Supported,
+    },
   },
 );
