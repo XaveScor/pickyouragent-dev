@@ -15,6 +15,7 @@ If you're a web developer or want to automate tasks, you can use the built-in br
 
 - Codex
 - Kilo Code (The developer declares the support here https://kilo.ai/docs/features/browser-use) but I failed to connect Chrome instances to the agent
+- Junie
 
 **Not verified yet:**
 

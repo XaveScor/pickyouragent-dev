@@ -16,6 +16,7 @@ This feature enables the agent to search the internet for information that may n
 **Not supported agents:**
 
 - Kilo Code
+- Junie
 
 **Not verified yet:**
 

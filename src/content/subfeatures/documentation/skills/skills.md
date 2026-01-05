@@ -28,7 +28,7 @@ Read more about the standard: https://agentskills.io/home
 
 **Not supported agents:**
 
-None
+- Junie
 
 **Not verified yet:**
 

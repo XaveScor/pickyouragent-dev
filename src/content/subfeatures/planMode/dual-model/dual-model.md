@@ -21,8 +21,8 @@ Dual model lets you choose one AI model for planning and another for execution. 
 
 - Cursor (Not implemented)
 - Codex (Not implemented)
+- Junie (Uses automatic model selection, not dual-model)
 
 **Not verified yet:**
 
 - None
-

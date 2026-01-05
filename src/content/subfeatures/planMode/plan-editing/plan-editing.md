@@ -17,6 +17,7 @@ Sometimes we need to make changes to the plan. We could ask the model, "please, 
 
 - Codex (Not implemented)
 - Kilo Code (Not implemented. You need to patch your system prompts to save the prompt into a file)
+- Junie
 
 **Not verified yet:**
 

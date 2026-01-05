@@ -30,6 +30,7 @@ I see you're using the Astro framework. Would you like to add their llms-txt fil
 - Claude Code
 - Codex
 - Kilo Code
+- Junie
 
 **Not verified yet:**
 

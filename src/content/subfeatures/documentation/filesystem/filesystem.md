@@ -19,3 +19,4 @@ Common documentation files include:
 - Claude Code (supports CLAUDE.md)
 - Kilo Code (supports AGENTS.md)
 - Codex (supports AGENTS.md)
+- Junie (supports AGENTS.md and .junie/guidelines.md)

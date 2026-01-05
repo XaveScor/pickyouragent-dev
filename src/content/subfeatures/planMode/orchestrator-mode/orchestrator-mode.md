@@ -18,6 +18,7 @@ Plan Mode on steroids. The agent delegates each task to specialized agents, whic
 
 - Cursor
 - Codex
+- Junie
 
 **Not verified yet:**
 

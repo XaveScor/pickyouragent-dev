@@ -17,8 +17,8 @@ You could make your own skill (see [partial/skills page](/features/documentation
 
 - Codex
 - Kilo Code
+- Junie
 
 **Not verified yet:**
 
 - Claude Code
-

@@ -24,6 +24,7 @@ None
 - Cursor
 - Kilo Code
 - Codex
+- Junie
 
 **Not verified yet:**
 

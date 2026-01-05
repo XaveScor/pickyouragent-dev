@@ -16,4 +16,4 @@ Debug mode helps you find and fix problems in your code. The agent looks for bug
 
 - Claude Code (Has `--debug` flag but it's for debugging Claude Code itself, not a mode for debugging user code)
 - Codex (No dedicated debug mode - can help with debugging tasks but no specific mode feature)
-
+- Junie (No dedicated debug mode)
