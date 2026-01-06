@@ -1,0 +1,211 @@
+---
+// About page
+import '../styles/global.css';
+import Head from '../components/Head.astro';
+---
+
+<html lang="en">
+  <head>
+    <Head 
+      title="About | Pick Your Agent"
+      description="Hi. I'm Andrew: a senior frontend developer and I've created pickyouragent.dev to explore all the features across all AI agents at the market."
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="logo">pickyouragent.dev</a>
+      <div class="nav-links">
+        <a href="/about">About</a>
+        <a href="/about#how-to-use">How to use</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="about-section">
+        <a href="/" class="back-link">← Back to comparison</a>
+        
+        <div class="about-content">
+          <h1>About</h1>
+          <p>Hi. I'm <a href="http://linkedin.com/in/xavescor/" target="_blank" rel="noopener noreferrer">Andrew</a>: a senior frontend developer and I've created pickyouragent.dev to explore all the features across all AI agents at the market.</p>
+          <p>Each agent is tested by me in my production work. And my position is that the model is not as important as the agent because we already have cheap non-SOTA models (like <a href="https://z.ai/subscribe?ic=9GRH0KS07Z" target="_blank" rel="noopener noreferrer">GLM4.7</a>) sufficient for 95% of the tasks.</p>
+
+          <h2 id="how-to-use">How to use pickyouragent.dev</h2>
+          <p>Each feature has its own page with info about what is feature is about and how I use it in my work. Open it and integrate it into your pipeline.</p>
+
+          <p>Explore the <a href="/" target="_blank" rel="noopener noreferrer">comparison table</a> to see all features across different agents. Each feature link takes you to a detailed page with more information and my personal experience using it.</p>
+
+          <h2>Why features are important?</h2>
+          <p>We can implement a lot of declared features by patching system context of agent but it is not an effective way to solve tasks:</p>
+
+          <ol>
+            <li><strong>Price.</strong> The most powerful models like Anthropic Opus or OpenAI GPT Pro are not cheap. And each has its price. If an agent allows us to move out of context - it is a good way to save your limits/money.</li>
+            <li><strong>Even SOTA models have a small context window.</strong> If you put your instructions to base prompt - you have a smaller context window for problem solving.</li>
+            <li><strong>All LLMs cannot pay attention to each word in your prompt.</strong> See <a href="https://openai.com/index/introducing-gpt-5-2/" target="_blank" rel="noopener noreferrer">OpenAI's Long Contexts</a> paragraph. OpenAI shows how their models cannot find 100% of the needles in the context. That means: we MUST exclude all irrelevant information from the context because LLM can "forget" important info because context is too long.</li>
+            <li><strong>You don't need to know about features to integrate them into your pipeline.</strong> For example: a to-do list feature in plan mode. Some agents begin creating a to-do list from the prompt because LLMs work better when we make precise commands for them. If you use modern agents, you'll get these features automatically. All investigation work will be completed by agent authors. You don't need to spend your time.</li>
+            <li><strong>Features can be improved without your attention.</strong> Modern agents are used by lots of developers and authors can fine-tune features for better performance of your tools. If you create your own prompt, you have to improve your tools by yourself. You're just a user. This is inefficient because you can use an existing agent and receive all the benefits without spending time.</li>
+          </ol>
+
+          <h3>Examples of good features</h3>
+
+          <ol start="6">
+            <li><strong>LSP integration in opencode.</strong> Opencode automatically fetches error lists from related LSP servers: if you edit a TypeScript file, opencode tries to get TypeScript errors and fix them if the LLM wrote incorrect code. The same for Rust, CSS, Astro, etc. See <a href="https://opencode.ai/docs/lsp/#built-in" target="_blank" rel="noopener noreferrer">full list here</a>. You don't need to think about connecting the related LSP. It works automatically and makes your work more convenient and better.</li>
+            <li><strong>Documentation integration in cursor.</strong> Cursor has built-in documentation for almost any popular service and you can include it into your prompt. Just write "@ServiceName". You don't need to think about how to include docs because there are some issues like docs could be really large (1M+ tokens). Cursor solves it for you. Just use it.</li>
+            <li><strong>Some agents have questions support.</strong> When you create your plan sometimes you can see questions. This helps to clarify uncovered places in your prompt. You don't need to think about this feature. It just appears when you need it.</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .about-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+  }
+
+  .about-content {
+    background-color: var(--bg-card);
+    border-radius: 16px;
+    padding: 2.5rem 3rem;
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .about-content::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: var(--main-feature-color);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .about-content p {
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .about-content p:first-of-type {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+  }
+
+  .about-content a {
+    color: var(--main-feature-color);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .about-content a::after {
+    content: '↗';
+    font-size: 0.75em;
+    opacity: 0.5;
+    transition: opacity 0.15s ease;
+    line-height: 1;
+  }
+
+  .about-content a:hover {
+    color: var(--secondary-feature-color);
+  }
+
+  .about-content a:hover::after {
+    opacity: 1;
+  }
+
+  .about-content h2 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+    letter-spacing: -0.01em;
+  }
+
+  .about-content h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .about-content ol {
+    margin-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-content li {
+    color: var(--text-primary);
+    line-height: 1.7;
+    margin-bottom: 0.35rem;
+  }
+
+  .about-content li strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .about-section {
+      padding: 1.5rem 1.5rem 3rem;
+    }
+
+    .about-content {
+      padding: 2rem 1.75rem;
+      border-radius: 12px;
+    }
+
+    .about-content h1 {
+      font-size: 1.75rem;
+    }
+
+    .about-content h2 {
+      font-size: 1.2rem;
+    }
+
+    .about-content h3 {
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .about-section {
+      padding: 1rem 1rem 2.5rem;
+    }
+
+    .about-content {
+      padding: 1.5rem 1.25rem;
+    }
+
+    .about-content h1 {
+      font-size: 1.5rem;
+    }
+
+    .about-content p:first-of-type {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+  }
+</style>
