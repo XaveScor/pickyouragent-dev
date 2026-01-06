@@ -15,9 +15,10 @@ Sometimes we need to make changes to the plan. We could ask the model, "please, 
 
 **Not supported agents:**
 
-- Codex (Not implemented)
-- Kilo Code (Not implemented. You need to patch your system prompts to save the prompt into a file)
+- Codex
+- Kilo Code
 - Junie
+- OpenCode
 
 **Not verified yet:**
 

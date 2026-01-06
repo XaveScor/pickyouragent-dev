@@ -20,3 +20,4 @@ Common documentation files include:
 - Kilo Code (supports AGENTS.md)
 - Codex (supports AGENTS.md)
 - Junie (supports AGENTS.md and .junie/guidelines.md)
+- OpenCode (supports AGENTS.md) https://opencode.ai/docs/rules/

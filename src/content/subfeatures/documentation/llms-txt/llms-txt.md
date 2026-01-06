@@ -28,3 +28,4 @@ One approach is RAG (https://en.wikipedia.org/wiki/Retrieval-augmented-generatio
 - Codex
 - Kilo Code
 - Junie
+- OpenCode

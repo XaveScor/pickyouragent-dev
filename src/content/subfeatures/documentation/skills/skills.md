@@ -25,6 +25,7 @@ Read more about the standard: https://agentskills.io/home
 - Cursor
 - Kilo Code (https://kilo.ai/docs/features/skills)
 - Codex (https://developers.openai.com/codex/skills)
+- OpenCode (https://opencode.ai/docs/skills/)
 
 **Not supported agents:**
 

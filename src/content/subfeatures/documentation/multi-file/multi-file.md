@@ -52,3 +52,4 @@ If `root/code.source` uses `root/lib1/lib1.source`, the system context will be l
 - Codex
 - Kilo Code
 - Junie
+- OpenCode

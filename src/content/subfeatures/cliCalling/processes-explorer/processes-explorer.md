@@ -25,6 +25,7 @@ None
 - Kilo Code
 - Codex
 - Junie
+- OpenCode
 
 **Not verified yet:**
 

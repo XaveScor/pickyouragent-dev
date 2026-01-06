@@ -31,6 +31,7 @@ I see you're using the Astro framework. Would you like to add their llms-txt fil
 - Codex
 - Kilo Code
 - Junie
+- OpenCode
 
 **Not verified yet:**
 

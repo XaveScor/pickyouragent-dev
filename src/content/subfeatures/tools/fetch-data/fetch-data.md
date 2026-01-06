@@ -11,6 +11,7 @@ The built-in tool should be able to download the data and extract the useful inf
 **Supported agents:**
 
 - Claude Code
+- OpenCode https://opencode.ai/docs/tools/#webfetch
 
 **Not supported agents:**
 

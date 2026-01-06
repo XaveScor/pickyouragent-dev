@@ -17,6 +17,7 @@ This feature enables the agent to search the internet for information that may n
 
 - Kilo Code
 - Junie
+- OpenCode
 
 **Not verified yet:**
 

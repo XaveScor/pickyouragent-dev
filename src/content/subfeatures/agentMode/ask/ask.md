@@ -17,6 +17,7 @@ Ask mode lets you explore and ask questions about your codebase without making a
 
 - Claude Code (Use Plan Mode: `claude --permission-mode plan` or press Shift+Tab - provides read-only functionality)
 - Codex (Use read-only mode: `/approvals` select "Read Only" or `codex --sandbox read-only`)
+- OpenCode (Plan mode recommended instead) https://opencode.ai/docs/agents/#general
 
 **Not supported agents:**
 

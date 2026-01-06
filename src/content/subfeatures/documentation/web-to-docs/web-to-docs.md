@@ -17,3 +17,4 @@ This feature allows you to convert external websites and documentation into a fo
 - Codex
 - Kilo Code
 - Junie
+- OpenCode

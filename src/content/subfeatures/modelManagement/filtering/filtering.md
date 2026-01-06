@@ -10,6 +10,7 @@ The agent allows you to hide/show the models from the model list.
 **Supported agents:**
 
 - Cursor
+- OpenCode (type ctrl+x+m and select your favourite model)
 
 **Not supported agents:**
 

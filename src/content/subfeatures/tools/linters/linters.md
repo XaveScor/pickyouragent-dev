@@ -12,6 +12,7 @@ You could make your own skill (see [partial/skills page](/features/documentation
 **Supported agents:**
 
 - Cursor (partial support): You can install plugins for your linter—such as ESLint, TypeScript, etc.—and Cursor will detect errors directly, without consuming tokens. However, it cannot run `--autofix` to automatically fix issues; instead, it uses the selected model to resolve the errors.
+- OpenCode (https://opencode.ai/docs/lsp/)
 
 **Not supported agents:**
 
