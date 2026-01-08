@@ -8,8 +8,10 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && node scripts/build-sw.js",
-    "preview": "astro preview"
+    "build": "node scripts/build-cli.mjs",
+    "build:original": "astro build && node scripts/build-sw.js",
+    "preview": "astro preview",
+    "astro:run": "node scripts/astro-run.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

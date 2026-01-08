@@ -1,0 +1,57 @@
+---
+export const prerender = false;
+
+const name = Astro.url.searchParams.get("script");
+if (!name) {
+  return new Response(
+    JSON.stringify({ error: "Missing ?script= parameter" }),
+    {
+      status: 400,
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+}
+
+const scripts = import.meta.glob('../cli-scripts/*.ts');
+const key = `../cli-scripts/${name}.ts`;
+const loader = (scripts as any)[key];
+
+if (!loader) {
+  const availableScripts = Object.keys(scripts).map(k => k.replace('../cli-scripts/', '').replace('.ts', ''));
+  return new Response(
+    JSON.stringify({
+      error: `Unknown script: ${name}`,
+      available: availableScripts
+    }),
+    {
+      status: 404,
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+}
+
+try {
+  const mod = await loader();
+  const run = mod.default ?? mod.run;
+  const result = await run(Astro);
+
+  return new Response(
+    JSON.stringify(result, null, 2),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+} catch (error) {
+  return new Response(
+    JSON.stringify({
+      error: "Script execution failed",
+      message: error instanceof Error ? error.message : String(error)
+    }),
+    {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+}
+---
