@@ -15,7 +15,7 @@ export const kiloCode = declareSchema(
       questions: SubFeatureStatus.Supported,
       "plan-editing": SubFeatureStatus.NotSupported,
       "orchestrator-mode": SubFeatureStatus.Supported,
-      todos: SubFeatureStatus.NotVerified,
+      todos: SubFeatureStatus.PartiallySupported,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,
