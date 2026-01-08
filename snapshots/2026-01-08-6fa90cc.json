@@ -1,0 +1,312 @@
+{
+  "metadata": {
+    "date": "2026-01-08",
+    "commitHash": "6fa90cc",
+    "fullCommitHash": "6fa90cc168165d7a1c4678ba70a8022e9c4867aa",
+    "timestamp": "2026-01-08T11:06:43.183Z",
+    "githubRunId": "local",
+    "totalAgents": 6
+  },
+  "features": {
+    "planMode": {
+      "name": "Plan Mode",
+      "slug": "planmode",
+      "mainColor": "#3b82f6",
+      "secondaryColor": "#60a5fa",
+      "subfeatures": [
+        "dual-model",
+        "questions",
+        "plan-editing",
+        "orchestrator-mode"
+      ]
+    },
+    "documentation": {
+      "name": "Documentation",
+      "slug": "documentation",
+      "mainColor": "#8b5cf6",
+      "secondaryColor": "#a78bfa",
+      "subfeatures": [
+        "filesystem",
+        "tree",
+        "multi-file",
+        "llms-txt",
+        "auto-merge",
+        "skills",
+        "web-to-docs"
+      ]
+    },
+    "tools": {
+      "name": "Tools",
+      "slug": "tools",
+      "mainColor": "#06b6d4",
+      "secondaryColor": "#22d3ee",
+      "subfeatures": [
+        "web-search-engine",
+        "fetch-data",
+        "browser",
+        "linters"
+      ]
+    },
+    "commands": {
+      "name": "Commands",
+      "slug": "commands",
+      "mainColor": "#10b981",
+      "secondaryColor": "#34d399",
+      "subfeatures": []
+    },
+    "cliCalling": {
+      "name": "CLI Calling",
+      "slug": "cli-calling",
+      "mainColor": "#f97316",
+      "secondaryColor": "#fb923c",
+      "subfeatures": [
+        "infinite-tasks-timeout",
+        "processes-explorer"
+      ]
+    },
+    "modelManagement": {
+      "name": "Model management",
+      "slug": "model-management",
+      "mainColor": "#ec4899",
+      "secondaryColor": "#f472b6",
+      "subfeatures": [
+        "filtering",
+        "region-tuning"
+      ]
+    },
+    "agentMode": {
+      "name": "Agent Mode",
+      "slug": "agent-mode",
+      "mainColor": "#ef4444",
+      "secondaryColor": "#f87171",
+      "subfeatures": [
+        "debug",
+        "ask"
+      ]
+    }
+  },
+  "agents": [
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "features": {
+        "planMode": {
+          "dual-model": "not-supported",
+          "questions": "supported",
+          "plan-editing": "supported",
+          "orchestrator-mode": "not-supported"
+        },
+        "documentation": {
+          "filesystem": "supported",
+          "tree": "supported",
+          "multi-file": "supported",
+          "llms-txt": "supported",
+          "auto-merge": "not-supported",
+          "skills": "supported",
+          "web-to-docs": "supported"
+        },
+        "tools": {
+          "web-search-engine": "supported",
+          "fetch-data": "not-supported",
+          "browser": "partially-supported",
+          "linters": "partially-supported"
+        },
+        "commands": "supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": "not-supported",
+          "processes-explorer": "not-supported"
+        },
+        "modelManagement": {
+          "filtering": "supported",
+          "region-tuning": "partially-supported"
+        },
+        "agentMode": {
+          "debug": "supported",
+          "ask": "supported"
+        }
+      }
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "features": {
+        "planMode": {
+          "dual-model": "supported",
+          "questions": "not-verified",
+          "plan-editing": "not-verified",
+          "orchestrator-mode": "not-verified"
+        },
+        "documentation": {
+          "filesystem": "supported",
+          "tree": "supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "auto-merge": "not-supported",
+          "skills": "not-verified",
+          "web-to-docs": "not-supported"
+        },
+        "tools": {
+          "web-search-engine": "supported",
+          "fetch-data": "supported",
+          "browser": "not-verified",
+          "linters": "not-verified"
+        },
+        "commands": "supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": "not-verified",
+          "processes-explorer": "not-verified"
+        },
+        "modelManagement": {
+          "filtering": "not-supported",
+          "region-tuning": "not-supported"
+        },
+        "agentMode": {
+          "debug": "not-supported",
+          "ask": "partially-supported"
+        }
+      }
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "features": {
+        "planMode": "not-supported",
+        "documentation": {
+          "filesystem": "supported",
+          "tree": "not-supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "auto-merge": "not-supported",
+          "skills": "supported",
+          "web-to-docs": "not-supported"
+        },
+        "tools": {
+          "web-search-engine": "supported",
+          "fetch-data": "not-supported",
+          "browser": "not-supported",
+          "linters": "not-supported"
+        },
+        "commands": "supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": "not-supported",
+          "processes-explorer": "not-supported"
+        },
+        "modelManagement": {
+          "filtering": "not-supported",
+          "region-tuning": "not-supported"
+        },
+        "agentMode": {
+          "debug": "not-supported",
+          "ask": "partially-supported"
+        }
+      }
+    },
+    {
+      "id": "kilo-code",
+      "name": "Kilo Code",
+      "features": {
+        "planMode": {
+          "dual-model": "supported",
+          "questions": "supported",
+          "plan-editing": "not-supported",
+          "orchestrator-mode": "supported"
+        },
+        "documentation": {
+          "filesystem": "supported",
+          "tree": "not-supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "auto-merge": "not-supported",
+          "skills": "supported",
+          "web-to-docs": "not-supported"
+        },
+        "tools": {
+          "web-search-engine": "not-supported",
+          "fetch-data": "not-supported",
+          "browser": "not-supported",
+          "linters": "not-supported"
+        },
+        "commands": "supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": "not-supported",
+          "processes-explorer": "not-supported"
+        },
+        "modelManagement": {
+          "filtering": "not-supported",
+          "region-tuning": "supported"
+        },
+        "agentMode": {
+          "debug": "supported",
+          "ask": "supported"
+        }
+      }
+    },
+    {
+      "id": "junie",
+      "name": "Junie",
+      "features": {
+        "planMode": "not-supported",
+        "documentation": {
+          "filesystem": "supported",
+          "tree": "not-supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "auto-merge": "not-supported",
+          "skills": "not-supported",
+          "web-to-docs": "not-supported"
+        },
+        "tools": "not-supported",
+        "commands": "not-supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": "not-supported",
+          "processes-explorer": "not-supported"
+        },
+        "modelManagement": "not-supported",
+        "agentMode": {
+          "debug": "not-supported",
+          "ask": "supported"
+        }
+      }
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "features": {
+        "planMode": {
+          "dual-model": "supported",
+          "questions": "supported",
+          "plan-editing": "not-supported",
+          "orchestrator-mode": "not-supported"
+        },
+        "documentation": {
+          "filesystem": "supported",
+          "tree": "not-supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "auto-merge": "not-supported",
+          "skills": "supported",
+          "web-to-docs": "not-supported"
+        },
+        "tools": {
+          "web-search-engine": "not-supported",
+          "fetch-data": "supported",
+          "browser": "not-supported",
+          "linters": "supported"
+        },
+        "commands": "supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": "not-supported",
+          "processes-explorer": "not-supported"
+        },
+        "modelManagement": {
+          "filtering": "supported",
+          "region-tuning": "not-supported"
+        },
+        "agentMode": {
+          "debug": "not-supported",
+          "ask": "partially-supported"
+        }
+      }
+    }
+  ]
+}
