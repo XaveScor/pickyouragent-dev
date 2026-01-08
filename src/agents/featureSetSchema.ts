@@ -90,6 +90,7 @@ const planEditingDesc = await resolveSubfeature(
 const orchestratorModeDesc = await resolveSubfeature(
   "planmode/orchestrator-mode/orchestrator-mode",
 );
+const todosDesc = await resolveSubfeature("planmode/todos/todos");
 const filesystemDesc = await resolveSubfeature(
   "documentation/filesystem/filesystem",
 );
@@ -123,12 +124,8 @@ const modelManagementFilteringDesc = await resolveSubfeature(
 const modelManagementRegionTuningDesc = await resolveSubfeature(
   "modelmanagement/region-tuning/region-tuning",
 );
-const agentModeDebugDesc = await resolveSubfeature(
-  "agentmode/debug/debug",
-);
-const agentModeAskDesc = await resolveSubfeature(
-  "agentmode/ask/ask",
-);
+const agentModeDebugDesc = await resolveSubfeature("agentmode/debug/debug");
+const agentModeAskDesc = await resolveSubfeature("agentmode/ask/ask");
 
 export const featureSetSchema = z.object({
   planMode: feature(
@@ -154,6 +151,10 @@ export const featureSetSchema = z.object({
       "orchestrator-mode": subfeature({
         name: "orchestrator-mode",
         description: orchestratorModeDesc,
+      }),
+      todos: subfeature({
+        name: "todos",
+        description: todosDesc,
       }),
     },
   ),

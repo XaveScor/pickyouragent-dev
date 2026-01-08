@@ -1,4 +1,8 @@
-import { declareSchema, FeatureStatus, SubFeatureStatus } from "../featureSetSchema";
+import {
+  declareSchema,
+  FeatureStatus,
+  SubFeatureStatus,
+} from "../featureSetSchema";
 
 export const kiloCode = declareSchema(
   {
@@ -11,6 +15,7 @@ export const kiloCode = declareSchema(
       questions: SubFeatureStatus.Supported,
       "plan-editing": SubFeatureStatus.NotSupported,
       "orchestrator-mode": SubFeatureStatus.Supported,
+      todos: SubFeatureStatus.NotVerified,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,

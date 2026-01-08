@@ -1,4 +1,8 @@
-import { declareSchema, FeatureStatus, SubFeatureStatus } from "../featureSetSchema";
+import {
+  declareSchema,
+  FeatureStatus,
+  SubFeatureStatus,
+} from "../featureSetSchema";
 
 export const cursor = declareSchema(
   {
@@ -11,6 +15,7 @@ export const cursor = declareSchema(
       questions: SubFeatureStatus.Supported,
       "plan-editing": SubFeatureStatus.Supported,
       "orchestrator-mode": SubFeatureStatus.NotSupported,
+      todos: SubFeatureStatus.Supported,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,
@@ -25,8 +30,8 @@ export const cursor = declareSchema(
       "web-search-engine": SubFeatureStatus.Supported,
       // https://forum.cursor.com/t/agent-cant-web-search-properly/132658/17
       "fetch-data": SubFeatureStatus.NotSupported,
-      "browser": SubFeatureStatus.PartiallySupported,
-      "linters": SubFeatureStatus.PartiallySupported,
+      browser: SubFeatureStatus.PartiallySupported,
+      linters: SubFeatureStatus.PartiallySupported,
     },
     commands: FeatureStatus.Supported,
     cliCalling: {

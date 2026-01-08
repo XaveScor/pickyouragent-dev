@@ -15,6 +15,7 @@ export const opencode = declareSchema(
       questions: SubFeatureStatus.Supported,
       "plan-editing": SubFeatureStatus.NotSupported,
       "orchestrator-mode": SubFeatureStatus.NotSupported,
+      todos: SubFeatureStatus.PartiallySupported,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,

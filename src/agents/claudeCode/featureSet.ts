@@ -1,4 +1,8 @@
-import { declareSchema, FeatureStatus, SubFeatureStatus } from "../featureSetSchema";
+import {
+  declareSchema,
+  FeatureStatus,
+  SubFeatureStatus,
+} from "../featureSetSchema";
 
 export const claudeCode = declareSchema(
   {
@@ -11,6 +15,7 @@ export const claudeCode = declareSchema(
       questions: SubFeatureStatus.NotVerified,
       "plan-editing": SubFeatureStatus.NotVerified,
       "orchestrator-mode": SubFeatureStatus.NotVerified,
+      todos: SubFeatureStatus.Supported,
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,
@@ -24,8 +29,8 @@ export const claudeCode = declareSchema(
     tools: {
       "web-search-engine": SubFeatureStatus.Supported,
       "fetch-data": SubFeatureStatus.Supported,
-      "browser": SubFeatureStatus.NotVerified,
-      "linters": SubFeatureStatus.NotVerified,
+      browser: SubFeatureStatus.NotVerified,
+      linters: SubFeatureStatus.NotVerified,
     },
     commands: FeatureStatus.Supported,
     cliCalling: {
