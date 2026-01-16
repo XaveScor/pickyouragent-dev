@@ -138,15 +138,6 @@ const modelManagementRegionTuningDesc = await resolveSubfeature(
 );
 const agentModeDebugDesc = await resolveSubfeature("agentmode/debug/debug");
 const agentModeAskDesc = await resolveSubfeature("agentmode/ask/ask");
-const remoteDevelopmentOwnServerDesc = await resolveSubfeature(
-  "remotedevelopment/own-server/own-server",
-);
-const remoteDevelopmentMobileAppDesc = await resolveSubfeature(
-  "remotedevelopment/mobile-app/mobile-app",
-);
-const remoteDevelopmentInternetConnectionDesc = await resolveSubfeature(
-  "remotedevelopment/internet-connection/internet-connection",
-);
 
 export const featureSetSchema = z.object({
   subscriptions: feature(
@@ -312,28 +303,6 @@ export const featureSetSchema = z.object({
       ask: subfeature({
         name: "ask",
         description: agentModeAskDesc,
-      }),
-    },
-  ),
-  remoteDevelopment: feature(
-    {
-      name: "Remote Development",
-      mainColor: "#6366f1",
-      secondaryColor: "#818cf8",
-      slug: "remote-development",
-    },
-    {
-      "own-server": subfeature({
-        name: "own-server",
-        description: remoteDevelopmentOwnServerDesc,
-      }),
-      "mobile-app": subfeature({
-        name: "mobile-app",
-        description: remoteDevelopmentMobileAppDesc,
-      }),
-      "internet-connection": subfeature({
-        name: "internet-connection",
-        description: remoteDevelopmentInternetConnectionDesc,
       }),
     },
   ),

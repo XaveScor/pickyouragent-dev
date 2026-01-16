@@ -39,11 +39,6 @@ export const codex = declareSchema(
       debug: SubFeatureStatus.NotSupported,
       ask: SubFeatureStatus.PartiallySupported,
     },
-    remoteDevelopment: {
-      "own-server": SubFeatureStatus.NotSupported,
-      "mobile-app": SubFeatureStatus.Supported,
-      "internet-connection": SubFeatureStatus.Supported,
-    },
     subscriptions: [{ label: "openai", url: "https://chatgpt.com/pricing/" }],
   },
 );

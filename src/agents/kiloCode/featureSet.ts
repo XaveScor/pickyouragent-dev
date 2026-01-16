@@ -45,11 +45,6 @@ export const kiloCode = declareSchema(
       debug: SubFeatureStatus.Supported,
       ask: SubFeatureStatus.Supported,
     },
-    remoteDevelopment: {
-      "own-server": SubFeatureStatus.Supported,
-      "mobile-app": SubFeatureStatus.NotVerified,
-      "internet-connection": SubFeatureStatus.PartiallySupported,
-    },
     subscriptions: [
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
     ],

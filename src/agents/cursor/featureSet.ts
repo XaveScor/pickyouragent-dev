@@ -46,11 +46,6 @@ export const cursor = declareSchema(
       debug: SubFeatureStatus.Supported,
       ask: SubFeatureStatus.Supported,
     },
-    remoteDevelopment: {
-      "own-server": SubFeatureStatus.NotSupported,
-      "mobile-app": SubFeatureStatus.Supported,
-      "internet-connection": SubFeatureStatus.NotVerified,
-    },
     subscriptions: [
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
     ],
