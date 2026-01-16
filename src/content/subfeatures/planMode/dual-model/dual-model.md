@@ -17,10 +17,10 @@ Dual model lets you choose one AI model for planning and another for execution. 
 - Kilo Code (Just switch the model in the model selector)
 - Claude Code https://www.threads.com/@boris_cherny/post/DNTYPVMJpPs?xmt=AQF0H_HQD_tqVqdMLV8wlkbRIulBx_-WM9lkEZ1w2vjEOg
 - OpenCode (You can select another model for implementation)
+- Cursor (You can change the model at any time in your chat)
 
 **Not supported agents:**
 
-- Cursor (Not implemented)
 - Codex (Not implemented)
 - Junie (Uses automatic model selection, not dual-model)
 

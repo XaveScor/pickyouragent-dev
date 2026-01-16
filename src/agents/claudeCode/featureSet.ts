@@ -45,6 +45,11 @@ export const claudeCode = declareSchema(
       debug: SubFeatureStatus.NotSupported,
       ask: SubFeatureStatus.PartiallySupported,
     },
+    remoteDevelopment: {
+      "own-server": SubFeatureStatus.PartiallySupported,
+      "mobile-app": SubFeatureStatus.Supported,
+      "internet-connection": SubFeatureStatus.Supported,
+    },
     subscriptions: [
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
       { label: "max plan", url: "https://claude.com/pricing/max" },

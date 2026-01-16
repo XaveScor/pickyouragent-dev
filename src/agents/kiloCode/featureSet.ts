@@ -19,7 +19,7 @@ export const kiloCode = declareSchema(
     },
     documentation: {
       filesystem: SubFeatureStatus.Supported,
-      tree: SubFeatureStatus.NotSupported,
+      tree: SubFeatureStatus.Supported,
       "multi-file": SubFeatureStatus.NotSupported,
       "llms-txt": SubFeatureStatus.NotSupported,
       "auto-merge": SubFeatureStatus.NotSupported,
@@ -44,6 +44,11 @@ export const kiloCode = declareSchema(
     agentMode: {
       debug: SubFeatureStatus.Supported,
       ask: SubFeatureStatus.Supported,
+    },
+    remoteDevelopment: {
+      "own-server": SubFeatureStatus.Supported,
+      "mobile-app": SubFeatureStatus.NotVerified,
+      "internet-connection": SubFeatureStatus.PartiallySupported,
     },
     subscriptions: [
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },

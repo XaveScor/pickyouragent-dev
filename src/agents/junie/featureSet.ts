@@ -31,6 +31,11 @@ export const junie = declareSchema(
       debug: SubFeatureStatus.NotSupported,
       ask: SubFeatureStatus.Supported,
     },
+    remoteDevelopment: {
+      "own-server": SubFeatureStatus.NotVerified,
+      "mobile-app": SubFeatureStatus.NotVerified,
+      "internet-connection": SubFeatureStatus.NotVerified,
+    },
     subscriptions: FeatureStatus.NotSupported,
   },
 );

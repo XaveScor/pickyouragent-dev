@@ -11,7 +11,7 @@ export const cursor = declareSchema(
   },
   {
     planMode: {
-      "dual-model": SubFeatureStatus.NotSupported,
+      "dual-model": SubFeatureStatus.Supported,
       questions: SubFeatureStatus.Supported,
       "plan-editing": SubFeatureStatus.Supported,
       "orchestrator-mode": SubFeatureStatus.NotSupported,
@@ -45,6 +45,11 @@ export const cursor = declareSchema(
     agentMode: {
       debug: SubFeatureStatus.Supported,
       ask: SubFeatureStatus.Supported,
+    },
+    remoteDevelopment: {
+      "own-server": SubFeatureStatus.NotSupported,
+      "mobile-app": SubFeatureStatus.Supported,
+      "internet-connection": SubFeatureStatus.NotVerified,
     },
     subscriptions: [
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
