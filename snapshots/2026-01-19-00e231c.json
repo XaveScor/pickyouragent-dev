@@ -1,0 +1,763 @@
+{
+  "metadata": {
+    "date": "2026-01-19",
+    "commitHash": "00e231c",
+    "fullCommitHash": "00e231c718da82b75e062f3424170ece0142b878",
+    "timestamp": "2026-01-19T21:42:49.268Z",
+    "githubRunId": "21152191396",
+    "totalAgents": 6
+  },
+  "features": {
+    "subscriptions": {
+      "name": "Subscriptions",
+      "slug": "subscriptions",
+      "mainColor": "#f43f5e",
+      "secondaryColor": "#fb7185",
+      "subfeatures": []
+    },
+    "planMode": {
+      "name": "Plan Mode",
+      "slug": "planmode",
+      "mainColor": "#3b82f6",
+      "secondaryColor": "#60a5fa",
+      "subfeatures": [
+        "dual-model",
+        "questions",
+        "plan-editing",
+        "orchestrator-mode",
+        "todos"
+      ]
+    },
+    "documentation": {
+      "name": "Documentation",
+      "slug": "documentation",
+      "mainColor": "#8b5cf6",
+      "secondaryColor": "#a78bfa",
+      "subfeatures": [
+        "filesystem",
+        "tree",
+        "multi-file",
+        "llms-txt",
+        "auto-merge",
+        "skills",
+        "web-to-docs"
+      ]
+    },
+    "tools": {
+      "name": "Tools",
+      "slug": "tools",
+      "mainColor": "#06b6d4",
+      "secondaryColor": "#22d3ee",
+      "subfeatures": [
+        "web-search-engine",
+        "fetch-data",
+        "browser",
+        "linters"
+      ]
+    },
+    "commands": {
+      "name": "Commands",
+      "slug": "commands",
+      "mainColor": "#10b981",
+      "secondaryColor": "#34d399",
+      "subfeatures": []
+    },
+    "cliCalling": {
+      "name": "CLI Calling",
+      "slug": "cli-calling",
+      "mainColor": "#f97316",
+      "secondaryColor": "#fb923c",
+      "subfeatures": [
+        "infinite-tasks-timeout",
+        "processes-explorer"
+      ]
+    },
+    "modelManagement": {
+      "name": "Model management",
+      "slug": "model-management",
+      "mainColor": "#ec4899",
+      "secondaryColor": "#f472b6",
+      "subfeatures": [
+        "filtering",
+        "region-tuning"
+      ]
+    },
+    "agentMode": {
+      "name": "Agent Mode",
+      "slug": "agent-mode",
+      "mainColor": "#ef4444",
+      "secondaryColor": "#f87171",
+      "subfeatures": [
+        "debug",
+        "ask"
+      ]
+    }
+  },
+  "agents": [
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "features": {
+        "subscriptions": {
+          "$$type": "subscriptions",
+          "links": [
+            {
+              "label": "z.ai",
+              "url": "https://z.ai/subscribe?ic=9GRH0KS07Z"
+            }
+          ]
+        },
+        "planMode": {
+          "dual-model": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "questions": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "plan-editing": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "orchestrator-mode": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "todos": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "tree": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "multi-file": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "llms-txt": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "auto-merge": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "skills": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "web-to-docs": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        },
+        "tools": {
+          "web-search-engine": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "fetch-data": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "browser": {
+            "$$type": "status",
+            "status": "partially-supported"
+          },
+          "linters": {
+            "$$type": "status",
+            "status": "partially-supported"
+          }
+        },
+        "commands": {
+          "$$type": "status",
+          "status": "supported"
+        },
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "processes-explorer": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "modelManagement": {
+          "filtering": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "region-tuning": {
+            "$$type": "status",
+            "status": "partially-supported"
+          }
+        },
+        "agentMode": {
+          "debug": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "ask": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        }
+      }
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "features": {
+        "subscriptions": {
+          "$$type": "subscriptions",
+          "links": [
+            {
+              "label": "z.ai",
+              "url": "https://z.ai/subscribe?ic=9GRH0KS07Z"
+            },
+            {
+              "label": "max plan",
+              "url": "https://claude.com/pricing/max"
+            }
+          ]
+        },
+        "planMode": {
+          "dual-model": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "questions": {
+            "$$type": "status",
+            "status": "not-verified"
+          },
+          "plan-editing": {
+            "$$type": "status",
+            "status": "not-verified"
+          },
+          "orchestrator-mode": {
+            "$$type": "status",
+            "status": "not-verified"
+          },
+          "todos": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "tree": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "multi-file": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "llms-txt": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "auto-merge": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "skills": {
+            "$$type": "status",
+            "status": "not-verified"
+          },
+          "web-to-docs": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "tools": {
+          "web-search-engine": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "fetch-data": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "browser": {
+            "$$type": "status",
+            "status": "not-verified"
+          },
+          "linters": {
+            "$$type": "status",
+            "status": "not-verified"
+          }
+        },
+        "commands": {
+          "$$type": "status",
+          "status": "supported"
+        },
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "$$type": "status",
+            "status": "not-verified"
+          },
+          "processes-explorer": {
+            "$$type": "status",
+            "status": "not-verified"
+          }
+        },
+        "modelManagement": {
+          "filtering": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "region-tuning": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "agentMode": {
+          "debug": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "ask": {
+            "$$type": "status",
+            "status": "partially-supported"
+          }
+        }
+      }
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "features": {
+        "subscriptions": {
+          "$$type": "subscriptions",
+          "links": [
+            {
+              "label": "openai",
+              "url": "https://chatgpt.com/pricing/"
+            }
+          ]
+        },
+        "planMode": {
+          "$$type": "status",
+          "status": "not-supported"
+        },
+        "documentation": {
+          "filesystem": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "tree": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "multi-file": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "llms-txt": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "auto-merge": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "skills": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "web-to-docs": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "tools": {
+          "web-search-engine": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "fetch-data": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "browser": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "linters": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "commands": {
+          "$$type": "status",
+          "status": "supported"
+        },
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "processes-explorer": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "modelManagement": {
+          "filtering": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "region-tuning": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "agentMode": {
+          "debug": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "ask": {
+            "$$type": "status",
+            "status": "partially-supported"
+          }
+        }
+      }
+    },
+    {
+      "id": "kilo-code",
+      "name": "Kilo Code",
+      "features": {
+        "subscriptions": {
+          "$$type": "subscriptions",
+          "links": [
+            {
+              "label": "z.ai",
+              "url": "https://z.ai/subscribe?ic=9GRH0KS07Z"
+            }
+          ]
+        },
+        "planMode": {
+          "dual-model": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "questions": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "plan-editing": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "orchestrator-mode": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "todos": {
+            "$$type": "status",
+            "status": "partially-supported"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "tree": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "multi-file": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "llms-txt": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "auto-merge": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "skills": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "web-to-docs": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "tools": {
+          "web-search-engine": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "fetch-data": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "browser": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "linters": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "commands": {
+          "$$type": "status",
+          "status": "supported"
+        },
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "processes-explorer": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "modelManagement": {
+          "filtering": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "region-tuning": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        },
+        "agentMode": {
+          "debug": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "ask": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        }
+      }
+    },
+    {
+      "id": "junie",
+      "name": "Junie",
+      "features": {
+        "subscriptions": {
+          "$$type": "status",
+          "status": "not-supported"
+        },
+        "planMode": {
+          "$$type": "status",
+          "status": "not-supported"
+        },
+        "documentation": {
+          "filesystem": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "tree": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "multi-file": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "llms-txt": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "auto-merge": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "skills": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "web-to-docs": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "tools": {
+          "$$type": "status",
+          "status": "not-supported"
+        },
+        "commands": {
+          "$$type": "status",
+          "status": "not-supported"
+        },
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "processes-explorer": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "modelManagement": {
+          "$$type": "status",
+          "status": "not-supported"
+        },
+        "agentMode": {
+          "debug": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "ask": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        }
+      }
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "features": {
+        "subscriptions": {
+          "$$type": "subscriptions",
+          "links": [
+            {
+              "label": "z.ai",
+              "url": "https://z.ai/subscribe?ic=9GRH0KS07Z"
+            },
+            {
+              "label": "openai",
+              "url": "https://chatgpt.com/pricing/"
+            },
+            {
+              "label": "copilot",
+              "url": "https://github.com/features/copilot/plans"
+            }
+          ]
+        },
+        "planMode": {
+          "dual-model": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "questions": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "plan-editing": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "orchestrator-mode": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "todos": {
+            "$$type": "status",
+            "status": "partially-supported"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "tree": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "multi-file": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "llms-txt": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "auto-merge": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "skills": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "web-to-docs": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "tools": {
+          "web-search-engine": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "fetch-data": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "browser": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "linters": {
+            "$$type": "status",
+            "status": "supported"
+          }
+        },
+        "commands": {
+          "$$type": "status",
+          "status": "supported"
+        },
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "processes-explorer": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "modelManagement": {
+          "filtering": {
+            "$$type": "status",
+            "status": "supported"
+          },
+          "region-tuning": {
+            "$$type": "status",
+            "status": "not-supported"
+          }
+        },
+        "agentMode": {
+          "debug": {
+            "$$type": "status",
+            "status": "not-supported"
+          },
+          "ask": {
+            "$$type": "status",
+            "status": "partially-supported"
+          }
+        }
+      }
+    }
+  ]
+}
