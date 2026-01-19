@@ -15,25 +15,25 @@ export type SubscriptionLink = {
 };
 
 export type StatusCell = {
-  type: "status";
+  $$type: "status";
   status: Status;
 };
 
 export type SubscriptionsCell = {
-  type: "subscriptions";
+  $$type: "subscriptions";
   links: SubscriptionLink[];
 };
 
 export type Cell = StatusCell | SubscriptionsCell;
 
 export function statusCell(status: Status): StatusCell {
-  return { type: "status", status };
+  return { $$type: "status", status };
 }
 
 export function subscriptionsCell(
   links: SubscriptionLink[],
 ): SubscriptionsCell {
-  return { type: "subscriptions", links };
+  return { $$type: "subscriptions", links };
 }
 
 const subscriptionLinkSchema = z.object({
@@ -42,7 +42,7 @@ const subscriptionLinkSchema = z.object({
 });
 
 export const statusCellSchema = z.object({
-  type: z.literal("status"),
+  $$type: z.literal("status"),
   status: z.enum([
     Status.Supported,
     Status.PartiallySupported,
@@ -52,7 +52,7 @@ export const statusCellSchema = z.object({
 });
 
 export const subscriptionsCellSchema = z.object({
-  type: z.literal("subscriptions"),
+  $$type: z.literal("subscriptions"),
   links: z.array(subscriptionLinkSchema),
 });
 

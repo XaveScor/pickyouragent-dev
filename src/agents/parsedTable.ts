@@ -11,6 +11,9 @@ import {
   type SubscriptionLink,
   type StatusCell,
   type SubscriptionsCell,
+  type Cell,
+  statusCell,
+  subscriptionsCell,
 } from "./cells";
 
 // Helper function to format display names
@@ -26,7 +29,7 @@ function isStatusCell(value: any): value is StatusCell {
   return (
     value &&
     typeof value === "object" &&
-    value.type === "status" &&
+    value.$$type === "status" &&
     typeof value.status === "string" &&
     Object.values(Status).includes(value.status)
   );
@@ -37,7 +40,7 @@ function isSubscriptionsCell(value: any): value is SubscriptionsCell {
   return (
     value &&
     typeof value === "object" &&
-    value.type === "subscriptions" &&
+    value.$$type === "subscriptions" &&
     Array.isArray(value.links)
   );
 }
@@ -203,6 +206,64 @@ export class ParsedFeature {
   getLinksByAgent(agentId: string): SubscriptionLink[] {
     return this.linksByAgent.get(agentId) || [];
   }
+}
+
+/**
+ * Parses a feature and returns cells for rendering.
+ * This function simplifies the rendering by pre-computing cells for each agent.
+ *
+ * @param feature - The feature to parse
+ * @param agents - The agents to generate cells for
+ * @returns An object containing the feature's cells and subfeatures' cells
+ */
+export function parseLine(
+  feature: ParsedFeature,
+  agents: Agent[],
+): {
+  feature: { name: string; cells: Cell[]; key: string; slug: string };
+  subfeatures: Array<{
+    name: string;
+    cells: Cell[];
+    key: string;
+    slug: string;
+  }>;
+} {
+  // Build cells for the main feature row
+  const featureCells: Cell[] = agents.map((agent) => {
+    const links = feature.getLinksByAgent(agent.meta.id);
+    if (links.length > 0) {
+      return subscriptionsCell(links);
+    }
+    const status =
+      feature.statusByAgent.get(agent.meta.id) || feature.aggregatedStatus;
+    return statusCell(status);
+  });
+
+  // Build cells for each subfeature
+  const subfeaturesCells = feature.getSubfeatures().map((subfeature) => {
+    const cells: Cell[] = agents.map((agent) => {
+      const status =
+        subfeature.statusByAgent.get(agent.meta.id) ||
+        subfeature.aggregatedStatus;
+      return statusCell(status);
+    });
+    return {
+      name: subfeature.name,
+      cells,
+      key: subfeature.key,
+      slug: subfeature.slug,
+    };
+  });
+
+  return {
+    feature: {
+      name: feature.name,
+      cells: featureCells,
+      key: feature.key,
+      slug: feature.slug,
+    },
+    subfeatures: subfeaturesCells,
+  };
 }
 
 /**

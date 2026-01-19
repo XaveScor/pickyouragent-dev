@@ -54,7 +54,7 @@ function subfeature(config: {
   description: CollectionEntry<"subfeatures">;
 }) {
   const subfeatureSchema = z.object({
-    type: z.literal("status"),
+    $$type: z.literal("status"),
     status: z.enum([
       Status.Supported,
       Status.PartiallySupported,

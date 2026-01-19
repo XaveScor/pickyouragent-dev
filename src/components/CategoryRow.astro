@@ -1,6 +1,7 @@
 ---
 import type { Agent } from '../agents/featureSetSchema';
 import { ParsedFeature } from '../agents/parsedTable';
+import { parseLine } from '../agents/parsedTable';
 import StatusCell from './StatusCell.astro';
 import SubscriptionsCell from './SubscriptionsCell.astro';
 
@@ -10,43 +11,42 @@ interface Props {
 }
 
 const { feature, agents } = Astro.props;
+
+const parsed = parseLine(feature, agents);
 ---
 
 <tr class="category-row" data-category={feature.key} style={`--main-feature-color: ${feature.mainColor}; --secondary-feature-color: ${feature.secondaryColor}`}>
     <td class="category-cell">
       <a href={`/features/${feature.slug}`} class="category-name category-link">
-        {feature.name}
+        {parsed.feature.name}
       </a>
     </td>
-    {agents.map((agent) => {
-      const status = feature.statusByAgent.get(agent.meta.id) || feature.aggregatedStatus;
-      const links = feature.getLinksByAgent(agent.meta.id);
-      return (
-        <td>
-          {links.length > 0 ? (
-            <SubscriptionsCell links={links} mainColor={feature.mainColor} />
-          ) : (
-            <StatusCell status={status} />
-          )}
-        </td>
-      );
-    })}
+    {parsed.feature.cells.map((cell) => (
+      <td>
+        {cell.$$type === "subscriptions" ? (
+          <SubscriptionsCell links={cell.links} mainColor={feature.mainColor} />
+        ) : (
+          <StatusCell status={cell.status} />
+        )}
+      </td>
+    ))}
   </tr>
-  {feature.getSubfeatures().map((subfeature) => (
+  {parsed.subfeatures.map((subfeature) => (
     <tr class="feature-row" data-category={feature.key} style={`--main-feature-color: ${feature.mainColor}; --secondary-feature-color: ${feature.secondaryColor}`}>
       <td class="feature-cell">
         <a href={`/features/${feature.slug}#${subfeature.key}`} class="feature-name feature-link">
           {subfeature.name}
         </a>
       </td>
-      {agents.map((agent) => {
-        const status = subfeature.statusByAgent.get(agent.meta.id) || subfeature.aggregatedStatus;
-        return (
-          <td>
-            <StatusCell status={status} />
-          </td>
-        );
-      })}
+      {subfeature.cells.map((cell) => (
+        <td>
+          {cell.$$type === "subscriptions" ? (
+            <SubscriptionsCell links={cell.links} mainColor={feature.mainColor} />
+          ) : (
+            <StatusCell status={cell.status} />
+          )}
+        </td>
+      ))}
     </tr>
   ))}
 
