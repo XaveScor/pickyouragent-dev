@@ -1,8 +1,5 @@
-import {
-  declareSchema,
-  FeatureStatus,
-  SubFeatureStatus,
-} from "../featureSetSchema";
+import { declareSchema } from "../featureSetSchema";
+import { Status, statusCell, subscriptionsCell } from "../cells";
 
 export const claudeCode = declareSchema(
   {
@@ -11,43 +8,43 @@ export const claudeCode = declareSchema(
   },
   {
     planMode: {
-      "dual-model": SubFeatureStatus.Supported,
-      questions: SubFeatureStatus.NotVerified,
-      "plan-editing": SubFeatureStatus.NotVerified,
-      "orchestrator-mode": SubFeatureStatus.NotVerified,
-      todos: SubFeatureStatus.Supported,
+      "dual-model": statusCell(Status.Supported),
+      questions: statusCell(Status.NotVerified),
+      "plan-editing": statusCell(Status.NotVerified),
+      "orchestrator-mode": statusCell(Status.NotVerified),
+      todos: statusCell(Status.Supported),
     },
     documentation: {
-      filesystem: SubFeatureStatus.Supported,
-      tree: SubFeatureStatus.Supported,
-      "multi-file": SubFeatureStatus.NotSupported,
-      "llms-txt": SubFeatureStatus.NotSupported,
-      "auto-merge": SubFeatureStatus.NotSupported,
-      skills: SubFeatureStatus.NotVerified,
-      "web-to-docs": SubFeatureStatus.NotSupported,
+      filesystem: statusCell(Status.Supported),
+      tree: statusCell(Status.Supported),
+      "multi-file": statusCell(Status.NotSupported),
+      "llms-txt": statusCell(Status.NotSupported),
+      "auto-merge": statusCell(Status.NotSupported),
+      skills: statusCell(Status.NotVerified),
+      "web-to-docs": statusCell(Status.NotSupported),
     },
     tools: {
-      "web-search-engine": SubFeatureStatus.Supported,
-      "fetch-data": SubFeatureStatus.Supported,
-      browser: SubFeatureStatus.NotVerified,
-      linters: SubFeatureStatus.NotVerified,
+      "web-search-engine": statusCell(Status.Supported),
+      "fetch-data": statusCell(Status.Supported),
+      browser: statusCell(Status.NotVerified),
+      linters: statusCell(Status.NotVerified),
     },
-    commands: FeatureStatus.Supported,
+    commands: statusCell(Status.Supported),
     cliCalling: {
-      "infinite-tasks-timeout": SubFeatureStatus.NotVerified,
-      "processes-explorer": SubFeatureStatus.NotVerified,
+      "infinite-tasks-timeout": statusCell(Status.NotVerified),
+      "processes-explorer": statusCell(Status.NotVerified),
     },
     modelManagement: {
-      filtering: SubFeatureStatus.NotSupported,
-      "region-tuning": SubFeatureStatus.NotSupported,
+      filtering: statusCell(Status.NotSupported),
+      "region-tuning": statusCell(Status.NotSupported),
     },
     agentMode: {
-      debug: SubFeatureStatus.NotSupported,
-      ask: SubFeatureStatus.PartiallySupported,
+      debug: statusCell(Status.NotSupported),
+      ask: statusCell(Status.PartiallySupported),
     },
-    subscriptions: [
+    subscriptions: subscriptionsCell([
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
       { label: "max plan", url: "https://claude.com/pricing/max" },
-    ],
+    ]),
   },
 );

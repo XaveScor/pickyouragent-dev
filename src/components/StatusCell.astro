@@ -1,0 +1,12 @@
+---
+import { Status } from '../agents/cells';
+import Badge from './Badge.astro';
+
+interface Props {
+  status: Status;
+}
+
+const { status } = Astro.props;
+---
+
+<Badge status={status} />

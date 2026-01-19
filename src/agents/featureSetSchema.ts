@@ -1,25 +1,13 @@
 import { z } from "zod";
 import { getEntry, getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
-
-export enum SubFeatureStatus {
-  Supported = "supported",
-  PartiallySupported = "partially-supported",
-  NotSupported = "not-supported",
-  NotVerified = "not-verified",
-}
-
-export enum FeatureStatus {
-  Supported = "supported",
-  PartiallySupported = "partially-supported",
-  NotSupported = "not-supported",
-  NotVerified = "not-verified",
-}
-
-export type SubscriptionLink = {
-  label: string;
-  url: string;
-};
+import type { SubscriptionLink } from "./cells";
+import {
+  Status,
+  statusCellSchema,
+  subscriptionsCellSchema,
+  cellSchema,
+} from "./cells";
 
 type FeatureMeta = {
   name: string;
@@ -65,7 +53,15 @@ function subfeature(config: {
   name: string;
   description: CollectionEntry<"subfeatures">;
 }) {
-  const subfeatureSchema = z.enum(SubFeatureStatus);
+  const subfeatureSchema = z.object({
+    type: z.literal("status"),
+    status: z.enum([
+      Status.Supported,
+      Status.PartiallySupported,
+      Status.NotSupported,
+      Status.NotVerified,
+    ]),
+  });
   // Type assertion to work around Astro version compatibility issue with render() method signature
   subfeaturesRegistry.add(subfeatureSchema, {
     name: config.name,
@@ -79,17 +75,7 @@ function feature<T extends Record<string, z.ZodType>>(
   subfeatures: T,
 ) {
   const subfeaturesSchema = z.object(subfeatures);
-  const linksSchema = z.array(
-    z.object({
-      label: z.string(),
-      url: z.string().url(),
-    }),
-  );
-  const featureSchema = z.union([
-    z.nativeEnum(FeatureStatus),
-    subfeaturesSchema,
-    linksSchema,
-  ]);
+  const featureSchema = z.union([cellSchema, subfeaturesSchema]);
   featuresRegistry.add(featureSchema, meta);
   return featureSchema;
 }

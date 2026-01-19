@@ -1,8 +1,5 @@
-import {
-  declareSchema,
-  FeatureStatus,
-  SubFeatureStatus,
-} from "../featureSetSchema";
+import { declareSchema } from "../featureSetSchema";
+import { Status, statusCell, subscriptionsCell } from "../cells";
 
 export const codex = declareSchema(
   {
@@ -10,35 +7,37 @@ export const codex = declareSchema(
     name: "Codex",
   },
   {
-    planMode: FeatureStatus.NotSupported,
+    planMode: statusCell(Status.NotSupported),
     documentation: {
-      filesystem: SubFeatureStatus.Supported,
-      tree: SubFeatureStatus.NotSupported,
-      "multi-file": SubFeatureStatus.NotSupported,
-      "llms-txt": SubFeatureStatus.NotSupported,
-      "auto-merge": SubFeatureStatus.NotSupported,
-      skills: SubFeatureStatus.Supported,
-      "web-to-docs": SubFeatureStatus.NotSupported,
+      filesystem: statusCell(Status.Supported),
+      tree: statusCell(Status.NotSupported),
+      "multi-file": statusCell(Status.NotSupported),
+      "llms-txt": statusCell(Status.NotSupported),
+      "auto-merge": statusCell(Status.NotSupported),
+      skills: statusCell(Status.Supported),
+      "web-to-docs": statusCell(Status.NotSupported),
     },
     tools: {
-      "web-search-engine": SubFeatureStatus.Supported,
-      "fetch-data": SubFeatureStatus.NotSupported,
-      browser: SubFeatureStatus.NotSupported,
-      linters: SubFeatureStatus.NotSupported,
+      "web-search-engine": statusCell(Status.Supported),
+      "fetch-data": statusCell(Status.NotSupported),
+      browser: statusCell(Status.NotSupported),
+      linters: statusCell(Status.NotSupported),
     },
-    commands: FeatureStatus.Supported,
+    commands: statusCell(Status.Supported),
     cliCalling: {
-      "infinite-tasks-timeout": SubFeatureStatus.NotSupported,
-      "processes-explorer": SubFeatureStatus.NotSupported,
+      "infinite-tasks-timeout": statusCell(Status.NotSupported),
+      "processes-explorer": statusCell(Status.NotSupported),
     },
     modelManagement: {
-      filtering: SubFeatureStatus.NotSupported,
-      "region-tuning": SubFeatureStatus.NotSupported,
+      filtering: statusCell(Status.NotSupported),
+      "region-tuning": statusCell(Status.NotSupported),
     },
     agentMode: {
-      debug: SubFeatureStatus.NotSupported,
-      ask: SubFeatureStatus.PartiallySupported,
+      debug: statusCell(Status.NotSupported),
+      ask: statusCell(Status.PartiallySupported),
     },
-    subscriptions: [{ label: "openai", url: "https://chatgpt.com/pricing/" }],
+    subscriptions: subscriptionsCell([
+      { label: "openai", url: "https://chatgpt.com/pricing/" },
+    ]),
   },
 );

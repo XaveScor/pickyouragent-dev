@@ -1,8 +1,5 @@
-import {
-  declareSchema,
-  FeatureStatus,
-  SubFeatureStatus,
-} from "../featureSetSchema";
+import { declareSchema } from "../featureSetSchema";
+import { Status, statusCell, subscriptionsCell } from "../cells";
 
 export const cursor = declareSchema(
   {
@@ -11,43 +8,43 @@ export const cursor = declareSchema(
   },
   {
     planMode: {
-      "dual-model": SubFeatureStatus.Supported,
-      questions: SubFeatureStatus.Supported,
-      "plan-editing": SubFeatureStatus.Supported,
-      "orchestrator-mode": SubFeatureStatus.NotSupported,
-      todos: SubFeatureStatus.Supported,
+      "dual-model": statusCell(Status.Supported),
+      questions: statusCell(Status.Supported),
+      "plan-editing": statusCell(Status.Supported),
+      "orchestrator-mode": statusCell(Status.NotSupported),
+      todos: statusCell(Status.Supported),
     },
     documentation: {
-      filesystem: SubFeatureStatus.Supported,
-      tree: SubFeatureStatus.Supported,
-      "multi-file": SubFeatureStatus.Supported,
-      "llms-txt": SubFeatureStatus.Supported,
-      "auto-merge": SubFeatureStatus.NotSupported,
-      skills: SubFeatureStatus.Supported,
-      "web-to-docs": SubFeatureStatus.Supported,
+      filesystem: statusCell(Status.Supported),
+      tree: statusCell(Status.Supported),
+      "multi-file": statusCell(Status.Supported),
+      "llms-txt": statusCell(Status.Supported),
+      "auto-merge": statusCell(Status.NotSupported),
+      skills: statusCell(Status.Supported),
+      "web-to-docs": statusCell(Status.Supported),
     },
     tools: {
-      "web-search-engine": SubFeatureStatus.Supported,
+      "web-search-engine": statusCell(Status.Supported),
       // https://forum.cursor.com/t/agent-cant-web-search-properly/132658/17
-      "fetch-data": SubFeatureStatus.NotSupported,
-      browser: SubFeatureStatus.PartiallySupported,
-      linters: SubFeatureStatus.PartiallySupported,
+      "fetch-data": statusCell(Status.NotSupported),
+      browser: statusCell(Status.PartiallySupported),
+      linters: statusCell(Status.PartiallySupported),
     },
-    commands: FeatureStatus.Supported,
+    commands: statusCell(Status.Supported),
     cliCalling: {
-      "infinite-tasks-timeout": SubFeatureStatus.NotSupported,
-      "processes-explorer": SubFeatureStatus.NotSupported,
+      "infinite-tasks-timeout": statusCell(Status.NotSupported),
+      "processes-explorer": statusCell(Status.NotSupported),
     },
     modelManagement: {
-      filtering: SubFeatureStatus.Supported,
-      "region-tuning": SubFeatureStatus.PartiallySupported,
+      filtering: statusCell(Status.Supported),
+      "region-tuning": statusCell(Status.PartiallySupported),
     },
     agentMode: {
-      debug: SubFeatureStatus.Supported,
-      ask: SubFeatureStatus.Supported,
+      debug: statusCell(Status.Supported),
+      ask: statusCell(Status.Supported),
     },
-    subscriptions: [
+    subscriptions: subscriptionsCell([
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
-    ],
+    ]),
   },
 );

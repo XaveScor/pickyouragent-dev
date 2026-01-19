@@ -1,0 +1,15 @@
+---
+import type { SubscriptionLink } from '../agents/cells';
+import LinksList from './LinksList.astro';
+
+interface Props {
+  links: SubscriptionLink[];
+  mainColor?: string;
+}
+
+const { links, mainColor = "#f43f5e" } = Astro.props;
+---
+
+{links.length > 0 ? (
+  <LinksList links={links} mainColor={mainColor} />
+) : null}

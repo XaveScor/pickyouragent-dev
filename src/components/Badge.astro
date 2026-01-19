@@ -1,53 +1,45 @@
 ---
-import { FeatureStatus, SubFeatureStatus } from '../agents/featureSetSchema';
+import { Status } from '../agents/cells';
 
 interface Props {
-  status: FeatureStatus | SubFeatureStatus;
+  status: Status;
 }
 
 const { status } = Astro.props;
 
 // Helper function to get status text
-function getStatusText(status: FeatureStatus | SubFeatureStatus): string {
+function getStatusText(status: Status): string {
   switch (status) {
-    case FeatureStatus.Supported:
-    case SubFeatureStatus.Supported:
+    case Status.Supported:
       return 'yes';
-    case FeatureStatus.PartiallySupported:
-    case SubFeatureStatus.PartiallySupported:
+    case Status.PartiallySupported:
       return 'partial';
-    case FeatureStatus.NotSupported:
-    case SubFeatureStatus.NotSupported:
+    case Status.NotSupported:
       return 'no';
-    case FeatureStatus.NotVerified:
-    case SubFeatureStatus.NotVerified:
+    case Status.NotVerified:
       return 'not verified yet';
   }
 }
 
 // Helper function to get status class
-function getStatusClass(status: FeatureStatus | SubFeatureStatus): string {
+function getStatusClass(status: Status): string {
   switch (status) {
-    case FeatureStatus.Supported:
-    case SubFeatureStatus.Supported:
+    case Status.Supported:
       return 'supported';
-    case FeatureStatus.PartiallySupported:
-    case SubFeatureStatus.PartiallySupported:
+    case Status.PartiallySupported:
       return 'partially-supported';
-    case FeatureStatus.NotSupported:
-    case SubFeatureStatus.NotSupported:
+    case Status.NotSupported:
       return 'not-supported';
-    case FeatureStatus.NotVerified:
-    case SubFeatureStatus.NotVerified:
+    case Status.NotVerified:
       return 'not-verified';
   }
 }
 
 const statusClass = getStatusClass(status);
 const statusText = getStatusText(status);
-const icon = (status === FeatureStatus.NotSupported || status === SubFeatureStatus.NotSupported) 
-  ? '✕' 
-  : (status === FeatureStatus.NotVerified || status === SubFeatureStatus.NotVerified)
+const icon = (status === Status.NotSupported)
+  ? '✕'
+  : (status === Status.NotVerified)
   ? '?'
   : '✓';
 ---

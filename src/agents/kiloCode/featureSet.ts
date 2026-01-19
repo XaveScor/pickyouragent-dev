@@ -1,8 +1,5 @@
-import {
-  declareSchema,
-  FeatureStatus,
-  SubFeatureStatus,
-} from "../featureSetSchema";
+import { declareSchema } from "../featureSetSchema";
+import { Status, statusCell, subscriptionsCell } from "../cells";
 
 export const kiloCode = declareSchema(
   {
@@ -11,42 +8,42 @@ export const kiloCode = declareSchema(
   },
   {
     planMode: {
-      "dual-model": SubFeatureStatus.Supported,
-      questions: SubFeatureStatus.Supported,
-      "plan-editing": SubFeatureStatus.NotSupported,
-      "orchestrator-mode": SubFeatureStatus.Supported,
-      todos: SubFeatureStatus.PartiallySupported,
+      "dual-model": statusCell(Status.Supported),
+      questions: statusCell(Status.Supported),
+      "plan-editing": statusCell(Status.NotSupported),
+      "orchestrator-mode": statusCell(Status.Supported),
+      todos: statusCell(Status.PartiallySupported),
     },
     documentation: {
-      filesystem: SubFeatureStatus.Supported,
-      tree: SubFeatureStatus.Supported,
-      "multi-file": SubFeatureStatus.NotSupported,
-      "llms-txt": SubFeatureStatus.NotSupported,
-      "auto-merge": SubFeatureStatus.NotSupported,
-      skills: SubFeatureStatus.Supported,
-      "web-to-docs": SubFeatureStatus.NotSupported,
+      filesystem: statusCell(Status.Supported),
+      tree: statusCell(Status.Supported),
+      "multi-file": statusCell(Status.NotSupported),
+      "llms-txt": statusCell(Status.NotSupported),
+      "auto-merge": statusCell(Status.NotSupported),
+      skills: statusCell(Status.Supported),
+      "web-to-docs": statusCell(Status.NotSupported),
     },
     tools: {
-      "web-search-engine": SubFeatureStatus.NotSupported,
-      "fetch-data": SubFeatureStatus.NotSupported,
-      browser: SubFeatureStatus.NotSupported,
-      linters: SubFeatureStatus.NotSupported,
+      "web-search-engine": statusCell(Status.NotSupported),
+      "fetch-data": statusCell(Status.NotSupported),
+      browser: statusCell(Status.NotSupported),
+      linters: statusCell(Status.NotSupported),
     },
-    commands: FeatureStatus.Supported,
+    commands: statusCell(Status.Supported),
     cliCalling: {
-      "infinite-tasks-timeout": SubFeatureStatus.NotSupported,
-      "processes-explorer": SubFeatureStatus.NotSupported,
+      "infinite-tasks-timeout": statusCell(Status.NotSupported),
+      "processes-explorer": statusCell(Status.NotSupported),
     },
     modelManagement: {
-      filtering: SubFeatureStatus.NotSupported,
-      "region-tuning": SubFeatureStatus.Supported,
+      filtering: statusCell(Status.NotSupported),
+      "region-tuning": statusCell(Status.Supported),
     },
     agentMode: {
-      debug: SubFeatureStatus.Supported,
-      ask: SubFeatureStatus.Supported,
+      debug: statusCell(Status.Supported),
+      ask: statusCell(Status.Supported),
     },
-    subscriptions: [
+    subscriptions: subscriptionsCell([
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
-    ],
+    ]),
   },
 );

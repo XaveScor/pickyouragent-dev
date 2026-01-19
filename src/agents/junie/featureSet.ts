@@ -1,8 +1,5 @@
-import {
-  declareSchema,
-  FeatureStatus,
-  SubFeatureStatus,
-} from "../featureSetSchema";
+import { declareSchema } from "../featureSetSchema";
+import { Status, statusCell } from "../cells";
 
 export const junie = declareSchema(
   {
@@ -10,27 +7,27 @@ export const junie = declareSchema(
     name: "Junie",
   },
   {
-    planMode: FeatureStatus.NotSupported,
+    planMode: statusCell(Status.NotSupported),
     documentation: {
-      filesystem: SubFeatureStatus.Supported,
-      tree: SubFeatureStatus.NotSupported,
-      "multi-file": SubFeatureStatus.NotSupported,
-      "llms-txt": SubFeatureStatus.NotSupported,
-      "auto-merge": SubFeatureStatus.NotSupported,
-      skills: SubFeatureStatus.NotSupported,
-      "web-to-docs": SubFeatureStatus.NotSupported,
+      filesystem: statusCell(Status.Supported),
+      tree: statusCell(Status.NotSupported),
+      "multi-file": statusCell(Status.NotSupported),
+      "llms-txt": statusCell(Status.NotSupported),
+      "auto-merge": statusCell(Status.NotSupported),
+      skills: statusCell(Status.NotSupported),
+      "web-to-docs": statusCell(Status.NotSupported),
     },
-    tools: FeatureStatus.NotSupported,
-    commands: FeatureStatus.NotSupported,
+    tools: statusCell(Status.NotSupported),
+    commands: statusCell(Status.NotSupported),
     cliCalling: {
-      "infinite-tasks-timeout": SubFeatureStatus.NotSupported,
-      "processes-explorer": SubFeatureStatus.NotSupported,
+      "infinite-tasks-timeout": statusCell(Status.NotSupported),
+      "processes-explorer": statusCell(Status.NotSupported),
     },
-    modelManagement: FeatureStatus.NotSupported,
+    modelManagement: statusCell(Status.NotSupported),
     agentMode: {
-      debug: SubFeatureStatus.NotSupported,
-      ask: SubFeatureStatus.Supported,
+      debug: statusCell(Status.NotSupported),
+      ask: statusCell(Status.Supported),
     },
-    subscriptions: FeatureStatus.NotSupported,
+    subscriptions: statusCell(Status.NotSupported),
   },
 );

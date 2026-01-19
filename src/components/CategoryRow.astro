@@ -1,8 +1,8 @@
 ---
 import type { Agent } from '../agents/featureSetSchema';
 import { ParsedFeature } from '../agents/parsedTable';
-import Badge from './Badge.astro';
-import LinksList from './LinksList.astro';
+import StatusCell from './StatusCell.astro';
+import SubscriptionsCell from './SubscriptionsCell.astro';
 
 interface Props {
   feature: ParsedFeature;
@@ -20,16 +20,13 @@ const { feature, agents } = Astro.props;
     </td>
     {agents.map((agent) => {
       const status = feature.statusByAgent.get(agent.meta.id) || feature.aggregatedStatus;
+      const links = feature.getLinksByAgent(agent.meta.id);
       return (
         <td>
-          {feature.key === 'subscriptions' ? (
-            feature.getLinksByAgent(agent.meta.id).length > 0 ? (
-              <LinksList links={feature.getLinksByAgent(agent.meta.id)} mainColor={feature.mainColor} />
-            ) : (
-              <Badge status={status} />
-            )
+          {links.length > 0 ? (
+            <SubscriptionsCell links={links} mainColor={feature.mainColor} />
           ) : (
-            <Badge status={status} />
+            <StatusCell status={status} />
           )}
         </td>
       );
@@ -46,7 +43,7 @@ const { feature, agents } = Astro.props;
         const status = subfeature.statusByAgent.get(agent.meta.id) || subfeature.aggregatedStatus;
         return (
           <td>
-            <Badge status={status} />
+            <StatusCell status={status} />
           </td>
         );
       })}
