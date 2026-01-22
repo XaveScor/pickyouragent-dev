@@ -4,6 +4,7 @@ import '../../styles/global.css';
 import { allAgents } from '../../agents/allAgents';
 import { ParsedTable } from '../../agents/parsedTable';
 import Head from '../../components/Head.astro';
+import SubfeatureSupportTabs from '../../components/SubfeatureSupportTabs.astro';
 
 export async function getStaticPaths() {
   const features = await getCollection('features');
@@ -14,21 +15,19 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
 
 // Get category color from parsed table
 const parsedTable = await ParsedTable.create(allAgents);
 const feature = parsedTable.getFeature(entry.slug);
-const mainColor = feature?.mainColor || '#3b82f6';
 
-// Get all subfeature contents
-const subfeatureContents = feature && feature.getSubfeatures().length > 0
-  ? feature.getSubfeatures().map((subfeature) => ({
-      key: subfeature.key,
-      name: subfeature.name,
-      Content: subfeature.Content,
-    }))
-  : [];
+if (!feature) {
+  return new Response('Feature not found', { status: 404 });
+}
+
+const mainColor = feature.mainColor || '#3b82f6';
+
+// Get all subfeatures
+const subfeatures = feature.getSubfeatures();
 ---
 
 <html lang="en">
@@ -49,16 +48,20 @@ const subfeatureContents = feature && feature.getSubfeatures().length > 0
 
     <main class="feature-page">
       <a href="/" class="back-link">← Back to comparison</a>
-      
+
       <article class="feature-content" style={`--main-feature-color: ${mainColor}`}>
-        <Content />
-        
-        {subfeatureContents.length > 0 && (
+        <h1>{entry.data.title}</h1>
+        <p class="lead">{entry.data.description}</p>
+
+        {subfeatures.length > 0 && (
           <>
-            {subfeatureContents.map((subfeature) => (
+            {subfeatures.map((subfeature) => (
               <section class="subfeature" id={subfeature.key}>
                 <h2>{subfeature.name}</h2>
-                <subfeature.Content />
+                <div class="subfeature-description">
+                  <subfeature.Content />
+                </div>
+                <SubfeatureSupportTabs subfeature={subfeature} agents={parsedTable.agents} />
               </section>
             ))}
           </>

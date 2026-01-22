@@ -1,0 +1,271 @@
+---
+import type { Agent } from '../agents/featureSetSchema';
+import type { ParsedSubfeature } from '../agents/parsedTable';
+import { Status } from '../agents/cells';
+import Badge from './Badge.astro';
+
+interface Props {
+  subfeature: ParsedSubfeature;
+  agents: Agent[];
+}
+
+const { subfeature, agents } = Astro.props;
+
+// Build agent data with per-agent status for this subfeature
+const agentPanels = agents.map((agent) => {
+  const status = subfeature.statusByAgent.get(agent.meta.id) || subfeature.aggregatedStatus;
+
+  return {
+    agent,
+    status,
+  };
+});
+
+const defaultAgentId = agents[0]?.meta.id || '';
+---
+
+<section class="tabbed-area">
+  <div class="tab-list" role="tablist">
+    {agentPanels.map((panel, index) => (
+      <button
+        class={`tab ${index === 0 ? 'tab-active' : ''}`}
+        role="tab"
+        aria-selected={index === 0 ? 'true' : 'false'}
+        aria-controls={`panel-${panel.agent.meta.id}`}
+        data-agent-id={panel.agent.meta.id}
+        tabindex={index === 0 ? '0' : '-1'}
+      >
+        {panel.agent.meta.name}
+      </button>
+    ))}
+  </div>
+
+  <div class="panels">
+    {agentPanels.map((panel, index) => (
+      <div
+        id={`panel-${panel.agent.meta.id}`}
+        class={`panel ${index === 0 ? 'panel-active' : ''}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${panel.agent.meta.id}`}
+        hidden={index !== 0}
+      >
+        <div class="support-table">
+          <div class="support-row">
+            <span class="support-label">Status</span>
+            <div class="support-value">
+              <Badge status={panel.status} />
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .tabbed-area {
+    margin: 2rem 0;
+    background-color: var(--bg-page);
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+  }
+
+  .tab-list {
+    display: flex;
+    border-bottom: 1px solid var(--border-light);
+    background-color: var(--bg-page);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .tab-list::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .tab-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .tab-list::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 2px;
+  }
+
+  .tab {
+    padding: 0.875rem 1.25rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  .tab:hover {
+    color: var(--text-primary);
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .tab:focus-visible {
+    outline: 2px solid var(--main-feature-color);
+    outline-offset: -2px;
+  }
+
+  .tab-active {
+    color: var(--main-feature-color);
+    border-bottom-color: var(--main-feature-color);
+    background-color: var(--bg-card);
+  }
+
+  .panels {
+    padding: 1.5rem;
+  }
+
+  .panel {
+    display: none;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .panel-active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .support-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .support-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .support-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    min-width: 60px;
+  }
+
+  .support-value {
+    flex: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .panels {
+      padding: 1.25rem;
+    }
+
+    .tab {
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .tabbed-area {
+      margin: 1.5rem 0;
+      border-radius: 8px;
+    }
+
+    .panels {
+      padding: 1rem;
+    }
+
+    .tab {
+      padding: 0.625rem 0.875rem;
+      font-size: 0.8rem;
+    }
+
+    .support-row {
+      gap: 0.75rem;
+    }
+
+    .support-label {
+      min-width: 50px;
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
+<script is:inline>
+  (function() {
+    const tabbedAreas = document.querySelectorAll('.tabbed-area');
+
+    tabbedAreas.forEach((tabbedArea) => {
+      const tabs = tabbedArea.querySelectorAll('.tab');
+      const panels = tabbedArea.querySelectorAll('.panel');
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+          const agentId = tab.dataset.agentId;
+          if (!agentId) return;
+
+          tabs.forEach((t) => {
+            t.classList.remove('tab-active');
+            t.setAttribute('aria-selected', 'false');
+            t.setAttribute('tabindex', '-1');
+          });
+
+          tab.classList.add('tab-active');
+          tab.setAttribute('aria-selected', 'true');
+          tab.setAttribute('tabindex', '0');
+
+          panels.forEach((p) => {
+            p.classList.remove('panel-active');
+            p.hidden = true;
+          });
+
+          const activePanel = tabbedArea.querySelector(`#panel-${agentId}`);
+          if (activePanel) {
+            activePanel.classList.add('panel-active');
+            activePanel.hidden = false;
+          }
+        });
+      });
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('keydown', (e) => {
+          const currentIndex = Array.from(tabs).indexOf(tab);
+          let nextIndex = currentIndex;
+
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            e.preventDefault();
+            nextIndex = (currentIndex + 1) % tabs.length;
+            tabs[nextIndex].focus();
+            tabs[nextIndex].click();
+          } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+            tabs[nextIndex].focus();
+            tabs[nextIndex].click();
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            tabs[0].focus();
+            tabs[0].click();
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            tabs[tabs.length - 1].focus();
+            tabs[tabs.length - 1].click();
+          }
+        });
+      });
+    });
+  })();
+</script>
