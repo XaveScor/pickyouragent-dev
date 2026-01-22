@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { Agent } from "./featureSetSchema";
-import { render } from "astro:content";
+import { render, getCollection } from "astro:content";
 import {
   featuresRegistry,
   subfeaturesRegistry,
@@ -121,6 +121,24 @@ function getSubfeatureStatus(featureValue: any, featureKey: string): Status {
 }
 
 /**
+ * Resolves an agent subfeature by its collection ID.
+ * ID should be the path relative to the collection base without extension (e.g., 'claude-code/planmode/dual-model').
+ * Returns null if the entry does not exist (agent-specific content is optional).
+ *
+ * Note: This function must be called at the top level with await for Astro's static analysis.
+ */
+export async function resolveAgentSubfeature(id: string): Promise<any | null> {
+  const allEntries = await getCollection("agentSubfeatures");
+  const entry = allEntries.find((e) => e.id === id);
+
+  if (!entry) {
+    return null;
+  }
+
+  return entry;
+}
+
+/**
  * Represents a subfeature with pre-rendered content.
  * All Astro-specific rendering is encapsulated within this class.
  */
@@ -131,6 +149,7 @@ export class ParsedSubfeature {
   readonly statusByAgent: Map<string, Status>;
   readonly aggregatedStatus: Status;
   readonly Content: any;
+  readonly agentContentById: Map<string, any>;
 
   constructor(
     key: string,
@@ -138,16 +157,22 @@ export class ParsedSubfeature {
     slug: string,
     statusByAgent: Map<string, Status>,
     Content: any,
+    agentContentById: Map<string, any> = new Map(),
   ) {
     this.key = key;
     this.name = name;
     this.slug = slug;
     this.statusByAgent = statusByAgent;
     this.Content = Content;
+    this.agentContentById = agentContentById;
 
     // Aggregate status across all agents
     const statuses = Array.from(statusByAgent.values());
     this.aggregatedStatus = aggregateSubfeatureStatuses(statuses);
+  }
+
+  getAgentContent(agentId: string): any | undefined {
+    return this.agentContentById.get(agentId);
   }
 }
 
@@ -378,16 +403,45 @@ export class ParsedTable {
           ? formatDisplayName(subfeatureMeta.name)
           : formatDisplayName(subfeatureKey);
 
-        // Collect status by agent
+        // Collect status by agent and gather detailsId for agent-specific content
         const statusByAgent = new Map<string, Status>();
+        const detailsIdByAgent = new Map<string, string | undefined>();
         for (const agent of this.agents) {
           const featureValue =
             agent.features[categoryKey as keyof typeof agent.features];
           const status = getSubfeatureStatus(featureValue, subfeatureKey);
           statusByAgent.set(agent.meta.id, status);
+
+          // Extract detailsId if present in status cell
+          if (isStatusCell(featureValue)) {
+            // This is a simple status cell, no subfeatures, no detailsId to extract
+            detailsIdByAgent.set(agent.meta.id, undefined);
+          } else if (!isSubscriptionsCell(featureValue)) {
+            // This is an object with subfeature keys
+            const featureObj = featureValue as Record<string, StatusCell>;
+            detailsIdByAgent.set(
+              agent.meta.id,
+              featureObj[subfeatureKey]?.detailsId,
+            );
+          } else {
+            detailsIdByAgent.set(agent.meta.id, undefined);
+          }
         }
 
         const renderedContent = await render(subfeatureMeta.description);
+
+        // Resolve and render agent-specific content for each agent
+        const agentContentById = new Map<string, any>();
+        for (const agent of this.agents) {
+          const detailsId = detailsIdByAgent.get(agent.meta.id);
+          if (detailsId) {
+            const agentEntry = await resolveAgentSubfeature(detailsId);
+            if (agentEntry) {
+              const agentRenderedContent = await render(agentEntry);
+              agentContentById.set(agent.meta.id, agentRenderedContent.Content);
+            }
+          }
+        }
 
         parsedSubfeatures.push(
           new ParsedSubfeature(
@@ -396,6 +450,7 @@ export class ParsedTable {
             subfeatureKey, // Use key as slug for subfeatures
             statusByAgent,
             renderedContent.Content,
+            agentContentById,
           ),
         );
       }

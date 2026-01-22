@@ -11,13 +11,15 @@ interface Props {
 
 const { subfeature, agents } = Astro.props;
 
-// Build agent data with per-agent status for this subfeature
+// Build agent data with per-agent status and content for this subfeature
 const agentPanels = agents.map((agent) => {
   const status = subfeature.statusByAgent.get(agent.meta.id) || subfeature.aggregatedStatus;
+  const agentContent = subfeature.getAgentContent(agent.meta.id);
 
   return {
     agent,
     status,
+    content: agentContent,
   };
 });
 
@@ -57,6 +59,11 @@ const defaultAgentId = agents[0]?.meta.id || '';
             </div>
           </div>
         </div>
+        {panel.content && (
+          <div class="agent-specific-content">
+            <panel.content />
+          </div>
+        )}
       </div>
     ))}
   </div>
@@ -165,6 +172,58 @@ const defaultAgentId = agents[0]?.meta.id || '';
 
   .support-value {
     flex: 1;
+  }
+
+  .agent-specific-content {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .agent-specific-content :global(p) {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  .agent-specific-content :global(h3) {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .agent-specific-content :global(code) {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+
+  .agent-specific-content :global(pre) {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+  }
+
+  .agent-specific-content :global(pre code) {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .agent-specific-content :global(ul),
+  .agent-specific-content :global(ol) {
+    margin-left: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .agent-specific-content :global(li) {
+    margin-bottom: 0.35rem;
+    line-height: 1.6;
   }
 
   /* Responsive */

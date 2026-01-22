@@ -17,6 +17,7 @@ export type SubscriptionLink = {
 export type StatusCell = {
   $$type: "status";
   status: Status;
+  detailsId?: string;
 };
 
 export type SubscriptionsCell = {
@@ -26,8 +27,8 @@ export type SubscriptionsCell = {
 
 export type Cell = StatusCell | SubscriptionsCell;
 
-export function statusCell(status: Status): StatusCell {
-  return { $$type: "status", status };
+export function statusCell(status: Status, detailsId?: string): StatusCell {
+  return { $$type: "status", status, detailsId };
 }
 
 export function subscriptionsCell(
@@ -49,6 +50,7 @@ export const statusCellSchema = z.object({
     Status.NotSupported,
     Status.NotVerified,
   ]),
+  detailsId: z.string().optional(),
 });
 
 export const subscriptionsCellSchema = z.object({

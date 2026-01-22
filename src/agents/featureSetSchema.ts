@@ -61,6 +61,7 @@ function subfeature(config: {
       Status.NotSupported,
       Status.NotVerified,
     ]),
+    detailsId: z.string().optional(),
   });
   // Type assertion to work around Astro version compatibility issue with render() method signature
   subfeaturesRegistry.add(subfeatureSchema, {

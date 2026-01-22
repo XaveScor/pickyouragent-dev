@@ -8,7 +8,10 @@ export const claudeCode = declareSchema(
   },
   {
     planMode: {
-      "dual-model": statusCell(Status.Supported),
+      "dual-model": statusCell(
+        Status.Supported,
+        "claude-code/planmode/dual-model",
+      ),
       questions: statusCell(Status.NotVerified),
       "plan-editing": statusCell(Status.NotVerified),
       "orchestrator-mode": statusCell(Status.NotVerified),

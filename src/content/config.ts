@@ -1,8 +1,8 @@
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
 
 const featuresCollection = defineCollection({
-  type: 'content',
+  type: "content",
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -11,8 +11,23 @@ const featuresCollection = defineCollection({
 });
 
 const subfeaturesCollection = defineCollection({
-  loader: glob({ pattern: '**/!(AGENTS)*.{md,mdx}', base: './src/content/subfeatures' }),
+  loader: glob({
+    pattern: "**/!(AGENTS)*.{md,mdx}",
+    base: "./src/content/subfeatures",
+  }),
   schema: z.object({
+    featureName: z.string(),
+    subfeatureName: z.string(),
+  }),
+});
+
+const agentSubfeaturesCollection = defineCollection({
+  loader: glob({
+    pattern: "**/!(AGENTS)*.{md,mdx}",
+    base: "./src/content/agent-subfeatures",
+  }),
+  schema: z.object({
+    agentId: z.string(),
     featureName: z.string(),
     subfeatureName: z.string(),
   }),
@@ -21,5 +36,5 @@ const subfeaturesCollection = defineCollection({
 export const collections = {
   features: featuresCollection,
   subfeatures: subfeaturesCollection,
+  agentSubfeatures: agentSubfeaturesCollection,
 };
-
