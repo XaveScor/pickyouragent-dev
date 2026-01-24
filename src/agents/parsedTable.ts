@@ -19,6 +19,14 @@ import {
 
 export type Cell = CellsCell;
 
+type FeatureMeta = {
+  name: string;
+  mainColor: string;
+  secondaryColor: string;
+  slug?: string;
+  kind: "subscriptions" | "status";
+};
+
 function formatDisplayName(key: string): string {
   return key
     .split("-")
@@ -348,6 +356,152 @@ export class StatusFeature extends Feature {
 
     return subfeatureLines;
   }
+
+  static async parse(
+    categoryKey: string,
+    categoryMeta: FeatureMeta,
+    categorySchema: z.ZodType,
+    agents: Agent[],
+  ): Promise<StatusFeature> {
+    const categorySchemaAny = categorySchema as any;
+    const subfeatureKeys: string[] = [];
+
+    if (categorySchemaAny instanceof z.ZodUnion) {
+      const objectOption = categorySchemaAny.options.find(
+        (opt: any) => opt instanceof z.ZodObject,
+      );
+      if (objectOption instanceof z.ZodObject) {
+        const keys = Object.keys(objectOption.shape);
+        subfeatureKeys.push(
+          ...keys.filter(
+            (k) => !["$$type", "status", "detailsId", "links"].includes(k),
+          ),
+        );
+      }
+    } else if (categorySchemaAny instanceof z.ZodObject) {
+      const keys = Object.keys(categorySchemaAny.shape);
+      subfeatureKeys.push(
+        ...keys.filter(
+          (k) => !["$$type", "status", "detailsId", "links"].includes(k),
+        ),
+      );
+    }
+
+    const parsedSubfeatures: StatusSubfeature[] = [];
+    for (const subfeatureKey of subfeatureKeys) {
+      let subfeatureSchema: z.ZodType | undefined;
+      if (categorySchemaAny instanceof z.ZodUnion) {
+        const objectOption = categorySchemaAny.options.find(
+          (opt: any) => opt instanceof z.ZodObject,
+        );
+        if (objectOption instanceof z.ZodObject) {
+          subfeatureSchema = (objectOption.shape as Record<string, z.ZodType>)[
+            subfeatureKey
+          ];
+        }
+      } else if (categorySchemaAny instanceof z.ZodObject) {
+        subfeatureSchema = (
+          categorySchemaAny.shape as Record<string, z.ZodType>
+        )[subfeatureKey];
+      }
+
+      if (!subfeatureSchema) continue;
+
+      const subfeatureMeta = subfeaturesRegistry.get(subfeatureSchema);
+      if (!subfeatureMeta) {
+        throw new Error(`Subfeature metadata not found for ${subfeatureKey}`);
+      }
+      if (!subfeatureMeta.description) {
+        throw new Error(
+          `Subfeature description not found for ${subfeatureKey}`,
+        );
+      }
+
+      const subfeatureName = subfeatureMeta.name
+        ? formatDisplayName(subfeatureMeta.name)
+        : formatDisplayName(subfeatureKey);
+
+      const statusByAgent = new Map<string, Status>();
+      const detailsIdByAgent = new Map<string, string | undefined>();
+      for (const agent of agents) {
+        const featureValue =
+          agent.features[categoryKey as keyof typeof agent.features];
+        const status = getSubfeatureStatus(featureValue, subfeatureKey);
+        statusByAgent.set(agent.meta.id, status);
+
+        if (isStatusCell(featureValue)) {
+          detailsIdByAgent.set(agent.meta.id, undefined);
+        } else if (!isSubscriptionsCell(featureValue)) {
+          const featureObj = featureValue as Record<string, StatusCell>;
+          detailsIdByAgent.set(
+            agent.meta.id,
+            featureObj[subfeatureKey]?.detailsId,
+          );
+        } else {
+          detailsIdByAgent.set(agent.meta.id, undefined);
+        }
+      }
+
+      const Content = await lazyAstroFactory(
+        "subfeatures",
+        subfeatureMeta.description.id,
+      );
+
+      const agentContentById = new Map<string, any>();
+      for (const agent of agents) {
+        const detailsId = detailsIdByAgent.get(agent.meta.id);
+        if (detailsId) {
+          const agentEntry = await resolveAgentSubfeature(detailsId);
+          if (agentEntry) {
+            const agentContent = await lazyAstroFactory(
+              "agentSubfeatures",
+              agentEntry.id,
+            );
+            agentContentById.set(agent.meta.id, agentContent);
+          }
+        }
+      }
+
+      parsedSubfeatures.push(
+        new StatusSubfeature(
+          subfeatureKey,
+          subfeatureName,
+          subfeatureKey,
+          statusByAgent,
+          Content,
+          agentContentById,
+        ),
+      );
+    }
+
+    const featureStatusByAgent = new Map<string, Status>();
+    for (const agent of agents) {
+      const featureValue =
+        agent.features[categoryKey as keyof typeof agent.features];
+
+      if (isStatusCell(featureValue)) {
+        featureStatusByAgent.set(agent.meta.id, featureValue.status);
+      } else {
+        const statuses = getSubfeatureStatuses(featureValue, subfeatureKeys);
+        const aggregatedStatus = aggregateSubfeatureStatuses(statuses);
+        featureStatusByAgent.set(agent.meta.id, aggregatedStatus);
+      }
+    }
+
+    const featureName = categoryMeta.name
+      ? formatDisplayName(categoryMeta.name)
+      : formatDisplayName(categoryKey);
+
+    return new StatusFeature(
+      categoryKey,
+      featureName,
+      categoryMeta.slug || categoryKey,
+      categoryMeta.mainColor,
+      categoryMeta.secondaryColor,
+      parsedSubfeatures,
+      featureStatusByAgent,
+    );
+  }
 }
 
 export class SubscriptionsFeature extends Feature {
@@ -378,6 +532,36 @@ export class SubscriptionsFeature extends Feature {
 
   getLines(): Line<SubscriptionsCellView>[] {
     return [];
+  }
+
+  static parse(
+    categoryKey: string,
+    categoryMeta: FeatureMeta,
+    agents: Agent[],
+  ): SubscriptionsFeature {
+    const featureLinksByAgent = new Map<string, SubscriptionLink[]>();
+
+    for (const agent of agents) {
+      const featureValue =
+        agent.features[categoryKey as keyof typeof agent.features];
+
+      if (isSubscriptionsCell(featureValue)) {
+        featureLinksByAgent.set(agent.meta.id, featureValue.links);
+      }
+    }
+
+    const featureName = categoryMeta.name
+      ? formatDisplayName(categoryMeta.name)
+      : formatDisplayName(categoryKey);
+
+    return new SubscriptionsFeature(
+      categoryKey,
+      featureName,
+      categoryMeta.slug || categoryKey,
+      categoryMeta.mainColor,
+      categoryMeta.secondaryColor,
+      featureLinksByAgent,
+    );
   }
 }
 
@@ -431,169 +615,21 @@ export class ParsedTable {
         );
       }
 
-      const categorySchemaAny = categorySchema as any;
-      const subfeatureKeys: string[] = [];
-
-      if (categoryMeta.kind !== "subscriptions") {
-        if (categorySchemaAny instanceof z.ZodUnion) {
-          const objectOption = categorySchemaAny.options.find(
-            (opt: any) => opt instanceof z.ZodObject,
-          );
-          if (objectOption instanceof z.ZodObject) {
-            const keys = Object.keys(objectOption.shape);
-            subfeatureKeys.push(
-              ...keys.filter(
-                (k) => !["$$type", "status", "detailsId", "links"].includes(k),
-              ),
-            );
-          }
-        } else if (categorySchemaAny instanceof z.ZodObject) {
-          const keys = Object.keys(categorySchemaAny.shape);
-          subfeatureKeys.push(
-            ...keys.filter(
-              (k) => !["$$type", "status", "detailsId", "links"].includes(k),
-            ),
-          );
-        }
-      }
-
-      const parsedSubfeatures: StatusSubfeature[] = [];
-      for (const subfeatureKey of subfeatureKeys) {
-        let subfeatureSchema: z.ZodType | undefined;
-        if (categorySchemaAny instanceof z.ZodUnion) {
-          const objectOption = categorySchemaAny.options.find(
-            (opt: any) => opt instanceof z.ZodObject,
-          );
-          if (objectOption instanceof z.ZodObject) {
-            subfeatureSchema = (
-              objectOption.shape as Record<string, z.ZodType>
-            )[subfeatureKey];
-          }
-        } else if (categorySchemaAny instanceof z.ZodObject) {
-          subfeatureSchema = (
-            categorySchemaAny.shape as Record<string, z.ZodType>
-          )[subfeatureKey];
-        }
-
-        if (!subfeatureSchema) continue;
-
-        const subfeatureMeta = subfeaturesRegistry.get(subfeatureSchema);
-        if (!subfeatureMeta) {
-          throw new Error(`Subfeature metadata not found for ${subfeatureKey}`);
-        }
-        if (!subfeatureMeta.description) {
-          throw new Error(
-            `Subfeature description not found for ${subfeatureKey}`,
-          );
-        }
-
-        const subfeatureName = subfeatureMeta.name
-          ? formatDisplayName(subfeatureMeta.name)
-          : formatDisplayName(subfeatureKey);
-
-        const statusByAgent = new Map<string, Status>();
-        const detailsIdByAgent = new Map<string, string | undefined>();
-        for (const agent of this.agents) {
-          const featureValue =
-            agent.features[categoryKey as keyof typeof agent.features];
-          const status = getSubfeatureStatus(featureValue, subfeatureKey);
-          statusByAgent.set(agent.meta.id, status);
-
-          if (isStatusCell(featureValue)) {
-            detailsIdByAgent.set(agent.meta.id, undefined);
-          } else if (!isSubscriptionsCell(featureValue)) {
-            const featureObj = featureValue as Record<string, StatusCell>;
-            detailsIdByAgent.set(
-              agent.meta.id,
-              featureObj[subfeatureKey]?.detailsId,
-            );
-          } else {
-            detailsIdByAgent.set(agent.meta.id, undefined);
-          }
-        }
-
-        const Content = await lazyAstroFactory(
-          "subfeatures",
-          subfeatureMeta.description.id,
-        );
-
-        const agentContentById = new Map<string, any>();
-        for (const agent of this.agents) {
-          const detailsId = detailsIdByAgent.get(agent.meta.id);
-          if (detailsId) {
-            const agentEntry = await resolveAgentSubfeature(detailsId);
-            if (agentEntry) {
-              const agentContent = await lazyAstroFactory(
-                "agentSubfeatures",
-                agentEntry.id,
-              );
-              agentContentById.set(agent.meta.id, agentContent);
-            }
-          }
-        }
-
-        parsedSubfeatures.push(
-          new StatusSubfeature(
-            subfeatureKey,
-            subfeatureName,
-            subfeatureKey,
-            statusByAgent,
-            Content,
-            agentContentById,
-          ),
-        );
-      }
-
-      const featureStatusByAgent = new Map<string, Status>();
-      for (const agent of this.agents) {
-        const featureValue =
-          agent.features[categoryKey as keyof typeof agent.features];
-
-        if (isStatusCell(featureValue)) {
-          featureStatusByAgent.set(agent.meta.id, featureValue.status);
-        } else {
-          const statuses = getSubfeatureStatuses(featureValue, subfeatureKeys);
-          const aggregatedStatus = aggregateSubfeatureStatuses(statuses);
-          featureStatusByAgent.set(agent.meta.id, aggregatedStatus);
-        }
-      }
-
-      const featureLinksByAgent = new Map<string, SubscriptionLink[]>();
-
-      for (const agent of this.agents) {
-        const featureValue =
-          agent.features[categoryKey as keyof typeof agent.features];
-
-        if (isSubscriptionsCell(featureValue)) {
-          featureLinksByAgent.set(agent.meta.id, featureValue.links);
-        }
-      }
-
-      const featureName = categoryMeta.name
-        ? formatDisplayName(categoryMeta.name)
-        : formatDisplayName(categoryKey);
-
       if (categoryMeta.kind === "subscriptions") {
         features.push(
-          new SubscriptionsFeature(
-            categoryKey,
-            featureName,
-            categoryMeta.slug || categoryKey,
-            categoryMeta.mainColor,
-            categoryMeta.secondaryColor,
-            featureLinksByAgent,
+          SubscriptionsFeature.parse(
+            categoryKey as string,
+            categoryMeta as FeatureMeta,
+            this.agents,
           ),
         );
       } else {
         features.push(
-          new StatusFeature(
-            categoryKey,
-            featureName,
-            categoryMeta.slug || categoryKey,
-            categoryMeta.mainColor,
-            categoryMeta.secondaryColor,
-            parsedSubfeatures,
-            featureStatusByAgent,
+          await StatusFeature.parse(
+            categoryKey as string,
+            categoryMeta as FeatureMeta,
+            categorySchema,
+            this.agents,
           ),
         );
       }
