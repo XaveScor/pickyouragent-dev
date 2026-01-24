@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { Agent } from "./featureSetSchema";
-import { render, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
+import { lazyAstroFactory } from "../lazyAstroComponent/lazyAstroComponent";
 import {
   featuresRegistry,
   subfeaturesRegistry,
@@ -509,7 +510,10 @@ export class ParsedTable {
           }
         }
 
-        const renderedContent = await render(subfeatureMeta.description);
+        const Content = await lazyAstroFactory(
+          "subfeatures",
+          subfeatureMeta.description.id,
+        );
 
         const agentContentById = new Map<string, any>();
         for (const agent of this.agents) {
@@ -517,8 +521,11 @@ export class ParsedTable {
           if (detailsId) {
             const agentEntry = await resolveAgentSubfeature(detailsId);
             if (agentEntry) {
-              const agentRenderedContent = await render(agentEntry);
-              agentContentById.set(agent.meta.id, agentRenderedContent.Content);
+              const agentContent = await lazyAstroFactory(
+                "agentSubfeatures",
+                agentEntry.id,
+              );
+              agentContentById.set(agent.meta.id, agentContent);
             }
           }
         }
@@ -529,7 +536,7 @@ export class ParsedTable {
             subfeatureName,
             subfeatureKey,
             statusByAgent,
-            renderedContent.Content,
+            Content,
             agentContentById,
           ),
         );
