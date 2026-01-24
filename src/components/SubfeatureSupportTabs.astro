@@ -1,11 +1,10 @@
 ---
 import type { Agent } from '../agents/featureSetSchema';
-import type { ParsedSubfeature } from '../agents/parsedTable';
 import { Status } from '../agents/cells';
 import Badge from './Badge.astro';
 
 interface Props {
-  subfeature: ParsedSubfeature;
+  subfeature: any;
   agents: Agent[];
 }
 

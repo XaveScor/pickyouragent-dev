@@ -2,18 +2,14 @@ import { z } from "zod";
 import { getEntry, getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { SubscriptionLink } from "./cells";
-import {
-  Status,
-  statusCellSchema,
-  subscriptionsCellSchema,
-  cellSchema,
-} from "./cells";
+import { Status, statusCellSchema, subscriptionsCellSchema } from "./cells";
 
 type FeatureMeta = {
   name: string;
   mainColor: string;
   secondaryColor: string;
   slug?: string;
+  kind: "subscriptions" | "status";
 };
 
 type SubfeatureMeta = {
@@ -71,13 +67,19 @@ function subfeature(config: {
   return subfeatureSchema;
 }
 
-function feature<T extends Record<string, z.ZodType>>(
-  meta: FeatureMeta,
+function subscriptionsFeature(meta: Omit<FeatureMeta, "kind">) {
+  const featureSchema = subscriptionsCellSchema;
+  featuresRegistry.add(featureSchema, { ...meta, kind: "subscriptions" });
+  return featureSchema;
+}
+
+function statusFeature<T extends Record<string, z.ZodType>>(
+  meta: Omit<FeatureMeta, "kind">,
   subfeatures: T,
 ) {
   const subfeaturesSchema = z.object(subfeatures);
-  const featureSchema = z.union([cellSchema, subfeaturesSchema]);
-  featuresRegistry.add(featureSchema, meta);
+  const featureSchema = z.union([statusCellSchema, subfeaturesSchema]);
+  featuresRegistry.add(featureSchema, { ...meta, kind: "status" });
   return featureSchema;
 }
 
@@ -127,16 +129,13 @@ const agentModeDebugDesc = await resolveSubfeature("agentmode/debug/debug");
 const agentModeAskDesc = await resolveSubfeature("agentmode/ask/ask");
 
 export const featureSetSchema = z.object({
-  subscriptions: feature(
-    {
-      name: "Subscriptions",
-      mainColor: "#f43f5e",
-      secondaryColor: "#fb7185",
-      slug: "subscriptions",
-    },
-    {},
-  ),
-  planMode: feature(
+  subscriptions: subscriptionsFeature({
+    name: "Subscriptions",
+    mainColor: "#f43f5e",
+    secondaryColor: "#fb7185",
+    slug: "subscriptions",
+  }),
+  planMode: statusFeature(
     {
       name: "Plan Mode",
       mainColor: "#3b82f6",
@@ -166,7 +165,7 @@ export const featureSetSchema = z.object({
       }),
     },
   ),
-  documentation: feature(
+  documentation: statusFeature(
     {
       name: "Documentation",
       mainColor: "#8b5cf6",
@@ -204,7 +203,7 @@ export const featureSetSchema = z.object({
       }),
     },
   ),
-  tools: feature(
+  tools: statusFeature(
     {
       name: "Tools",
       mainColor: "#06b6d4",
@@ -230,7 +229,7 @@ export const featureSetSchema = z.object({
       }),
     },
   ),
-  commands: feature(
+  commands: statusFeature(
     {
       name: "Commands",
       mainColor: "#10b981",
@@ -239,7 +238,7 @@ export const featureSetSchema = z.object({
     },
     {},
   ),
-  cliCalling: feature(
+  cliCalling: statusFeature(
     {
       name: "CLI Calling",
       mainColor: "#f97316",
@@ -257,7 +256,7 @@ export const featureSetSchema = z.object({
       }),
     },
   ),
-  modelManagement: feature(
+  modelManagement: statusFeature(
     {
       name: "Model management",
       mainColor: "#ec4899",
@@ -275,7 +274,7 @@ export const featureSetSchema = z.object({
       }),
     },
   ),
-  agentMode: feature(
+  agentMode: statusFeature(
     {
       name: "Agent Mode",
       mainColor: "#ef4444",

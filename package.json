@@ -11,7 +11,9 @@
     "build": "node scripts/build-cli.mjs",
     "build:original": "astro build && node scripts/build-sw.js",
     "preview": "astro preview",
-    "astro:run": "node scripts/astro-run.mjs"
+    "astro:run": "node scripts/astro-run.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "vite": "^7.3.0",
+    "vitest": "^4.0.18",
     "workbox-expiration": "^7.4.0",
     "workbox-routing": "^7.4.0",
     "workbox-strategies": "^7.4.0",

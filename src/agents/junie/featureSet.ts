@@ -1,5 +1,5 @@
 import { declareSchema } from "../featureSetSchema";
-import { Status, statusCell } from "../cells";
+import { Status, statusCell, subscriptionsCell } from "../cells";
 
 export const junie = declareSchema(
   {
@@ -28,6 +28,6 @@ export const junie = declareSchema(
       debug: statusCell(Status.NotSupported),
       ask: statusCell(Status.Supported),
     },
-    subscriptions: statusCell(Status.NotSupported),
+    subscriptions: subscriptionsCell([]),
   },
 );

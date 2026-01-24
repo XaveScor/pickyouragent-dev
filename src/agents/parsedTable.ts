@@ -11,12 +11,13 @@ import {
   type SubscriptionLink,
   type StatusCell,
   type SubscriptionsCell,
-  type Cell,
-  statusCell,
-  subscriptionsCell,
+  StatusCellView,
+  SubscriptionsCellView,
+  type Cell as CellsCell,
 } from "./cells";
 
-// Helper function to format display names
+export type Cell = CellsCell;
+
 function formatDisplayName(key: string): string {
   return key
     .split("-")
@@ -24,7 +25,6 @@ function formatDisplayName(key: string): string {
     .join(" ");
 }
 
-// Type guard to check if a value is a StatusCell
 function isStatusCell(value: any): value is StatusCell {
   return (
     value &&
@@ -35,7 +35,6 @@ function isStatusCell(value: any): value is StatusCell {
   );
 }
 
-// Type guard to check if a value is a SubscriptionsCell
 function isSubscriptionsCell(value: any): value is SubscriptionsCell {
   return (
     value &&
@@ -45,7 +44,6 @@ function isSubscriptionsCell(value: any): value is SubscriptionsCell {
   );
 }
 
-// Helper function to aggregate subfeature statuses
 function aggregateSubfeatureStatuses(statuses: Status[]): Status {
   if (statuses.length === 0) {
     return Status.NotSupported;
@@ -60,16 +58,12 @@ function aggregateSubfeatureStatuses(statuses: Status[]): Status {
   } else if (allNotVerified) {
     return Status.NotVerified;
   } else if (allNotSupported) {
-    // If all subfeatures are NotSupported but feature itself is not explicitly NotSupported,
-    // show PartiallySupported (not NotSupported)
     return Status.PartiallySupported;
   } else {
-    // Mix of supported and not-supported subfeatures
     return Status.PartiallySupported;
   }
 }
 
-// Helper function to aggregate feature statuses
 function aggregateFeatureStatuses(statuses: Status[]): Status {
   if (statuses.length === 0) {
     return Status.NotSupported;
@@ -86,12 +80,10 @@ function aggregateFeatureStatuses(statuses: Status[]): Status {
   } else if (allNotSupported) {
     return Status.NotSupported;
   } else {
-    // Mix of statuses
     return Status.PartiallySupported;
   }
 }
 
-// Helper function to get subfeature statuses from a feature object
 function getSubfeatureStatuses(
   featureValue: any,
   featureKeys: string[],
@@ -108,7 +100,6 @@ function getSubfeatureStatuses(
     .filter((s): s is Status => s !== undefined);
 }
 
-// Helper function to get a single subfeature status
 function getSubfeatureStatus(featureValue: any, featureKey: string): Status {
   if (isStatusCell(featureValue)) {
     return featureValue.status;
@@ -120,13 +111,6 @@ function getSubfeatureStatus(featureValue: any, featureKey: string): Status {
   return featureObj[featureKey]?.status || Status.NotVerified;
 }
 
-/**
- * Resolves an agent subfeature by its collection ID.
- * ID should be the path relative to the collection base without extension (e.g., 'claude-code/planmode/dual-model').
- * Returns null if the entry does not exist (agent-specific content is optional).
- *
- * Note: This function must be called at the top level with await for Astro's static analysis.
- */
 export async function resolveAgentSubfeature(id: string): Promise<any | null> {
   const allEntries = await getCollection("agentSubfeatures");
   const entry = allEntries.find((e) => e.id === id);
@@ -138,11 +122,119 @@ export async function resolveAgentSubfeature(id: string): Promise<any | null> {
   return entry;
 }
 
-/**
- * Represents a subfeature with pre-rendered content.
- * All Astro-specific rendering is encapsulated within this class.
- */
-export class ParsedSubfeature {
+export interface Line<TCell extends Cell> {
+  getDescription(): string;
+  getSlug(): string;
+  getKey(): string;
+  getCells(): Array<TCell>;
+}
+
+export class StatusLine implements Line<StatusCellView> {
+  #name: string;
+  #slug: string;
+  #key: string;
+  #cells: StatusCellView[];
+
+  constructor(
+    name: string,
+    slug: string,
+    key: string,
+    cells: StatusCellView[],
+  ) {
+    this.#name = name;
+    this.#slug = slug;
+    this.#key = key;
+    this.#cells = cells;
+  }
+
+  getDescription() {
+    return this.#name;
+  }
+
+  getSlug() {
+    return this.#slug;
+  }
+
+  getKey() {
+    return this.#key;
+  }
+
+  getCells() {
+    return this.#cells;
+  }
+}
+
+export class SubfeatureLine implements Line<StatusCellView> {
+  #name: string;
+  #slug: string;
+  #key: string;
+  #cells: StatusCellView[];
+
+  constructor(
+    name: string,
+    slug: string,
+    key: string,
+    cells: StatusCellView[],
+  ) {
+    this.#name = name;
+    this.#slug = slug;
+    this.#key = key;
+    this.#cells = cells;
+  }
+
+  getDescription() {
+    return this.#name;
+  }
+
+  getSlug() {
+    return this.#slug;
+  }
+
+  getKey() {
+    return this.#key;
+  }
+
+  getCells() {
+    return this.#cells;
+  }
+}
+
+export class SubscriptionsLine implements Line<SubscriptionsCellView> {
+  #name: string;
+  #slug: string;
+  #key: string;
+  #cells: SubscriptionsCellView[];
+
+  constructor(
+    name: string,
+    slug: string,
+    key: string,
+    cells: SubscriptionsCellView[],
+  ) {
+    this.#name = name;
+    this.#slug = slug;
+    this.#key = key;
+    this.#cells = cells;
+  }
+
+  getDescription() {
+    return this.#name;
+  }
+
+  getSlug() {
+    return this.#slug;
+  }
+
+  getKey() {
+    return this.#key;
+  }
+
+  getCells() {
+    return this.#cells;
+  }
+}
+
+export class StatusSubfeature {
   readonly key: string;
   readonly name: string;
   readonly slug: string;
@@ -166,7 +258,6 @@ export class ParsedSubfeature {
     this.Content = Content;
     this.agentContentById = agentContentById;
 
-    // Aggregate status across all agents
     const statuses = Array.from(statusByAgent.values());
     this.aggregatedStatus = aggregateSubfeatureStatuses(statuses);
   }
@@ -176,21 +267,12 @@ export class ParsedSubfeature {
   }
 }
 
-/**
- * Represents a feature with its subfeatures.
- * Does not directly handle rendering - that's handled at the subfeature level.
- */
-export class ParsedFeature {
+export abstract class Feature {
   readonly key: string;
   readonly name: string;
   readonly slug: string;
   readonly mainColor: string;
   readonly secondaryColor: string;
-  readonly subfeatures: ParsedSubfeature[];
-  readonly aggregatedStatus: Status;
-  readonly statusByAgent: Map<string, Status>;
-  readonly linksByAgent: Map<string, SubscriptionLink[]>;
-  readonly hasLinks: boolean;
 
   constructor(
     key: string,
@@ -198,112 +280,110 @@ export class ParsedFeature {
     slug: string,
     mainColor: string,
     secondaryColor: string,
-    subfeatures: ParsedSubfeature[],
-    statusByAgent: Map<string, Status>,
-    linksByAgent: Map<string, SubscriptionLink[]>,
-    hasLinks: boolean,
   ) {
     this.key = key;
     this.name = name;
     this.slug = slug;
     this.mainColor = mainColor;
     this.secondaryColor = secondaryColor;
+  }
+
+  abstract getLines(): Line<Cell>[];
+}
+
+export class StatusFeature extends Feature {
+  readonly subfeatures: StatusSubfeature[];
+  readonly statusByAgent: Map<string, Status>;
+  readonly aggregatedStatus: Status;
+
+  constructor(
+    key: string,
+    name: string,
+    slug: string,
+    mainColor: string,
+    secondaryColor: string,
+    subfeatures: StatusSubfeature[],
+    statusByAgent: Map<string, Status>,
+  ) {
+    super(key, name, slug, mainColor, secondaryColor);
     this.subfeatures = subfeatures;
     this.statusByAgent = statusByAgent;
-    this.linksByAgent = linksByAgent;
-    this.hasLinks = hasLinks;
 
-    // Aggregate status across all agents
     const statuses = Array.from(statusByAgent.values());
     this.aggregatedStatus = aggregateFeatureStatuses(statuses);
   }
 
-  getSubfeatures(): ParsedSubfeature[] {
+  getSubfeatures(): StatusSubfeature[] {
     return this.subfeatures;
   }
 
-  getSubfeature(slug: string): ParsedSubfeature | undefined {
+  getSubfeature(slug: string): StatusSubfeature | undefined {
     return this.subfeatures.find(
       (sub) => sub.slug === slug || sub.key === slug,
     );
   }
 
-  getLinksByAgent(agentId: string): SubscriptionLink[] {
-    return this.linksByAgent.get(agentId) || [];
+  getLines(): Line<StatusCellView>[] {
+    const statusCells: StatusCellView[] = Array.from(
+      this.statusByAgent.values(),
+    ).map((status) => new StatusCellView(status));
+
+    const statusLine = new StatusLine(
+      this.name,
+      this.slug,
+      this.key,
+      statusCells,
+    );
+
+    const subfeatureLines = this.subfeatures.map((subfeature) => {
+      const cells = Array.from(subfeature.statusByAgent.values()).map(
+        (status) => new StatusCellView(status),
+      );
+      return new SubfeatureLine(
+        subfeature.name,
+        subfeature.slug,
+        subfeature.key,
+        cells,
+      );
+    });
+
+    return [statusLine, ...subfeatureLines];
   }
 }
 
-/**
- * Parses a feature and returns cells for rendering.
- * This function simplifies the rendering by pre-computing cells for each agent.
- *
- * @param feature - The feature to parse
- * @param agents - The agents to generate cells for
- * @returns An object containing the feature's cells and subfeatures' cells
- */
-export function parseLine(
-  feature: ParsedFeature,
-  agents: Agent[],
-): {
-  feature: { name: string; cells: Cell[]; key: string; slug: string };
-  subfeatures: Array<{
-    name: string;
-    cells: Cell[];
-    key: string;
-    slug: string;
-  }>;
-} {
-  // Build cells for the main feature row
-  const featureCells: Cell[] = agents.map((agent) => {
-    const links = feature.getLinksByAgent(agent.meta.id);
-    if (links.length > 0) {
-      return subscriptionsCell(links);
-    }
-    const status =
-      feature.statusByAgent.get(agent.meta.id) || feature.aggregatedStatus;
-    return statusCell(status);
-  });
+export class SubscriptionsFeature extends Feature {
+  readonly linksByAgent: Map<string, SubscriptionLink[]>;
 
-  // Build cells for each subfeature
-  const subfeaturesCells = feature.getSubfeatures().map((subfeature) => {
-    const cells: Cell[] = agents.map((agent) => {
-      const status =
-        subfeature.statusByAgent.get(agent.meta.id) ||
-        subfeature.aggregatedStatus;
-      return statusCell(status);
-    });
-    return {
-      name: subfeature.name,
-      cells,
-      key: subfeature.key,
-      slug: subfeature.slug,
-    };
-  });
+  constructor(
+    key: string,
+    name: string,
+    slug: string,
+    mainColor: string,
+    secondaryColor: string,
+    linksByAgent: Map<string, SubscriptionLink[]>,
+  ) {
+    super(key, name, slug, mainColor, secondaryColor);
+    this.linksByAgent = linksByAgent;
+  }
 
-  return {
-    feature: {
-      name: feature.name,
-      cells: featureCells,
-      key: feature.key,
-      slug: feature.slug,
-    },
-    subfeatures: subfeaturesCells,
-  };
+  getLinksByAgent(agentId: string): SubscriptionLink[] {
+    return this.linksByAgent.get(agentId) || [];
+  }
+
+  getLines(): Line<SubscriptionsCellView>[] {
+    const cells = Array.from(this.linksByAgent.values()).map(
+      (links) => new SubscriptionsCellView(links, this.mainColor),
+    );
+    return [new SubscriptionsLine(this.name, this.slug, this.key, cells)];
+  }
 }
 
-/**
- * Represents a parsed table of features and agents.
- * All Astro content rendering is encapsulated within this class.
- * Use the static `create()` method to instantiate.
- */
+export type AnyFeature = StatusFeature | SubscriptionsFeature;
+
 export class ParsedTable {
-  readonly features: ParsedFeature[];
+  readonly features: AnyFeature[];
   readonly agents: Agent[];
 
-  /**
-   * Creates a new ParsedTable instance with pre-rendered content.
-   * This factory method is async because it renders all subfeature content.
-   */
   static async create(agents: Agent[]): Promise<ParsedTable> {
     const table = new ParsedTable(agents);
     await table.initialize();
@@ -313,31 +393,26 @@ export class ParsedTable {
   private constructor(agents: Agent[]) {
     this.agents = agents;
     this.features = [];
-    // Initialize features array, will be populated asynchronously
   }
 
-  /**
-   * Initialize the table by parsing features and rendering content.
-   * This must be called after construction.
-   */
   private async initialize(): Promise<void> {
     (this as any).features = await this.parseFeatures();
   }
 
-  getFeatures(): ParsedFeature[] {
+  getFeatures(): AnyFeature[] {
     return this.features;
   }
 
-  getFeature(slug: string): ParsedFeature | undefined {
+  getFeature(slug: string): AnyFeature | undefined {
     return this.features.find((f) => f.slug === slug || f.key === slug);
   }
 
-  getFeatureByKey(key: string): ParsedFeature | undefined {
+  getFeatureByKey(key: string): AnyFeature | undefined {
     return this.features.find((f) => f.key === key);
   }
 
-  private async parseFeatures(): Promise<ParsedFeature[]> {
-    const features: ParsedFeature[] = [];
+  private async parseFeatures(): Promise<AnyFeature[]> {
+    const features: AnyFeature[] = [];
     const categoryOrderEnum = featureSetSchema.keyof().enum;
     const categoryOrder = Object.values(
       categoryOrderEnum,
@@ -353,24 +428,34 @@ export class ParsedTable {
         );
       }
 
-      // Extract subfeature keys from schema
-      const subfeatureKeys: string[] = [];
       const categorySchemaAny = categorySchema as any;
-      if (categorySchemaAny instanceof z.ZodUnion) {
-        const objectOption = categorySchemaAny.options.find(
-          (opt: any) => opt instanceof z.ZodObject,
-        );
-        if (objectOption instanceof z.ZodObject) {
-          subfeatureKeys.push(...Object.keys(objectOption.shape));
+      const subfeatureKeys: string[] = [];
+
+      if (categoryMeta.kind !== "subscriptions") {
+        if (categorySchemaAny instanceof z.ZodUnion) {
+          const objectOption = categorySchemaAny.options.find(
+            (opt: any) => opt instanceof z.ZodObject,
+          );
+          if (objectOption instanceof z.ZodObject) {
+            const keys = Object.keys(objectOption.shape);
+            subfeatureKeys.push(
+              ...keys.filter(
+                (k) => !["$$type", "status", "detailsId", "links"].includes(k),
+              ),
+            );
+          }
+        } else if (categorySchemaAny instanceof z.ZodObject) {
+          const keys = Object.keys(categorySchemaAny.shape);
+          subfeatureKeys.push(
+            ...keys.filter(
+              (k) => !["$$type", "status", "detailsId", "links"].includes(k),
+            ),
+          );
         }
-      } else if (categorySchemaAny instanceof z.ZodObject) {
-        subfeatureKeys.push(...Object.keys(categorySchemaAny.shape));
       }
 
-      // Parse subfeatures
-      const parsedSubfeatures: ParsedSubfeature[] = [];
+      const parsedSubfeatures: StatusSubfeature[] = [];
       for (const subfeatureKey of subfeatureKeys) {
-        // Get subfeature schema and metadata
         let subfeatureSchema: z.ZodType | undefined;
         if (categorySchemaAny instanceof z.ZodUnion) {
           const objectOption = categorySchemaAny.options.find(
@@ -403,7 +488,6 @@ export class ParsedTable {
           ? formatDisplayName(subfeatureMeta.name)
           : formatDisplayName(subfeatureKey);
 
-        // Collect status by agent and gather detailsId for agent-specific content
         const statusByAgent = new Map<string, Status>();
         const detailsIdByAgent = new Map<string, string | undefined>();
         for (const agent of this.agents) {
@@ -412,12 +496,9 @@ export class ParsedTable {
           const status = getSubfeatureStatus(featureValue, subfeatureKey);
           statusByAgent.set(agent.meta.id, status);
 
-          // Extract detailsId if present in status cell
           if (isStatusCell(featureValue)) {
-            // This is a simple status cell, no subfeatures, no detailsId to extract
             detailsIdByAgent.set(agent.meta.id, undefined);
           } else if (!isSubscriptionsCell(featureValue)) {
-            // This is an object with subfeature keys
             const featureObj = featureValue as Record<string, StatusCell>;
             detailsIdByAgent.set(
               agent.meta.id,
@@ -430,7 +511,6 @@ export class ParsedTable {
 
         const renderedContent = await render(subfeatureMeta.description);
 
-        // Resolve and render agent-specific content for each agent
         const agentContentById = new Map<string, any>();
         for (const agent of this.agents) {
           const detailsId = detailsIdByAgent.get(agent.meta.id);
@@ -444,10 +524,10 @@ export class ParsedTable {
         }
 
         parsedSubfeatures.push(
-          new ParsedSubfeature(
+          new StatusSubfeature(
             subfeatureKey,
             subfeatureName,
-            subfeatureKey, // Use key as slug for subfeatures
+            subfeatureKey,
             statusByAgent,
             renderedContent.Content,
             agentContentById,
@@ -455,7 +535,6 @@ export class ParsedTable {
         );
       }
 
-      // Collect feature-level status by agent
       const featureStatusByAgent = new Map<string, Status>();
       for (const agent of this.agents) {
         const featureValue =
@@ -464,27 +543,20 @@ export class ParsedTable {
         if (isStatusCell(featureValue)) {
           featureStatusByAgent.set(agent.meta.id, featureValue.status);
         } else {
-          // Aggregate subfeature statuses for this agent
           const statuses = getSubfeatureStatuses(featureValue, subfeatureKeys);
           const aggregatedStatus = aggregateSubfeatureStatuses(statuses);
           featureStatusByAgent.set(agent.meta.id, aggregatedStatus);
         }
       }
 
-      // Collect links by agent for this feature
       const featureLinksByAgent = new Map<string, SubscriptionLink[]>();
-      let featureHasLinks = false;
 
       for (const agent of this.agents) {
         const featureValue =
           agent.features[categoryKey as keyof typeof agent.features];
 
-        // Check if feature value is a subscriptions cell
         if (isSubscriptionsCell(featureValue)) {
           featureLinksByAgent.set(agent.meta.id, featureValue.links);
-          if (featureValue.links.length > 0) {
-            featureHasLinks = true;
-          }
         }
       }
 
@@ -492,21 +564,35 @@ export class ParsedTable {
         ? formatDisplayName(categoryMeta.name)
         : formatDisplayName(categoryKey);
 
-      features.push(
-        new ParsedFeature(
-          categoryKey,
-          featureName,
-          categoryMeta.slug || categoryKey,
-          categoryMeta.mainColor,
-          categoryMeta.secondaryColor,
-          parsedSubfeatures,
-          featureStatusByAgent,
-          featureLinksByAgent,
-          featureHasLinks,
-        ),
-      );
+      if (categoryMeta.kind === "subscriptions") {
+        features.push(
+          new SubscriptionsFeature(
+            categoryKey,
+            featureName,
+            categoryMeta.slug || categoryKey,
+            categoryMeta.mainColor,
+            categoryMeta.secondaryColor,
+            featureLinksByAgent,
+          ),
+        );
+      } else {
+        features.push(
+          new StatusFeature(
+            categoryKey,
+            featureName,
+            categoryMeta.slug || categoryKey,
+            categoryMeta.mainColor,
+            categoryMeta.secondaryColor,
+            parsedSubfeatures,
+            featureStatusByAgent,
+          ),
+        );
+      }
     }
 
     return features;
   }
 }
+
+type ParsedFeature = StatusFeature | SubscriptionsFeature;
+type ParsedSubfeature = StatusSubfeature;

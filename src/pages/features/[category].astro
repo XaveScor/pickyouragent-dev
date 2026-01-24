@@ -26,8 +26,9 @@ if (!feature) {
 
 const mainColor = feature.mainColor || '#3b82f6';
 
-// Get all subfeatures
-const subfeatures = feature.getSubfeatures();
+// Check if this is a status feature with subfeatures
+const hasSubfeatures = typeof feature.getSubfeatures === 'function';
+const subfeatures = hasSubfeatures ? feature.getSubfeatures() : [];
 ---
 
 <html lang="en">
@@ -55,7 +56,7 @@ const subfeatures = feature.getSubfeatures();
 
         {subfeatures.length > 0 && (
           <>
-            {subfeatures.map((subfeature) => (
+            {subfeatures.map((subfeature: any) => (
               <section class="subfeature" id={subfeature.key}>
                 <h2>{subfeature.name}</h2>
                 <div class="subfeature-description">

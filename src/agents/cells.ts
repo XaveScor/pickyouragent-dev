@@ -25,8 +25,6 @@ export type SubscriptionsCell = {
   links: SubscriptionLink[];
 };
 
-export type Cell = StatusCell | SubscriptionsCell;
-
 export function statusCell(status: Status, detailsId?: string): StatusCell {
   return { $$type: "status", status, detailsId };
 }
@@ -58,4 +56,41 @@ export const subscriptionsCellSchema = z.object({
   links: z.array(subscriptionLinkSchema),
 });
 
-export const cellSchema = z.union([statusCellSchema, subscriptionsCellSchema]);
+export interface Cell {
+  getComponentPath(): string;
+  getProps(): Record<string, unknown>;
+}
+
+export class StatusCellView implements Cell {
+  #status: Status;
+
+  constructor(status: Status) {
+    this.#status = status;
+  }
+
+  getComponentPath() {
+    return "../components/StatusCell.astro";
+  }
+
+  getProps() {
+    return { status: this.#status };
+  }
+}
+
+export class SubscriptionsCellView implements Cell {
+  #links: SubscriptionLink[];
+  #mainColor: string;
+
+  constructor(links: SubscriptionLink[], mainColor = "#f43f5e") {
+    this.#links = links;
+    this.#mainColor = mainColor;
+  }
+
+  getComponentPath() {
+    return "../components/SubscriptionsCell.astro";
+  }
+
+  getProps() {
+    return { links: this.#links, mainColor: this.#mainColor };
+  }
+}
