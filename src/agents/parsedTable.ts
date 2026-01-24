@@ -289,6 +289,7 @@ export abstract class Feature {
     this.secondaryColor = secondaryColor;
   }
 
+  abstract getTopLine(): Cell[];
   abstract getLines(): Line<Cell>[];
 }
 
@@ -324,18 +325,15 @@ export class StatusFeature extends Feature {
     );
   }
 
-  getLines(): Line<StatusCellView>[] {
+  getTopLine(): Cell[] {
     const statusCells: StatusCellView[] = Array.from(
       this.statusByAgent.values(),
     ).map((status) => new StatusCellView(status));
 
-    const statusLine = new StatusLine(
-      this.name,
-      this.slug,
-      this.key,
-      statusCells,
-    );
+    return statusCells;
+  }
 
+  getLines(): Line<StatusCellView>[] {
     const subfeatureLines = this.subfeatures.map((subfeature) => {
       const cells = Array.from(subfeature.statusByAgent.values()).map(
         (status) => new StatusCellView(status),
@@ -348,7 +346,7 @@ export class StatusFeature extends Feature {
       );
     });
 
-    return [statusLine, ...subfeatureLines];
+    return subfeatureLines;
   }
 }
 
@@ -371,11 +369,15 @@ export class SubscriptionsFeature extends Feature {
     return this.linksByAgent.get(agentId) || [];
   }
 
-  getLines(): Line<SubscriptionsCellView>[] {
+  getTopLine(): Cell[] {
     const cells = Array.from(this.linksByAgent.values()).map(
       (links) => new SubscriptionsCellView(links, this.mainColor),
     );
-    return [new SubscriptionsLine(this.name, this.slug, this.key, cells)];
+    return cells;
+  }
+
+  getLines(): Line<SubscriptionsCellView>[] {
+    return [];
   }
 }
 

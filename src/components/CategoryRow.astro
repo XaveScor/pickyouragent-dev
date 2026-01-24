@@ -1,8 +1,6 @@
 ---
 import type { Agent } from '../agents/featureSetSchema';
 import { ParsedTable } from '../agents/parsedTable';
-import StatusCell from './StatusCell.astro';
-import SubscriptionsCell from './SubscriptionsCell.astro';
 
 interface Props {
   feature: any;
@@ -11,39 +9,40 @@ interface Props {
 
 const { feature, agents } = Astro.props;
 
-const isSubscriptionsFeature = feature.getLinksByAgent !== undefined;
+const topLine = feature.getTopLine();
 const lines = feature.getLines();
 ---
 
 <tr class="category-row" data-category={feature.key} style={`--main-feature-color: ${feature.mainColor}; --secondary-feature-color: ${feature.secondaryColor}`}>
     <td class="category-cell">
       <a href={`/features/${feature.slug}`} class="category-name category-link">
-        {lines[0]?.getDescription() || feature.name}
+        {feature.name}
       </a>
     </td>
-    {isSubscriptionsFeature && lines[0]?.getCells().map((cell: any) => (
-      <td>
-        <SubscriptionsCell links={cell.getProps().links} mainColor={cell.getProps().mainColor} />
-      </td>
-    ))}
-    {!isSubscriptionsFeature && lines[0]?.getCells().map((cell: any) => (
-      <td>
-        <StatusCell status={cell.getProps().status} />
-      </td>
-    ))}
+    {topLine.map((cell: any) => {
+      const { Component, props } = cell.renderCellInTable();
+      return (
+        <td>
+          <Component {...props} />
+        </td>
+      );
+    })}
   </tr>
-  {lines.slice(1).map((line: any) => (
+  {lines.map((line: any) => (
     <tr class="feature-row" data-category={feature.key} style={`--main-feature-color: ${feature.mainColor}; --secondary-feature-color: ${feature.secondaryColor}`}>
       <td class="feature-cell">
         <a href={`/features/${feature.slug}#${line.getKey()}`} class="feature-name feature-link">
           {line.getDescription()}
         </a>
       </td>
-      {line.getCells().map((cell: any) => (
-        <td>
-          <StatusCell status={cell.getProps().status} />
-        </td>
-      ))}
+      {line.getCells().map((cell: any) => {
+        const { Component, props } = cell.renderCellInTable();
+        return (
+          <td>
+            <Component {...props} />
+          </td>
+        );
+      })}
     </tr>
   ))}
 

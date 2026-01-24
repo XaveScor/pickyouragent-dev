@@ -29,22 +29,22 @@ describe("ParsedTable", () => {
       expect(cell.status).toBe(Status.Supported);
     });
 
-    test("StatusCellView has correct component and props", () => {
+    test("StatusCellView has correct component and props via renderCellInTable", () => {
       const cell = new StatusCellView(Status.Supported);
-      expect(cell.getProps()).toEqual({ status: Status.Supported });
-      expect(cell.getComponentPath()).toBe("../components/StatusCell.astro");
+      const result = cell.renderCellInTable();
+      expect(result.props).toEqual({ status: Status.Supported });
+      expect(result.Component).toBeDefined();
     });
 
-    test("SubscriptionsCellView has correct component and props", () => {
+    test("SubscriptionsCellView has correct component and props via renderCellInTable", () => {
       const links = [
         { label: "Pricing", url: "https://example.com/pricing" },
         { label: "Docs", url: "https://example.com/docs" },
       ];
       const cell = new SubscriptionsCellView(links, "#ff0000");
-      expect(cell.getProps()).toEqual({ links, mainColor: "#ff0000" });
-      expect(cell.getComponentPath()).toBe(
-        "../components/SubscriptionsCell.astro",
-      );
+      const result = cell.renderCellInTable();
+      expect(result.props).toEqual({ links, mainColor: "#ff0000" });
+      expect(result.Component).toBeDefined();
     });
   });
 
@@ -108,7 +108,33 @@ describe("ParsedTable", () => {
   });
 
   describe("Lines", () => {
-    test("StatusFeature.getLines returns category line + subfeature lines", () => {
+    test("StatusFeature.getTopLine returns category cells", () => {
+      const feature = new StatusFeature(
+        "test-feature",
+        "Test Feature",
+        "test-feature",
+        "#ff0000",
+        "#ffaaaa",
+        [],
+        new Map([
+          ["agent1", Status.Supported],
+          ["agent2", Status.NotSupported],
+        ]),
+      );
+
+      const topLine = feature.getTopLine();
+
+      expect(topLine).toHaveLength(2);
+      expect(topLine[0]).toBeInstanceOf(StatusCellView);
+      expect(topLine[1]).toBeInstanceOf(StatusCellView);
+
+      const render0 = topLine[0].renderCellInTable();
+      const render1 = topLine[1].renderCellInTable();
+      expect(render0.props.status).toBe(Status.Supported);
+      expect(render1.props.status).toBe(Status.NotSupported);
+    });
+
+    test("StatusFeature.getLines returns only subfeature lines", () => {
       const subfeature = new StatusSubfeature(
         "test-sub",
         "Test Subfeature",
@@ -136,21 +162,41 @@ describe("ParsedTable", () => {
 
       const lines = feature.getLines();
 
-      expect(lines).toHaveLength(2);
+      expect(lines).toHaveLength(1);
 
-      const categoryLine = lines[0] as StatusLine;
-      expect(categoryLine.getDescription()).toBe("Test Feature");
-      expect(categoryLine.getCells()).toHaveLength(2);
-      expect(categoryLine.getCells()[0]).toBeInstanceOf(StatusCellView);
-      expect(categoryLine.getCells()[1]).toBeInstanceOf(StatusCellView);
-
-      const subfeatureLine = lines[1] as SubfeatureLine;
+      const subfeatureLine = lines[0] as SubfeatureLine;
       expect(subfeatureLine.getDescription()).toBe("Test Subfeature");
       expect(subfeatureLine.getKey()).toBe("test-sub");
       expect(subfeatureLine.getCells()).toHaveLength(2);
     });
 
-    test("SubscriptionsFeature.getLines returns single line", () => {
+    test("SubscriptionsFeature.getTopLine returns cells", () => {
+      const linksByAgent = new Map([
+        ["agent1", [{ label: "Pricing", url: "https://example.com/pricing" }]],
+      ]);
+
+      const feature = new SubscriptionsFeature(
+        "subscriptions",
+        "Subscriptions",
+        "subscriptions",
+        "#f43f5e",
+        "#fb7185",
+        linksByAgent,
+      );
+
+      const topLine = feature.getTopLine();
+
+      expect(topLine).toHaveLength(1);
+      expect(topLine[0]).toBeInstanceOf(SubscriptionsCellView);
+
+      const render = topLine[0].renderCellInTable();
+      expect(render.props.links).toEqual([
+        { label: "Pricing", url: "https://example.com/pricing" },
+      ]);
+      expect(render.props.mainColor).toBe("#f43f5e");
+    });
+
+    test("SubscriptionsFeature.getLines returns empty array", () => {
       const linksByAgent = new Map([
         ["agent1", [{ label: "Pricing", url: "https://example.com/pricing" }]],
       ]);
@@ -166,19 +212,12 @@ describe("ParsedTable", () => {
 
       const lines = feature.getLines();
 
-      expect(lines).toHaveLength(1);
-
-      const subscriptionsLine = lines[0] as SubscriptionsLine;
-      expect(subscriptionsLine.getDescription()).toBe("Subscriptions");
-      expect(subscriptionsLine.getCells()).toHaveLength(1);
-      expect(subscriptionsLine.getCells()[0]).toBeInstanceOf(
-        SubscriptionsCellView,
-      );
+      expect(lines).toHaveLength(0);
     });
   });
 
   describe("Cell types", () => {
-    test("StatusFeature lines return only StatusCellView", () => {
+    test("StatusFeature topLine returns only StatusCellView", () => {
       const feature = new StatusFeature(
         "test",
         "Test",
@@ -189,15 +228,14 @@ describe("ParsedTable", () => {
         new Map([["agent1", Status.Supported]]),
       );
 
-      const lines = feature.getLines();
-      const cells = lines[0].getCells();
+      const topLine = feature.getTopLine();
 
-      cells.forEach((cell) => {
+      topLine.forEach((cell) => {
         expect(cell).toBeInstanceOf(StatusCellView);
       });
     });
 
-    test("SubscriptionsFeature lines return only SubscriptionsCellView", () => {
+    test("SubscriptionsFeature topLine returns only SubscriptionsCellView", () => {
       const feature = new SubscriptionsFeature(
         "subscriptions",
         "Subscriptions",
@@ -212,10 +250,9 @@ describe("ParsedTable", () => {
         ]),
       );
 
-      const lines = feature.getLines();
-      const cells = lines[0].getCells();
+      const topLine = feature.getTopLine();
 
-      cells.forEach((cell) => {
+      topLine.forEach((cell) => {
         expect(cell).toBeInstanceOf(SubscriptionsCellView);
       });
     });

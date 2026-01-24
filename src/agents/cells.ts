@@ -1,4 +1,6 @@
 import { z } from "zod";
+import StatusCell from "../components/StatusCell.astro";
+import SubscriptionsCell from "../components/SubscriptionsCell.astro";
 
 export const Status = {
   Supported: "supported",
@@ -57,8 +59,10 @@ export const subscriptionsCellSchema = z.object({
 });
 
 export interface Cell {
-  getComponentPath(): string;
-  getProps(): Record<string, unknown>;
+  renderCellInTable(): {
+    Component: any;
+    props: Record<string, unknown>;
+  };
 }
 
 export class StatusCellView implements Cell {
@@ -68,12 +72,11 @@ export class StatusCellView implements Cell {
     this.#status = status;
   }
 
-  getComponentPath() {
-    return "../components/StatusCell.astro";
-  }
-
-  getProps() {
-    return { status: this.#status };
+  renderCellInTable() {
+    return {
+      Component: StatusCell,
+      props: { status: this.#status },
+    };
   }
 }
 
@@ -86,11 +89,10 @@ export class SubscriptionsCellView implements Cell {
     this.#mainColor = mainColor;
   }
 
-  getComponentPath() {
-    return "../components/SubscriptionsCell.astro";
-  }
-
-  getProps() {
-    return { links: this.#links, mainColor: this.#mainColor };
+  renderCellInTable() {
+    return {
+      Component: SubscriptionsCell,
+      props: { links: this.#links, mainColor: this.#mainColor },
+    };
   }
 }
