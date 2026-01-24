@@ -37,4 +37,10 @@ export const collections = {
   features: featuresCollection,
   subfeatures: subfeaturesCollection,
   agentSubfeatures: agentSubfeaturesCollection,
+  test: defineCollection({
+    type: "content",
+    schema: z.object({
+      title: z.string(),
+    }),
+  }),
 };
