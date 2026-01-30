@@ -35,10 +35,20 @@ export default async function run(Astro: any) {
     };
   }
 
-  const agents = allAgents.map((agent) => ({
-    id: agent.id,
-    name: agent.name,
-  }));
+  const agents = allAgents.map((agent) => {
+    // Get all keys except id and name (those are the feature keys)
+    const features: Record<string, unknown> = {};
+    for (const key of Object.keys(agent)) {
+      if (key !== "id" && key !== "name") {
+        features[key] = (agent as any)[key];
+      }
+    }
+    return {
+      id: agent.id,
+      name: agent.name,
+      features,
+    };
+  });
 
   const snapshot = {
     metadata: {
