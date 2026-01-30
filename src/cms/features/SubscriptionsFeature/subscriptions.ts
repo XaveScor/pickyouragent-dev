@@ -39,12 +39,18 @@ export const claudeMax: SubscriptionService = {
   id: "claude-max",
   name: "Claude Max",
   url: "https://claude.com/pricing/max",
-  description: "Anthropic's premium subscription",
+  description: "Creator of SOTA Opus/Sonnet models. Offers <a href=\"https://she-llac.com/claude-limits\" target=\"_blank\" rel=\"noopener noreferrer\">generous limits<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg></a> compared to API token costs.",
   pros: [
-    "TBD - add your pros here",
+    "SOTA models (Opus 4.5, Sonnet 4)",
+    "~80% cheaper than API usage",
   ],
   cons: [
-    "TBD - add your cons here",
+    "Restricted to Claude Code only",
+  ],
+  limits: [
+    { tier: "Pro", fiveHours: "550K credits (1×)", oneWeek: "5M credits (1×)" },
+    { tier: "Max 5×", fiveHours: "3.3M credits (6×)", oneWeek: "41.7M credits (8.3×)" },
+    { tier: "Max 20×", fiveHours: "11M credits (20×)", oneWeek: "83.3M credits (16.7×)" },
   ],
 };
 
@@ -52,12 +58,14 @@ export const openai: SubscriptionService = {
   id: "openai",
   name: "OpenAI",
   url: "https://chatgpt.com/pricing/",
-  description: "OpenAI's subscription plans",
+  description: "Creator of SOTA GPT-family models. Offers generous limits compared to API costs.",
   pros: [
-    "TBD - add your pros here",
+    "Works with any agent",
+    "Specialized coding model (Codex)",
+    "~80% cheaper than API usage",
   ],
   cons: [
-    "TBD - add your cons here",
+    "No $100 tier — only $20 or $200 plans",
   ],
 };
 
