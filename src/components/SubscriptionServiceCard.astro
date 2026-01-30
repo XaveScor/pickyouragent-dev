@@ -32,7 +32,23 @@ const { service, supportedAgents, mainColor } = Astro.props;
   </header>
 
   {service.description && (
-    <p class="service-description">{service.description}</p>
+    <p class="service-description" set:html={service.description} />
+  )}
+
+  {service.limits && service.limits.length > 0 && (
+    <div class="limits-section">
+      <h4 class="section-title limits-title">Usage Limits</h4>
+      <div class="limits-list">
+        {service.limits.map((limit) => (
+          <div class="limit-row">
+            <span class="tier-name">{limit.tier}</span>
+            <span class="limit-value">{limit.fiveHours} / 5h</span>
+            <span class="limit-separator">·</span>
+            <span class="limit-value">{limit.oneWeek} / 1w</span>
+          </div>
+        ))}
+      </div>
+    </div>
   )}
 
   <div class="pros-cons-grid">
@@ -109,6 +125,60 @@ const { service, supportedAgents, mainColor } = Astro.props;
     margin: 0 0 1rem 0;
     font-size: 0.9rem;
     line-height: 1.5;
+  }
+
+  .service-description :global(a) {
+    color: var(--main-color);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .service-description :global(a svg) {
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .service-description :global(a):hover {
+    color: var(--secondary-feature-color);
+  }
+
+  .limits-section {
+    margin-bottom: 1rem;
+  }
+
+  .limits-title {
+    color: var(--text-primary);
+  }
+
+  .limits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .limit-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .tier-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 3rem;
+  }
+
+  .limit-value {
+    color: var(--text-secondary);
+  }
+
+  .limit-separator {
+    color: #d1d5db;
   }
 
   .supported-agents {
