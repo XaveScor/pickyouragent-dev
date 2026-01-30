@@ -110,12 +110,15 @@ export class StatusFeature<
       // Build per-agent values for this subfeature
       const subfeatureValues: Array<AgentValue<Status>> = [];
       for (const { value, agentId, agentName } of agentValues) {
+        let subfeatureStatus: Status;
         if (typeof value === "string") {
-          // Agent provided a Status directly for the whole feature, skip
-          continue;
+          // Agent provided a Status string instead of subfeature object
+          // Use the same status for all subfeatures to maintain column alignment
+          subfeatureStatus = value;
+        } else {
+          const subfeatureObj = value as SubfeaturesObject<Subfeatures>;
+          subfeatureStatus = subfeatureObj[key as keyof Subfeatures] as Status;
         }
-        const subfeatureObj = value as SubfeaturesObject<Subfeatures>;
-        const subfeatureStatus = subfeatureObj[key as keyof Subfeatures] as Status;
         subfeatureValues.push({
           value: subfeatureStatus,
           agentId,
