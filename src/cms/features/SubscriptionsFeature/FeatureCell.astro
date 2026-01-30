@@ -1,6 +1,8 @@
 ---
 import type { SubscriptionLink } from "./subscriptions";
 import LinksList from "../../../components/LinksList.astro";
+import Badge from "../../../components/Badge.astro";
+import { Status } from "../StatusFeature/status";
 
 interface Props {
   links: SubscriptionLink[];
@@ -12,4 +14,4 @@ const { links, mainColor } = Astro.props;
 
 {links.length > 0 ? (
   <LinksList links={links} mainColor={mainColor} />
-) : null}
+) : <Badge status={Status.NotSupported} />}
