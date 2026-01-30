@@ -53,7 +53,7 @@ export function aggregateSubfeatureStatuses(statuses: Status[]): Status {
 }
 
 type SubfeatureArg = {
-  name: string;
+  displayName: string;
   slug: string;
   subfeatureCollectionId: string;
 };
@@ -61,8 +61,8 @@ type SubfeatureArg = {
 export class StatusSubfeature {
   constructor(private readonly arg: SubfeatureArg) {}
 
-  get name(): string {
-    return this.arg.name;
+  get displayName(): string {
+    return this.arg.displayName;
   }
 
   get slug(): string {
@@ -88,7 +88,7 @@ export class StatusSubfeature {
 
     return {
       key: this.arg.slug,
-      name: this.arg.name,
+      displayName: this.arg.displayName,
       slug: this.arg.slug,
       statusByAgent,
       aggregatedStatus,

@@ -14,27 +14,27 @@ export const featureSetSchema = compileFeatures({
     slug: "planmode",
     subfeatures: {
       "dual-model": new StatusSubfeature({
-        name: "dual-model",
+        displayName: "Dual Model",
         slug: "dual-mode",
         subfeatureCollectionId: "planmode/dual-model/dual-model",
       }),
       questions: new StatusSubfeature({
-        name: "questions",
+        displayName: "Questions",
         slug: "questions",
         subfeatureCollectionId: "planmode/questions/questions",
       }),
       "plan-editing": new StatusSubfeature({
-        name: "plan-editing",
+        displayName: "Plan Editing",
         slug: "plan-editing",
         subfeatureCollectionId: "planmode/plan-editing/plan-editing",
       }),
       "orchestrator-mode": new StatusSubfeature({
-        name: "orchestrator-mode",
+        displayName: "Orchestrator Mode",
         slug: "orchestrator-mode",
         subfeatureCollectionId: "planmode/orchestrator-mode/orchestrator-mode",
       }),
       todos: new StatusSubfeature({
-        name: "todos",
+        displayName: "Todos",
         slug: "todos",
         subfeatureCollectionId: "planmode/todos/todos",
       }),
@@ -47,37 +47,37 @@ export const featureSetSchema = compileFeatures({
     slug: "documentation",
     subfeatures: {
       filesystem: new StatusSubfeature({
-        name: "filesystem-documentation",
+        displayName: "Filesystem Documentation",
         slug: "filesystem-documentation",
         subfeatureCollectionId: "documentation/filesystem/filesystem",
       }),
       tree: new StatusSubfeature({
-        name: "hierarchical-tree",
+        displayName: "Hierarchical Tree",
         slug: "hierarchical-tree",
         subfeatureCollectionId: "documentation/tree/tree",
       }),
       "multi-file": new StatusSubfeature({
-        name: "multi-file",
+        displayName: "Multi File",
         slug: "multi-file",
         subfeatureCollectionId: "documentation/multi-file/multi-file",
       }),
       "llms-txt": new StatusSubfeature({
-        name: "llms-txt",
+        displayName: "Llms Txt",
         slug: "llms-txt",
         subfeatureCollectionId: "documentation/llms-txt/llms-txt",
       }),
       "auto-merge": new StatusSubfeature({
-        name: "auto-merge",
+        displayName: "Auto Merge",
         slug: "auto-merge",
         subfeatureCollectionId: "documentation/auto-merge/auto-merge",
       }),
       skills: new StatusSubfeature({
-        name: "Partial/Skills.md",
+        displayName: "Partial/Skills.md",
         slug: "Partial/Skills.md",
         subfeatureCollectionId: "documentation/skills/skills",
       }),
       "web-to-docs": new StatusSubfeature({
-        name: "web-to-docs",
+        displayName: "Web To Docs",
         slug: "web-to-docs",
         subfeatureCollectionId: "documentation/web-to-docs/web-to-docs",
       }),
@@ -90,22 +90,22 @@ export const featureSetSchema = compileFeatures({
     slug: "tools",
     subfeatures: {
       "web-search-engine": new StatusSubfeature({
-        name: "web-search-engine",
+        displayName: "Web Search Engine",
         slug: "web-search-engine",
         subfeatureCollectionId: "tools/web-search-engine/web-search-engine",
       }),
       "fetch-data": new StatusSubfeature({
-        name: "fetch-data",
+        displayName: "Fetch Data",
         slug: "fetch-data",
         subfeatureCollectionId: "tools/fetch-data/fetch-data",
       }),
       browser: new StatusSubfeature({
-        name: "browser",
+        displayName: "Browser",
         slug: "browser",
         subfeatureCollectionId: "tools/browser/browser",
       }),
       linters: new StatusSubfeature({
-        name: "linters",
+        displayName: "Linters",
         slug: "linters",
         subfeatureCollectionId: "tools/linters/linters",
       }),
@@ -125,13 +125,13 @@ export const featureSetSchema = compileFeatures({
     slug: "cli-calling",
     subfeatures: {
       "infinite-tasks-timeout": new StatusSubfeature({
-        name: "infinite-tasks-timeout",
+        displayName: "Infinite Tasks Timeout",
         slug: "infinite-tasks-timeout",
         subfeatureCollectionId:
           "clicalling/infinite-tasks-timeout/infinite-tasks-timeout",
       }),
       "processes-explorer": new StatusSubfeature({
-        name: "processes-explorer",
+        displayName: "Processes Explorer",
         slug: "processes-explorer",
         subfeatureCollectionId:
           "clicalling/processes-explorer/processes-explorer",
@@ -145,12 +145,12 @@ export const featureSetSchema = compileFeatures({
     slug: "model-management",
     subfeatures: {
       filtering: new StatusSubfeature({
-        name: "filtering",
+        displayName: "Filtering",
         slug: "filtering",
         subfeatureCollectionId: "modelmanagement/filtering/filtering",
       }),
       "region-tuning": new StatusSubfeature({
-        name: "region-tuning",
+        displayName: "Region Tuning",
         slug: "region-tuning",
         subfeatureCollectionId: "modelmanagement/region-tuning/region-tuning",
       }),
@@ -163,12 +163,12 @@ export const featureSetSchema = compileFeatures({
     slug: "agent-mode",
     subfeatures: {
       debug: new StatusSubfeature({
-        name: "debug",
+        displayName: "Debug",
         slug: "debug",
         subfeatureCollectionId: "agentmode/debug/debug",
       }),
       ask: new StatusSubfeature({
-        name: "ask",
+        displayName: "Ask",
         slug: "ask",
         subfeatureCollectionId: "agentmode/ask/ask",
       }),

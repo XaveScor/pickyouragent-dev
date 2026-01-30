@@ -50,7 +50,7 @@ describe("statusFeature", () => {
         secondaryColor: "#cc0000",
         subfeatures: {
           testSubfeature: new StatusSubfeature({
-            name: "subfeatureName",
+            displayName: "Subfeature Name",
             slug: "subfeatureName",
             subfeatureCollectionId: "subfeatureName",
           }),

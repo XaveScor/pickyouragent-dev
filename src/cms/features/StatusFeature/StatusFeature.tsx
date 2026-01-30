@@ -72,7 +72,7 @@ class ParsedStatusFeature<
           secondaryColor: this.meta.secondaryColor,
           featureLink,
           slug: subfeature.slug,
-          name: subfeature.name,
+          name: subfeature.displayName,
           statuses: Array.from(subfeature.statusByAgent.values()),
         },
       })),

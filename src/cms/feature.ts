@@ -26,7 +26,7 @@ export interface ParsedFeature {
 
 export interface ParsedSubfeature {
   key: string;
-  name: string;
+  displayName: string;
   slug: string;
   statusByAgent: Map<string, unknown>;
   aggregatedStatus: unknown;
