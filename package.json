@@ -12,8 +12,8 @@
     "build:original": "astro build && node scripts/build-sw.js",
     "preview": "astro preview",
     "astro:run": "node scripts/astro-run.mjs",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test": "vitest run --typecheck",
+    "test:watch": "vitest --typecheck"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",

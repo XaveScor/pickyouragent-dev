@@ -1,10 +1,10 @@
 import { getEntry, render } from "astro:content";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 
-export const lazyAstroFactory: (
+export const lazyAstroFactory = async (
   collectionName: string,
   id: string,
-) => Promise<AstroComponentFactory> = async (collectionName, id) => {
+): Promise<AstroComponentFactory> => {
   if (!collectionName || !id) {
     throw new Error(
       `Both collectionName and id are required. Received: collectionName="${collectionName}", id="${id}"`,

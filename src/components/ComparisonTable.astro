@@ -1,17 +1,20 @@
 ---
-import type { Agent } from '../agents/featureSetSchema';
-import { ParsedTable } from '../agents/parsedTable';
-import CategoryRow from './CategoryRow.astro';
+import { compileTable } from '../agents/featureSetSchema';
+import type { Agent } from '../cms';
+import FeatureRow from './FeatureRow.astro';
 
 interface Props {
-  agents: Agent[];
+  agents: Agent<any>[];
 }
 
 const { agents } = Astro.props;
 
-// Create parsed table from agents
-const parsedTable = await ParsedTable.create(agents);
-const features = parsedTable.getFeatures();
+const table = compileTable(agents);
+const features = await table.getFeatures();
+
+const featureRenderData = await Promise.all(
+  features.map((feature) => feature.getTableLineAsync())
+);
 ---
 
 <div class="table-card">
@@ -20,16 +23,13 @@ const features = parsedTable.getFeatures();
       <tr>
         <th class="feature-col">Feature</th>
         {agents.map((agent) => (
-          <th class="agent-col">{agent.meta.name}</th>
+          <th class="agent-col">{agent.name}</th>
         ))}
       </tr>
     </thead>
     <tbody>
-      {features.map((feature) => (
-        <CategoryRow
-          feature={feature}
-          agents={agents}
-        />
+      {featureRenderData.map((data) => (
+        <FeatureRow data={data} />
       ))}
     </tbody>
   </table>
@@ -40,7 +40,7 @@ const features = parsedTable.getFeatures();
   .table-card {
     background-color: var(--bg-card);
     border-radius: 16px;
-    box-shadow: 
+    box-shadow:
       0 1px 3px rgba(0, 0, 0, 0.04),
       0 4px 12px rgba(0, 0, 0, 0.06);
     overflow: hidden;
@@ -105,19 +105,19 @@ const features = parsedTable.getFeatures();
     .table-card {
       border-radius: 12px;
     }
-    
+
     th, td {
       padding: 0.75rem 0.75rem;
     }
-    
+
     .category-row td {
       padding: 0.9rem 0.75rem;
     }
-    
+
     .feature-row td {
       padding: 0.4rem 0.75rem;
     }
-    
+
     th.feature-col {
       width: 180px;
     }
@@ -127,23 +127,23 @@ const features = parsedTable.getFeatures();
     .table-card {
       overflow-x: auto;
     }
-    
+
     table {
       min-width: 500px;
     }
-    
+
     th.feature-col {
       width: 150px;
     }
-    
+
     .feature-name {
       padding-left: 0.75rem;
     }
-    
+
     .category-row td {
       padding: 0.8rem 0.6rem;
     }
-    
+
     .feature-row td {
       padding: 0.35rem 0.6rem;
     }

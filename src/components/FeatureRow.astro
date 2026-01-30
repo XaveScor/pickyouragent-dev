@@ -1,0 +1,16 @@
+---
+import type { TableLineRenderData } from "../cms/feature";
+
+interface Props {
+  data: TableLineRenderData;
+}
+
+const { data } = Astro.props;
+const { Component, props, subfeatures } = data;
+---
+
+<Component {...props}>
+  {subfeatures && subfeatures.map(({ Component: SubComponent, props: subProps }) => (
+    <SubComponent slot="subfeatures" {...subProps} />
+  ))}
+</Component>

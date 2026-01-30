@@ -1,312 +1,180 @@
-import { z } from "zod";
-import { getEntry, getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-import type { SubscriptionLink } from "./cells";
-import { Status, statusCellSchema, subscriptionsCellSchema } from "./cells";
+import { compileFeatures, StatusFeature, StatusSubfeature, SubscriptionsFeature } from "../cms";
 
-type FeatureMeta = {
-  name: string;
-  mainColor: string;
-  secondaryColor: string;
-  slug?: string;
-  kind: "subscriptions" | "status";
-};
-
-type SubfeatureMeta = {
-  name: string;
-  description: CollectionEntry<"subfeatures">;
-};
-
-export const featuresRegistry = z.registry<FeatureMeta>();
-export const subfeaturesRegistry = z.registry<SubfeatureMeta>();
-
-/**
- * Resolves a subfeature by its collection ID.
- * ID should be the path relative to the collection base without extension (e.g., 'planmode/dual-model/dual-model').
- * Throws an error if the entry does not exist, failing the build.
- *
- * Note: This function must be called at the top level with await for Astro's static analysis.
- */
-export async function resolveSubfeature(
-  id: string,
-): Promise<CollectionEntry<"subfeatures">> {
-  // Use getCollection and find by ID to ensure entries are processed the same way
-  // as they were with the old implementation
-  const allEntries = await getCollection("subfeatures");
-  const entry = allEntries.find((e) => e.id === id);
-
-  if (!entry) {
-    const availableIds = allEntries.map((e) => e.id).join("\n  ");
-    throw new Error(
-      `Subfeature entry not found: ${id}\n\nAvailable IDs:\n  ${availableIds}`,
-    );
-  }
-
-  return entry;
-}
-
-function subfeature(config: {
-  name: string;
-  description: CollectionEntry<"subfeatures">;
-}) {
-  const subfeatureSchema = z.object({
-    $$type: z.literal("status"),
-    status: z.enum([
-      Status.Supported,
-      Status.PartiallySupported,
-      Status.NotSupported,
-      Status.NotVerified,
-    ]),
-    detailsId: z.string().optional(),
-  });
-  // Type assertion to work around Astro version compatibility issue with render() method signature
-  subfeaturesRegistry.add(subfeatureSchema, {
-    name: config.name,
-    description: config.description as any,
-  });
-  return subfeatureSchema;
-}
-
-function subscriptionsFeature(meta: Omit<FeatureMeta, "kind">) {
-  const featureSchema = subscriptionsCellSchema;
-  featuresRegistry.add(featureSchema, { ...meta, kind: "subscriptions" });
-  return featureSchema;
-}
-
-function statusFeature<T extends Record<string, z.ZodType>>(
-  meta: Omit<FeatureMeta, "kind">,
-  subfeatures: T,
-) {
-  const subfeaturesSchema = z.object(subfeatures);
-  const featureSchema = z.union([statusCellSchema, subfeaturesSchema]);
-  featuresRegistry.add(featureSchema, { ...meta, kind: "status" });
-  return featureSchema;
-}
-
-const dualModelDesc = await resolveSubfeature("planmode/dual-model/dual-model");
-const questionsDesc = await resolveSubfeature("planmode/questions/questions");
-const planEditingDesc = await resolveSubfeature(
-  "planmode/plan-editing/plan-editing",
-);
-const orchestratorModeDesc = await resolveSubfeature(
-  "planmode/orchestrator-mode/orchestrator-mode",
-);
-const todosDesc = await resolveSubfeature("planmode/todos/todos");
-const filesystemDesc = await resolveSubfeature(
-  "documentation/filesystem/filesystem",
-);
-const treeDesc = await resolveSubfeature("documentation/tree/tree");
-const multiFileDesc = await resolveSubfeature(
-  "documentation/multi-file/multi-file",
-);
-const llmsTxtDesc = await resolveSubfeature("documentation/llms-txt/llms-txt");
-const autoMergeDesc = await resolveSubfeature(
-  "documentation/auto-merge/auto-merge",
-);
-const skillsDesc = await resolveSubfeature("documentation/skills/skills");
-const webToDocsDesc = await resolveSubfeature(
-  "documentation/web-to-docs/web-to-docs",
-);
-const webSearchEngineDesc = await resolveSubfeature(
-  "tools/web-search-engine/web-search-engine",
-);
-const fetchDataDesc = await resolveSubfeature("tools/fetch-data/fetch-data");
-const browserDesc = await resolveSubfeature("tools/browser/browser");
-const lintersDesc = await resolveSubfeature("tools/linters/linters");
-const cliCallingInfiniteTasksTimeoutDesc = await resolveSubfeature(
-  "clicalling/infinite-tasks-timeout/infinite-tasks-timeout",
-);
-const cliCallingProcessesExplorerDesc = await resolveSubfeature(
-  "clicalling/processes-explorer/processes-explorer",
-);
-const modelManagementFilteringDesc = await resolveSubfeature(
-  "modelmanagement/filtering/filtering",
-);
-const modelManagementRegionTuningDesc = await resolveSubfeature(
-  "modelmanagement/region-tuning/region-tuning",
-);
-const agentModeDebugDesc = await resolveSubfeature("agentmode/debug/debug");
-const agentModeAskDesc = await resolveSubfeature("agentmode/ask/ask");
-
-export const featureSetSchema = z.object({
-  subscriptions: subscriptionsFeature({
+export const featureSetSchema = compileFeatures({
+  subscriptions: new SubscriptionsFeature({
     name: "Subscriptions",
     mainColor: "#f43f5e",
     secondaryColor: "#fb7185",
     slug: "subscriptions",
   }),
-  planMode: statusFeature(
-    {
-      name: "Plan Mode",
-      mainColor: "#3b82f6",
-      secondaryColor: "#60a5fa",
-      slug: "planmode",
-    },
-    {
-      "dual-model": subfeature({
+  planMode: new StatusFeature({
+    name: "Plan Mode",
+    mainColor: "#3b82f6",
+    secondaryColor: "#60a5fa",
+    slug: "planmode",
+    subfeatures: {
+      "dual-model": new StatusSubfeature({
         name: "dual-model",
-        description: dualModelDesc,
+        slug: "dual-mode",
+        subfeatureCollectionId: "planmode/dual-model/dual-model",
       }),
-      questions: subfeature({
+      questions: new StatusSubfeature({
         name: "questions",
-        description: questionsDesc,
+        slug: "questions",
+        subfeatureCollectionId: "planmode/questions/questions",
       }),
-      "plan-editing": subfeature({
+      "plan-editing": new StatusSubfeature({
         name: "plan-editing",
-        description: planEditingDesc,
+        slug: "plan-editing",
+        subfeatureCollectionId: "planmode/plan-editing/plan-editing",
       }),
-      "orchestrator-mode": subfeature({
+      "orchestrator-mode": new StatusSubfeature({
         name: "orchestrator-mode",
-        description: orchestratorModeDesc,
+        slug: "orchestrator-mode",
+        subfeatureCollectionId: "planmode/orchestrator-mode/orchestrator-mode",
       }),
-      todos: subfeature({
+      todos: new StatusSubfeature({
         name: "todos",
-        description: todosDesc,
+        slug: "todos",
+        subfeatureCollectionId: "planmode/todos/todos",
       }),
     },
-  ),
-  documentation: statusFeature(
-    {
-      name: "Documentation",
-      mainColor: "#8b5cf6",
-      secondaryColor: "#a78bfa",
-      slug: "documentation",
-    },
-    {
-      filesystem: subfeature({
+  }),
+  documentation: new StatusFeature({
+    name: "Documentation",
+    mainColor: "#8b5cf6",
+    secondaryColor: "#a78bfa",
+    slug: "documentation",
+    subfeatures: {
+      filesystem: new StatusSubfeature({
         name: "filesystem-documentation",
-        description: filesystemDesc,
+        slug: "filesystem-documentation",
+        subfeatureCollectionId: "documentation/filesystem/filesystem",
       }),
-      tree: subfeature({
+      tree: new StatusSubfeature({
         name: "hierarchical-tree",
-        description: treeDesc,
+        slug: "hierarchical-tree",
+        subfeatureCollectionId: "documentation/tree/tree",
       }),
-      "multi-file": subfeature({
+      "multi-file": new StatusSubfeature({
         name: "multi-file",
-        description: multiFileDesc,
+        slug: "multi-file",
+        subfeatureCollectionId: "documentation/multi-file/multi-file",
       }),
-      "llms-txt": subfeature({
+      "llms-txt": new StatusSubfeature({
         name: "llms-txt",
-        description: llmsTxtDesc,
+        slug: "llms-txt",
+        subfeatureCollectionId: "documentation/llms-txt/llms-txt",
       }),
-      "auto-merge": subfeature({
+      "auto-merge": new StatusSubfeature({
         name: "auto-merge",
-        description: autoMergeDesc,
+        slug: "auto-merge",
+        subfeatureCollectionId: "documentation/auto-merge/auto-merge",
       }),
-      skills: subfeature({
+      skills: new StatusSubfeature({
         name: "Partial/Skills.md",
-        description: skillsDesc,
+        slug: "Partial/Skills.md",
+        subfeatureCollectionId: "documentation/skills/skills",
       }),
-      "web-to-docs": subfeature({
+      "web-to-docs": new StatusSubfeature({
         name: "web-to-docs",
-        description: webToDocsDesc,
+        slug: "web-to-docs",
+        subfeatureCollectionId: "documentation/web-to-docs/web-to-docs",
       }),
     },
-  ),
-  tools: statusFeature(
-    {
-      name: "Tools",
-      mainColor: "#06b6d4",
-      secondaryColor: "#22d3ee",
-      slug: "tools",
-    },
-    {
-      "web-search-engine": subfeature({
+  }),
+  tools: new StatusFeature({
+    name: "Tools",
+    mainColor: "#06b6d4",
+    secondaryColor: "#22d3ee",
+    slug: "tools",
+    subfeatures: {
+      "web-search-engine": new StatusSubfeature({
         name: "web-search-engine",
-        description: webSearchEngineDesc,
+        slug: "web-search-engine",
+        subfeatureCollectionId: "tools/web-search-engine/web-search-engine",
       }),
-      "fetch-data": subfeature({
+      "fetch-data": new StatusSubfeature({
         name: "fetch-data",
-        description: fetchDataDesc,
+        slug: "fetch-data",
+        subfeatureCollectionId: "tools/fetch-data/fetch-data",
       }),
-      browser: subfeature({
+      browser: new StatusSubfeature({
         name: "browser",
-        description: browserDesc,
+        slug: "browser",
+        subfeatureCollectionId: "tools/browser/browser",
       }),
-      linters: subfeature({
+      linters: new StatusSubfeature({
         name: "linters",
-        description: lintersDesc,
+        slug: "linters",
+        subfeatureCollectionId: "tools/linters/linters",
       }),
     },
-  ),
-  commands: statusFeature(
-    {
-      name: "Commands",
-      mainColor: "#10b981",
-      secondaryColor: "#34d399",
-      slug: "commands",
-    },
-    {},
-  ),
-  cliCalling: statusFeature(
-    {
-      name: "CLI Calling",
-      mainColor: "#f97316",
-      secondaryColor: "#fb923c",
-      slug: "cli-calling",
-    },
-    {
-      "infinite-tasks-timeout": subfeature({
+  }),
+  commands: new StatusFeature({
+    name: "Commands",
+    mainColor: "#10b981",
+    secondaryColor: "#34d399",
+    slug: "commands",
+    subfeatures: {},
+  }),
+  cliCalling: new StatusFeature({
+    name: "CLI Calling",
+    mainColor: "#f97316",
+    secondaryColor: "#fb923c",
+    slug: "cli-calling",
+    subfeatures: {
+      "infinite-tasks-timeout": new StatusSubfeature({
         name: "infinite-tasks-timeout",
-        description: cliCallingInfiniteTasksTimeoutDesc,
+        slug: "infinite-tasks-timeout",
+        subfeatureCollectionId:
+          "clicalling/infinite-tasks-timeout/infinite-tasks-timeout",
       }),
-      "processes-explorer": subfeature({
+      "processes-explorer": new StatusSubfeature({
         name: "processes-explorer",
-        description: cliCallingProcessesExplorerDesc,
+        slug: "processes-explorer",
+        subfeatureCollectionId:
+          "clicalling/processes-explorer/processes-explorer",
       }),
     },
-  ),
-  modelManagement: statusFeature(
-    {
-      name: "Model management",
-      mainColor: "#ec4899",
-      secondaryColor: "#f472b6",
-      slug: "model-management",
-    },
-    {
-      filtering: subfeature({
+  }),
+  modelManagement: new StatusFeature({
+    name: "Model management",
+    mainColor: "#ec4899",
+    secondaryColor: "#f472b6",
+    slug: "model-management",
+    subfeatures: {
+      filtering: new StatusSubfeature({
         name: "filtering",
-        description: modelManagementFilteringDesc,
+        slug: "filtering",
+        subfeatureCollectionId: "modelmanagement/filtering/filtering",
       }),
-      "region-tuning": subfeature({
+      "region-tuning": new StatusSubfeature({
         name: "region-tuning",
-        description: modelManagementRegionTuningDesc,
+        slug: "region-tuning",
+        subfeatureCollectionId: "modelmanagement/region-tuning/region-tuning",
       }),
     },
-  ),
-  agentMode: statusFeature(
-    {
-      name: "Agent Mode",
-      mainColor: "#ef4444",
-      secondaryColor: "#f87171",
-      slug: "agent-mode",
-    },
-    {
-      debug: subfeature({
+  }),
+  agentMode: new StatusFeature({
+    name: "Agent Mode",
+    mainColor: "#ef4444",
+    secondaryColor: "#f87171",
+    slug: "agent-mode",
+    subfeatures: {
+      debug: new StatusSubfeature({
         name: "debug",
-        description: agentModeDebugDesc,
+        slug: "debug",
+        subfeatureCollectionId: "agentmode/debug/debug",
       }),
-      ask: subfeature({
+      ask: new StatusSubfeature({
         name: "ask",
-        description: agentModeAskDesc,
+        slug: "ask",
+        subfeatureCollectionId: "agentmode/ask/ask",
       }),
     },
-  ),
+  }),
 });
 
-type AgentMeta = {
-  id: string;
-  name: string;
-};
-export const agentRegistry = z.registry<AgentMeta>();
-export function declareSchema<T extends z.infer<typeof featureSetSchema>>(
-  meta: AgentMeta,
-  features: T,
-) {
-  return {
-    meta,
-    features: featureSetSchema.parse(features),
-  };
-}
-
-export type Agent = ReturnType<typeof declareSchema>;
+export const declareAgent = featureSetSchema.declareAgent;
+export const compileTable = featureSetSchema.compileTable;

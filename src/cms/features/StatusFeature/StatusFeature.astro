@@ -1,50 +1,33 @@
 ---
-import type { Agent } from '../agents/featureSetSchema';
-import { ParsedTable } from '../agents/parsedTable';
+import { Status } from './status';
+import FeatureCell from './FeatureCell.astro';
 
 interface Props {
-  feature: any;
-  agents: Agent[];
+  name: string;
+  mainColor: string;
+  secondaryColor: string;
+  slug: string;
+  statuses: Array<Status>;
 }
 
-const { feature, agents } = Astro.props;
-
-const topLine = feature.getTopLine();
-const lines = feature.getLines();
+const { name, mainColor, secondaryColor, slug, statuses } = Astro.props;
 ---
 
-<tr class="category-row" data-category={feature.key} style={`--main-feature-color: ${feature.mainColor}; --secondary-feature-color: ${feature.secondaryColor}`}>
+<tr class="category-row" style={`--main-feature-color: ${mainColor}; --secondary-feature-color: ${secondaryColor}`}>
     <td class="category-cell">
-      <a href={`/features/${feature.slug}`} class="category-name category-link">
-        {feature.name}
+      <a href={`/features/${slug}`} class="category-name category-link">
+        {name}
       </a>
     </td>
-    {topLine.map((cell: any) => {
-      const { Component, props } = cell.renderCellInTable();
+    {statuses.map((status) => {
       return (
         <td>
-          <Component {...props} />
+          <FeatureCell status={status} />
         </td>
       );
     })}
   </tr>
-  {lines.map((line: any) => (
-    <tr class="feature-row" data-category={feature.key} style={`--main-feature-color: ${feature.mainColor}; --secondary-feature-color: ${feature.secondaryColor}`}>
-      <td class="feature-cell">
-        <a href={`/features/${feature.slug}#${line.getKey()}`} class="feature-name feature-link">
-          {line.getDescription()}
-        </a>
-      </td>
-      {line.getCells().map((cell: any) => {
-        const { Component, props } = cell.renderCellInTable();
-        return (
-          <td>
-            <Component {...props} />
-          </td>
-        );
-      })}
-    </tr>
-  ))}
+  <slot name="subfeatures" />
 
 <style>
   .category-row {
@@ -104,7 +87,7 @@ const lines = feature.getLines();
     .category-row td {
       padding: 0.9rem 0.75rem;
     }
-    
+
     .feature-row td {
       padding: 0.4rem 0.75rem;
     }
@@ -114,11 +97,11 @@ const lines = feature.getLines();
     .feature-name {
       padding-left: 0.75rem;
     }
-    
+
     .category-row td {
       padding: 0.8rem 0.6rem;
     }
-    
+
     .feature-row td {
       padding: 0.35rem 0.6rem;
     }

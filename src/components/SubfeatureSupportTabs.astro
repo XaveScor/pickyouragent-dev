@@ -1,19 +1,19 @@
 ---
-import type { Agent } from '../agents/featureSetSchema';
-import { Status } from '../agents/cells';
+import type { Agent } from '../cms';
+import { Status } from '../cms';
 import Badge from './Badge.astro';
 
 interface Props {
   subfeature: any;
-  agents: Agent[];
+  agents: Agent<any>[];
 }
 
 const { subfeature, agents } = Astro.props;
 
 // Build agent data with per-agent status and content for this subfeature
 const agentPanels = agents.map((agent) => {
-  const status = subfeature.statusByAgent.get(agent.meta.id) || subfeature.aggregatedStatus;
-  const agentContent = subfeature.getAgentContent(agent.meta.id);
+  const status = subfeature.statusByAgent.get(agent.id) || subfeature.aggregatedStatus;
+  const agentContent = subfeature.getAgentContent(agent.id);
 
   return {
     agent,
@@ -22,7 +22,7 @@ const agentPanels = agents.map((agent) => {
   };
 });
 
-const defaultAgentId = agents[0]?.meta.id || '';
+const defaultAgentId = agents[0]?.id || '';
 ---
 
 <section class="tabbed-area">
@@ -32,11 +32,11 @@ const defaultAgentId = agents[0]?.meta.id || '';
         class={`tab ${index === 0 ? 'tab-active' : ''}`}
         role="tab"
         aria-selected={index === 0 ? 'true' : 'false'}
-        aria-controls={`panel-${panel.agent.meta.id}`}
-        data-agent-id={panel.agent.meta.id}
+        aria-controls={`panel-${panel.agent.id}`}
+        data-agent-id={panel.agent.id}
         tabindex={index === 0 ? '0' : '-1'}
       >
-        {panel.agent.meta.name}
+        {panel.agent.name}
       </button>
     ))}
   </div>
@@ -44,10 +44,10 @@ const defaultAgentId = agents[0]?.meta.id || '';
   <div class="panels">
     {agentPanels.map((panel, index) => (
       <div
-        id={`panel-${panel.agent.meta.id}`}
+        id={`panel-${panel.agent.id}`}
         class={`panel ${index === 0 ? 'panel-active' : ''}`}
         role="tabpanel"
-        aria-labelledby={`tab-${panel.agent.meta.id}`}
+        aria-labelledby={`tab-${panel.agent.id}`}
         hidden={index !== 0}
       >
         <div class="support-table">

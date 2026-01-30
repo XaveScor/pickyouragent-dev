@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import '../../styles/global.css';
 import { allAgents } from '../../agents/allAgents';
-import { ParsedTable } from '../../agents/parsedTable';
+import { compileTable } from '../../agents/featureSetSchema';
 import Head from '../../components/Head.astro';
 import SubfeatureSupportTabs from '../../components/SubfeatureSupportTabs.astro';
 
@@ -16,9 +16,8 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 
-// Get category color from parsed table
-const parsedTable = await ParsedTable.create(allAgents);
-const feature = parsedTable.getFeature(entry.slug);
+const table = compileTable(allAgents);
+const feature = await table.getFeature(entry.slug);
 
 if (!feature) {
   return new Response('Feature not found', { status: 404 });
@@ -26,14 +25,15 @@ if (!feature) {
 
 const mainColor = feature.mainColor || '#3b82f6';
 
-// Check if this is a status feature with subfeatures
 const hasSubfeatures = typeof feature.getSubfeatures === 'function';
 const subfeatures = hasSubfeatures ? feature.getSubfeatures() : [];
+
+const agents = table.getAgents();
 ---
 
 <html lang="en">
   <head>
-    <Head 
+    <Head
       title={`${entry.data.title} Features - Pick Your Agent`}
       description={entry.data.description}
     />
@@ -60,9 +60,9 @@ const subfeatures = hasSubfeatures ? feature.getSubfeatures() : [];
               <section class="subfeature" id={subfeature.key}>
                 <h2>{subfeature.name}</h2>
                 <div class="subfeature-description">
-                  <subfeature.Content />
+                  {subfeature.Content && <subfeature.Content />}
                 </div>
-                <SubfeatureSupportTabs subfeature={subfeature} agents={parsedTable.agents} />
+                <SubfeatureSupportTabs subfeature={subfeature} agents={agents} />
               </section>
             ))}
           </>
@@ -71,4 +71,3 @@ const subfeatures = hasSubfeatures ? feature.getSubfeatures() : [];
     </main>
   </body>
 </html>
-

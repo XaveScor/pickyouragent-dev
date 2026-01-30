@@ -1,53 +1,50 @@
-import { declareSchema } from "../featureSetSchema";
-import { Status, statusCell, subscriptionsCell } from "../cells";
+import { declareAgent } from "../featureSetSchema";
+import { Status } from "../../cms";
 
-export const claudeCode = declareSchema(
+export const claudeCode = declareAgent(
   {
     id: "claude-code",
     name: "Claude Code",
   },
   {
     planMode: {
-      "dual-model": statusCell(
-        Status.Supported,
-        "claude-code/planmode/dual-model",
-      ),
-      questions: statusCell(Status.NotVerified),
-      "plan-editing": statusCell(Status.NotVerified),
-      "orchestrator-mode": statusCell(Status.NotVerified),
-      todos: statusCell(Status.Supported),
+      "dual-model": Status.Supported,
+      questions: Status.NotVerified,
+      "plan-editing": Status.NotVerified,
+      "orchestrator-mode": Status.NotVerified,
+      todos: Status.Supported,
     },
     documentation: {
-      filesystem: statusCell(Status.Supported),
-      tree: statusCell(Status.Supported),
-      "multi-file": statusCell(Status.NotSupported),
-      "llms-txt": statusCell(Status.NotSupported),
-      "auto-merge": statusCell(Status.NotSupported),
-      skills: statusCell(Status.NotVerified),
-      "web-to-docs": statusCell(Status.NotSupported),
+      filesystem: Status.Supported,
+      tree: Status.Supported,
+      "multi-file": Status.NotSupported,
+      "llms-txt": Status.NotSupported,
+      "auto-merge": Status.NotSupported,
+      skills: Status.NotVerified,
+      "web-to-docs": Status.NotSupported,
     },
     tools: {
-      "web-search-engine": statusCell(Status.Supported),
-      "fetch-data": statusCell(Status.Supported),
-      browser: statusCell(Status.NotVerified),
-      linters: statusCell(Status.NotVerified),
+      "web-search-engine": Status.Supported,
+      "fetch-data": Status.Supported,
+      browser: Status.NotVerified,
+      linters: Status.NotVerified,
     },
-    commands: statusCell(Status.Supported),
+    commands: Status.Supported,
     cliCalling: {
-      "infinite-tasks-timeout": statusCell(Status.NotVerified),
-      "processes-explorer": statusCell(Status.NotVerified),
+      "infinite-tasks-timeout": Status.NotVerified,
+      "processes-explorer": Status.NotVerified,
     },
     modelManagement: {
-      filtering: statusCell(Status.NotSupported),
-      "region-tuning": statusCell(Status.NotSupported),
+      filtering: Status.NotSupported,
+      "region-tuning": Status.NotSupported,
     },
     agentMode: {
-      debug: statusCell(Status.NotSupported),
-      ask: statusCell(Status.PartiallySupported),
+      debug: Status.NotSupported,
+      ask: Status.PartiallySupported,
     },
-    subscriptions: subscriptionsCell([
+    subscriptions: [
       { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
       { label: "max plan", url: "https://claude.com/pricing/max" },
-    ]),
+    ],
   },
 );

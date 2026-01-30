@@ -1,0 +1,29 @@
+---
+import { Status } from "./status";
+import FeatureCell from "./FeatureCell.astro";
+interface Props {
+  mainColor: string;
+  secondaryColor: string;
+  featureLink: string;
+  slug: string;
+  name: string;
+  statuses: Array<Status>;
+}
+
+const {featureLink, name, slug, secondaryColor, mainColor, statuses} = Astro.props;
+---
+
+<tr class="feature-row" style={`--main-feature-color: ${mainColor}; --secondary-feature-color: ${secondaryColor}`}>
+  <td class="feature-cell">
+    <a href={`${featureLink}#${slug}`} class="feature-name feature-link">
+      {name}
+    </a>
+  </td>
+  {statuses.map((status) => {
+    return (
+      <td>
+        <FeatureCell status={status} />
+      </td>
+    );
+  })}
+</tr>

@@ -1,9 +1,8 @@
 import { allAgents } from "../agents/allAgents";
-import { featuresRegistry, featureSetSchema } from "../agents/featureSetSchema";
+import { compileTable } from "../agents/featureSetSchema";
 import { mkdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 import { execSync } from "child_process";
-import { z } from "zod";
 
 export default async function run(Astro: any) {
   const root = process.cwd();
@@ -15,48 +14,30 @@ export default async function run(Astro: any) {
   const runId = process.env.GITHUB_RUN_ID || "local";
   const date = new Date().toISOString().split("T")[0];
 
+  const table = compileTable(allAgents as any);
+  const parsedFeatures = await table.getFeatures();
+
   const features: any = {};
-
-  const categoryOrderEnum = featureSetSchema.keyof().enum;
-  const categoryOrder = Object.values(
-    categoryOrderEnum,
-  ) as (keyof typeof categoryOrderEnum)[];
-
-  for (const categoryKey of categoryOrder) {
-    const categorySchema = featureSetSchema.shape[categoryKey];
-    const categoryMeta = featuresRegistry.get(categorySchema);
-
-    if (!categoryMeta) {
-      continue;
-    }
-
+  for (const feature of parsedFeatures) {
     const subfeatureKeys: string[] = [];
-    const categorySchemaAny = categorySchema as any;
-
-    if (categorySchemaAny instanceof z.ZodUnion) {
-      const objectOption = categorySchemaAny.options.find(
-        (opt: any) => opt instanceof z.ZodObject,
-      );
-      if (objectOption instanceof z.ZodObject) {
-        subfeatureKeys.push(...Object.keys(objectOption.shape));
+    if (feature.getSubfeatures) {
+      for (const subfeature of feature.getSubfeatures()) {
+        subfeatureKeys.push(subfeature.key);
       }
-    } else if (categorySchemaAny instanceof z.ZodObject) {
-      subfeatureKeys.push(...Object.keys(categorySchemaAny.shape));
     }
 
-    features[categoryKey] = {
-      name: categoryMeta.name,
-      slug: categoryMeta.slug || categoryKey,
-      mainColor: categoryMeta.mainColor,
-      secondaryColor: categoryMeta.secondaryColor,
+    features[feature.slug] = {
+      name: feature.name,
+      slug: feature.slug,
+      mainColor: feature.mainColor,
+      secondaryColor: feature.secondaryColor,
       subfeatures: subfeatureKeys,
     };
   }
 
   const agents = allAgents.map((agent) => ({
-    id: agent.meta.id,
-    name: agent.meta.name,
-    features: agent.features,
+    id: agent.id,
+    name: agent.name,
   }));
 
   const snapshot = {

@@ -1,33 +1,33 @@
-import { declareSchema } from "../featureSetSchema";
-import { Status, statusCell, subscriptionsCell } from "../cells";
+import { declareAgent } from "../featureSetSchema";
+import { Status } from "../../cms";
 
-export const junie = declareSchema(
+export const junie = declareAgent(
   {
     id: "junie",
     name: "Junie",
   },
   {
-    planMode: statusCell(Status.NotSupported),
+    planMode: Status.NotSupported,
     documentation: {
-      filesystem: statusCell(Status.Supported),
-      tree: statusCell(Status.NotSupported),
-      "multi-file": statusCell(Status.NotSupported),
-      "llms-txt": statusCell(Status.NotSupported),
-      "auto-merge": statusCell(Status.NotSupported),
-      skills: statusCell(Status.NotSupported),
-      "web-to-docs": statusCell(Status.NotSupported),
+      filesystem: Status.Supported,
+      tree: Status.NotSupported,
+      "multi-file": Status.NotSupported,
+      "llms-txt": Status.NotSupported,
+      "auto-merge": Status.NotSupported,
+      skills: Status.NotSupported,
+      "web-to-docs": Status.NotSupported,
     },
-    tools: statusCell(Status.NotSupported),
-    commands: statusCell(Status.NotSupported),
+    tools: Status.NotSupported,
+    commands: Status.NotSupported,
     cliCalling: {
-      "infinite-tasks-timeout": statusCell(Status.NotSupported),
-      "processes-explorer": statusCell(Status.NotSupported),
+      "infinite-tasks-timeout": Status.NotSupported,
+      "processes-explorer": Status.NotSupported,
     },
-    modelManagement: statusCell(Status.NotSupported),
+    modelManagement: Status.NotSupported,
     agentMode: {
-      debug: statusCell(Status.NotSupported),
-      ask: statusCell(Status.Supported),
+      debug: Status.NotSupported,
+      ask: Status.Supported,
     },
-    subscriptions: subscriptionsCell([]),
+    subscriptions: [],
   },
 );

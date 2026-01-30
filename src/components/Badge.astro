@@ -1,5 +1,5 @@
 ---
-import { Status } from '../agents/cells';
+import { Status } from '../cms';
 
 interface Props {
   status: Status;
@@ -55,15 +55,15 @@ const icon = (status === Status.NotSupported)
     --badge-supported-bg: #dcfce7;
     --badge-supported-text: #15803d;
     --badge-supported-icon: #22c55e;
-    
+
     --badge-partial-bg: #fef3c7;
     --badge-partial-text: #92400e;
     --badge-partial-icon: #f59e0b;
-    
+
     --badge-not-supported-bg: #fee2e2;
     --badge-not-supported-text: #b91c1c;
     --badge-not-supported-icon: #ef4444;
-    
+
     --badge-not-verified-bg: #f3f4f6;
     --badge-not-verified-text: #6b7280;
     --badge-not-verified-icon: #9ca3af;

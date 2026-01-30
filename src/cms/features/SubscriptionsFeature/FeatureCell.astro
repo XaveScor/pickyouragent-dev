@@ -1,0 +1,15 @@
+---
+import type { SubscriptionLink } from "./subscriptions";
+import LinksList from "../../../components/LinksList.astro";
+
+interface Props {
+  links: SubscriptionLink[];
+  mainColor: string;
+}
+
+const { links, mainColor } = Astro.props;
+---
+
+{links.length > 0 ? (
+  <LinksList links={links} mainColor={mainColor} />
+) : null}
