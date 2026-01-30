@@ -1,6 +1,7 @@
-import type { Feature, ParsedFeature, AgentValue, TableLineRenderData } from "../../feature";
+import type { Feature, ParsedFeature, AgentValue, TableLineRenderData, DescriptionPageRenderData } from "../../feature";
 import StatusFeatureComponent from "./StatusFeature.astro";
 import SubfeatureComponent from "./Subfeature.astro";
+import DescriptionPageComponent from "./DescriptionPage.astro";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { Status } from "./status";
 import {
@@ -31,6 +32,7 @@ class ParsedStatusFeature<
     private readonly meta: StatusFeatureArgs<Subfeatures>,
     private readonly featureStatuses: Array<Status>,
     private readonly parsedSubfeatures: Array<ParsedStatusSubfeature>,
+    private readonly agents: Array<{ id: string; name: string }>,
   ) {}
 
   get slug(): string {
@@ -51,6 +53,18 @@ class ParsedStatusFeature<
 
   getSubfeatures(): Array<ParsedStatusSubfeature> {
     return this.parsedSubfeatures;
+  }
+
+  getDescriptionPage(): DescriptionPageRenderData {
+    return {
+      Component: DescriptionPageComponent,
+      props: {
+        name: this.meta.name,
+        mainColor: this.meta.mainColor,
+        subfeatures: this.parsedSubfeatures,
+        agents: this.agents,
+      },
+    };
   }
 
   async getTableLineAsync(): Promise<TableLineRenderData> {
@@ -141,6 +155,11 @@ export class StatusFeature<
       parsedSubfeatures.push(parsed);
     }
 
-    return new ParsedStatusFeature(this.args, featureStatuses, parsedSubfeatures);
+    const agents = agentValues.map(({ agentId, agentName }) => ({
+      id: agentId,
+      name: agentName,
+    }));
+
+    return new ParsedStatusFeature(this.args, featureStatuses, parsedSubfeatures, agents);
   }
 }

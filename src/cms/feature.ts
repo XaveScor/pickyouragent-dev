@@ -15,12 +15,18 @@ export interface TableLineRenderData {
   }>;
 }
 
+export interface DescriptionPageRenderData {
+  Component: AstroComponentFactory;
+  props: Record<string, any>;
+}
+
 export interface ParsedFeature {
   slug: string;
   name: string;
   mainColor: string;
   secondaryColor: string;
   getTableLineAsync(): Promise<TableLineRenderData>;
+  getDescriptionPage(): DescriptionPageRenderData;
   getSubfeatures?(): Array<ParsedSubfeature>;
 }
 

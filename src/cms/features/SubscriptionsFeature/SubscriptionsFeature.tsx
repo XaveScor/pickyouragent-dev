@@ -1,5 +1,6 @@
-import type { Feature, ParsedFeature, AgentValue, TableLineRenderData } from "../../feature";
+import type { Feature, ParsedFeature, AgentValue, TableLineRenderData, DescriptionPageRenderData } from "../../feature";
 import SubscriptionsFeatureComponent from "./SubscriptionsFeature.astro";
+import DescriptionPageComponent from "./DescriptionPage.astro";
 import type { SubscriptionLink } from "./subscriptions";
 
 type SubscriptionsFeatureArgs = {
@@ -9,10 +10,17 @@ type SubscriptionsFeatureArgs = {
   slug: string;
 };
 
+type AgentSubscriptionData = {
+  agentId: string;
+  agentName: string;
+  links: SubscriptionLink[];
+};
+
 class ParsedSubscriptionsFeature implements ParsedFeature {
   constructor(
     private readonly meta: SubscriptionsFeatureArgs,
     private readonly linksByAgent: Array<SubscriptionLink[]>,
+    private readonly agentData: Array<AgentSubscriptionData>,
   ) {}
 
   get slug(): string {
@@ -29,6 +37,17 @@ class ParsedSubscriptionsFeature implements ParsedFeature {
 
   get secondaryColor(): string {
     return this.meta.secondaryColor;
+  }
+
+  getDescriptionPage(): DescriptionPageRenderData {
+    return {
+      Component: DescriptionPageComponent,
+      props: {
+        name: this.meta.name,
+        mainColor: this.meta.mainColor,
+        agents: this.agentData,
+      },
+    };
   }
 
   async getTableLineAsync(): Promise<TableLineRenderData> {
@@ -50,6 +69,11 @@ export class SubscriptionsFeature implements Feature<SubscriptionLink[]> {
 
   async parseAsync(agentValues: Array<AgentValue<SubscriptionLink[]>>) {
     const linksByAgent = agentValues.map(({ value }) => value);
-    return new ParsedSubscriptionsFeature(this.args, linksByAgent);
+    const agentData = agentValues.map(({ value, agentId, agentName }) => ({
+      agentId,
+      agentName,
+      links: value,
+    }));
+    return new ParsedSubscriptionsFeature(this.args, linksByAgent, agentData);
   }
 }

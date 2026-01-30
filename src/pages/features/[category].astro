@@ -4,7 +4,6 @@ import '../../styles/global.css';
 import { allAgents } from '../../agents/allAgents';
 import { compileTable } from '../../agents/featureSetSchema';
 import Head from '../../components/Head.astro';
-import SubfeatureSupportTabs from '../../components/SubfeatureSupportTabs.astro';
 
 export async function getStaticPaths() {
   const features = await getCollection('features');
@@ -24,11 +23,7 @@ if (!feature) {
 }
 
 const mainColor = feature.mainColor || '#3b82f6';
-
-const hasSubfeatures = typeof feature.getSubfeatures === 'function';
-const subfeatures = hasSubfeatures ? feature.getSubfeatures() : [];
-
-const agents = table.getAgents();
+const descriptionPage = feature.getDescriptionPage();
 ---
 
 <html lang="en">
@@ -54,19 +49,7 @@ const agents = table.getAgents();
         <h1>{entry.data.title}</h1>
         <p class="lead">{entry.data.description}</p>
 
-        {subfeatures.length > 0 && (
-          <>
-            {subfeatures.map((subfeature: any) => (
-              <section class="subfeature" id={subfeature.key}>
-                <h2>{subfeature.name}</h2>
-                <div class="subfeature-description">
-                  {subfeature.Content && <subfeature.Content />}
-                </div>
-                <SubfeatureSupportTabs subfeature={subfeature} agents={agents} />
-              </section>
-            ))}
-          </>
-        )}
+        <descriptionPage.Component {...descriptionPage.props} />
       </article>
     </main>
   </body>

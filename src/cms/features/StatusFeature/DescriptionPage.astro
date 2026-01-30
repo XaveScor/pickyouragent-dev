@@ -1,0 +1,69 @@
+---
+import SubfeatureSupportTabs from '../../../components/SubfeatureSupportTabs.astro';
+import type { ParsedStatusSubfeature } from './StatusSubfeature';
+import type { Agent } from '../../Agent';
+
+interface Props {
+  name: string;
+  mainColor: string;
+  subfeatures: ParsedStatusSubfeature[];
+  agents: Agent<any>[];
+}
+
+const { name, mainColor, subfeatures, agents } = Astro.props;
+---
+
+{subfeatures.length > 0 && (
+  <>
+    {subfeatures.map((subfeature) => (
+      <section class="subfeature" id={subfeature.key}>
+        <h2>{subfeature.displayName}</h2>
+        <div class="subfeature-description">
+          {subfeature.Content && <subfeature.Content />}
+        </div>
+        <SubfeatureSupportTabs subfeature={subfeature} agents={agents} />
+      </section>
+    ))}
+  </>
+)}
+
+<style>
+  .subfeature {
+    margin-bottom: 3rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .subfeature h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .subfeature-description {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .subfeature-description :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .subfeature-description :global(code) {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  @media (max-width: 600px) {
+    .subfeature {
+      margin-bottom: 2rem;
+    }
+
+    .subfeature h2 {
+      font-size: 1.25rem;
+    }
+  }
+</style>
