@@ -27,3 +27,47 @@ const {featureLink, name, slug, secondaryColor, mainColor, statuses} = Astro.pro
     );
   })}
 </tr>
+
+<style>
+  .feature-row .feature-cell {
+    position: relative;
+    padding-left: 1.75rem;
+  }
+
+  .feature-row .feature-cell::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: var(--main-feature-color);
+    opacity: 0.5;
+  }
+
+  .feature-row td {
+    padding: 0.5rem 1.25rem;
+  }
+
+  .feature-name {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    padding-left: 1.25rem;
+  }
+
+  @media (max-width: 900px) {
+    .feature-row td {
+      padding: 0.4rem 0.75rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .feature-name {
+      padding-left: 0.75rem;
+    }
+
+    .feature-row td {
+      padding: 0.35rem 0.6rem;
+    }
+  }
+</style>
