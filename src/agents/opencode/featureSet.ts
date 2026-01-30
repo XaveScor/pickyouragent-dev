@@ -1,5 +1,6 @@
 import { declareAgent } from "../featureSetSchema";
 import { Status } from "../../cms";
+import { zai, openai, copilot } from "../../cms/features/SubscriptionsFeature/subscriptions";
 
 export const opencode = declareAgent(
   {
@@ -42,13 +43,6 @@ export const opencode = declareAgent(
       debug: Status.NotSupported,
       ask: Status.PartiallySupported,
     },
-    subscriptions: [
-      { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
-      { label: "openai", url: "https://chatgpt.com/pricing/" },
-      {
-        label: "copilot",
-        url: "https://github.com/features/copilot/plans",
-      },
-    ],
+    subscriptions: [zai, openai, copilot],
   },
 );

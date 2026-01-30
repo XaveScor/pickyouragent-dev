@@ -1,5 +1,6 @@
 import { declareAgent } from "../featureSetSchema";
 import { Status } from "../../cms";
+import { zai } from "../../cms/features/SubscriptionsFeature/subscriptions";
 
 export const kiloCode = declareAgent(
   {
@@ -42,8 +43,6 @@ export const kiloCode = declareAgent(
       debug: Status.Supported,
       ask: Status.Supported,
     },
-    subscriptions: [
-      { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
-    ],
+    subscriptions: [zai],
   },
 );

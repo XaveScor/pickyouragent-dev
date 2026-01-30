@@ -1,5 +1,6 @@
 import { declareAgent } from "../featureSetSchema";
 import { Status } from "../../cms";
+import { zai, claudeMax } from "../../cms/features/SubscriptionsFeature/subscriptions";
 
 export const claudeCode = declareAgent(
   {
@@ -42,9 +43,6 @@ export const claudeCode = declareAgent(
       debug: Status.NotSupported,
       ask: Status.PartiallySupported,
     },
-    subscriptions: [
-      { label: "z.ai", url: "https://z.ai/subscribe?ic=9GRH0KS07Z" },
-      { label: "max plan", url: "https://claude.com/pricing/max" },
-    ],
+    subscriptions: [zai, claudeMax],
   },
 );

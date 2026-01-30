@@ -1,0 +1,195 @@
+---
+import type { SubscriptionService } from '../cms/features/SubscriptionsFeature/subscriptions';
+
+interface Props {
+  service: SubscriptionService;
+  supportedAgents: Array<{ id: string; name: string }>;
+  mainColor: string;
+}
+
+const { service, supportedAgents, mainColor } = Astro.props;
+---
+
+<article class="service-card" style={`--main-color: ${mainColor}`}>
+  <header class="service-header">
+    <h3 class="service-name">
+      <a href={service.url} target="_blank" rel="noopener noreferrer">
+        {service.name}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+      </a>
+    </h3>
+    {supportedAgents.length > 0 && (
+      <div class="supported-agents">
+        {supportedAgents.map((agent) => (
+          <span class="agent-chip">{agent.name}</span>
+        ))}
+      </div>
+    )}
+  </header>
+
+  {service.description && (
+    <p class="service-description">{service.description}</p>
+  )}
+
+  <div class="pros-cons-grid">
+    <div class="pros-section">
+      <h4 class="section-title">Advantages</h4>
+      <ul class="pros-list">
+        {service.pros.map((pro) => (
+          <li>
+            <span class="icon">✓</span>
+            {pro}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="cons-section">
+      <h4 class="section-title">Disadvantages</h4>
+      <ul class="cons-list">
+        {service.cons.map((con) => (
+          <li>
+            <span class="icon">✕</span>
+            {con}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</article>
+
+<style>
+  .service-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .service-name a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--main-color);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .service-name a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+
+  .service-name svg {
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .service-description {
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .supported-agents {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  .agent-chip {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background-color: #f3f4f6;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .pros-cons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .pros-section .section-title {
+    color: var(--badge-supported-text, #15803d);
+  }
+
+  .cons-section .section-title {
+    color: var(--badge-not-supported-text, #b91c1c);
+  }
+
+  .pros-list,
+  .cons-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pros-list li,
+  .cons-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .pros-list .icon {
+    color: var(--badge-supported-icon, #22c55e);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .cons-list .icon {
+    color: var(--badge-not-supported-icon, #ef4444);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .pros-cons-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .service-card {
+      padding: 1rem;
+    }
+  }
+</style>

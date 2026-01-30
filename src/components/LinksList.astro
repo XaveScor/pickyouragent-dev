@@ -1,6 +1,6 @@
 ---
 interface Props {
-  links: Array<{ label: string; url: string }>;
+  links: Array<{ name: string; url: string }>;
   mainColor?: string;
 }
 
@@ -10,7 +10,7 @@ const { links, mainColor = "#f43f5e" } = Astro.props;
 <div class="links-list" style={`--links-color: ${mainColor}`}>
   {links.map((link) => (
     <a href={link.url} class="links-item" target="_blank" rel="noopener noreferrer">
-      {link.label}
+      {link.name}
     </a>
   ))}
 </div>

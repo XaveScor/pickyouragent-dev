@@ -1,5 +1,6 @@
 import { declareAgent } from "../featureSetSchema";
 import { Status } from "../../cms";
+import { openai } from "../../cms/features/SubscriptionsFeature/subscriptions";
 
 export const codex = declareAgent(
   {
@@ -36,8 +37,6 @@ export const codex = declareAgent(
       debug: Status.NotSupported,
       ask: Status.PartiallySupported,
     },
-    subscriptions: [
-      { label: "openai", url: "https://chatgpt.com/pricing/" },
-    ],
+    subscriptions: [openai],
   },
 );
