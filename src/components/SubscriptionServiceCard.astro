@@ -253,13 +253,49 @@ const { service, supportedAgents, mainColor } = Astro.props;
   }
 
   @media (max-width: 600px) {
+    .service-card {
+      padding: 1rem;
+    }
+
+    .service-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .service-name {
+      font-size: 1.1rem;
+    }
+
+    .supported-agents {
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .agent-chip {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .limit-row {
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      gap: 0.35rem;
+    }
+
+    .tier-name {
+      min-width: 4rem;
+    }
+
     .pros-cons-grid {
       grid-template-columns: 1fr;
       gap: 1rem;
     }
 
-    .service-card {
-      padding: 1rem;
+    .pros-list li,
+    .cons-list li {
+      font-size: 0.85rem;
     }
   }
 </style>
