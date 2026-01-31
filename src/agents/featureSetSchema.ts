@@ -1,4 +1,9 @@
-import { compileFeatures, StatusFeature, StatusSubfeature, SubscriptionsFeature } from "../cms";
+import {
+  compileFeatures,
+  StatusFeature,
+  StatusSubfeature,
+  SubscriptionsFeature,
+} from "../cms";
 
 export const featureSetSchema = compileFeatures({
   subscriptions: new SubscriptionsFeature({
@@ -65,11 +70,6 @@ export const featureSetSchema = compileFeatures({
         displayName: "Llms Txt",
         slug: "llms-txt",
         subfeatureCollectionId: "documentation/llms-txt/llms-txt",
-      }),
-      "auto-merge": new StatusSubfeature({
-        displayName: "Auto Merge",
-        slug: "auto-merge",
-        subfeatureCollectionId: "documentation/auto-merge/auto-merge",
       }),
       skills: new StatusSubfeature({
         displayName: "Partial/Skills.md",
@@ -156,21 +156,21 @@ export const featureSetSchema = compileFeatures({
       }),
     },
   }),
-  agentMode: new StatusFeature({
-    name: "Agent Mode",
+  specializedModes: new StatusFeature({
+    name: "Specialized Modes",
     mainColor: "#ef4444",
     secondaryColor: "#f87171",
-    slug: "agent-mode",
+    slug: "specialized-modes",
     subfeatures: {
       debug: new StatusSubfeature({
         displayName: "Debug",
         slug: "debug",
-        subfeatureCollectionId: "agentmode/debug/debug",
+        subfeatureCollectionId: "specializedmodes/debug/debug",
       }),
       ask: new StatusSubfeature({
         displayName: "Ask",
         slug: "ask",
-        subfeatureCollectionId: "agentmode/ask/ask",
+        subfeatureCollectionId: "specializedmodes/ask/ask",
       }),
     },
   }),

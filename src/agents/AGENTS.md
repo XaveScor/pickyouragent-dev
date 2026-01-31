@@ -72,16 +72,16 @@ src/content/subfeatures/planmode/dual-model/dual-model.md
 
 The following feature categories are defined in the schema:
 
-| Feature          | Slug             | Main Color | Secondary Color |
-| ---------------- | ---------------- | ---------- | --------------- |
-| Plan Mode        | planmode         | #3b82f6    | #60a5fa         |
-| Documentation    | documentation    | #8b5cf6    | #a78bfa         |
-| Tools            | tools            | #06b6d4    | #22d3ee         |
-| Commands         | commands         | #10b981    | #34d399         |
-| CLI Calling      | cli-calling      | #f97316    | #fb923c         |
-| Model Management | model-management | #ec4899    | #f472b6         |
-| Agent Mode       | agent-mode       | #ef4444    | #f87171         |
-| Subscriptions    | subscriptions    | #f43f5e    | #fb7185         |
+| Feature           | Slug              | Main Color | Secondary Color |
+| ----------------- | ----------------- | ---------- | --------------- |
+| Plan Mode         | planmode          | #3b82f6    | #60a5fa         |
+| Documentation     | documentation     | #8b5cf6    | #a78bfa         |
+| Tools             | tools             | #06b6d4    | #22d3ee         |
+| Commands          | commands          | #10b981    | #34d399         |
+| CLI Calling       | cli-calling       | #f97316    | #fb923c         |
+| Model Management  | model-management  | #ec4899    | #f472b6         |
+| Specialized Modes | specialized-modes | #ef4444    | #f87171         |
+| Subscriptions     | subscriptions     | #f43f5e    | #fb7185         |
 
 ### How to Get Feature Support for an Agent
 

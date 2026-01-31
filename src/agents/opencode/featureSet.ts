@@ -36,7 +36,7 @@ export const opencode = declareAgent(
       tree: Status.NotSupported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
-      "auto-merge": Status.NotSupported,
+
       skills: {
         status: Status.Supported,
         collectionId: "opencode/documentation/skills",
@@ -67,11 +67,11 @@ export const opencode = declareAgent(
       },
       "region-tuning": Status.NotSupported,
     },
-    agentMode: {
+    specializedModes: {
       debug: Status.NotSupported,
       ask: {
         status: Status.PartiallySupported,
-        collectionId: "opencode/agentmode/ask",
+        collectionId: "opencode/specializedmodes/ask",
       },
     },
     subscriptions: [zai, openai, copilot],

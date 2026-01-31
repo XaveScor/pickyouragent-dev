@@ -28,7 +28,7 @@ export const junie = declareAgent(
       tree: Status.NotSupported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
-      "auto-merge": Status.NotSupported,
+
       skills: Status.NotSupported,
       "web-to-docs": Status.NotSupported,
     },
@@ -45,14 +45,14 @@ export const junie = declareAgent(
       },
       "region-tuning": Status.NotSupported,
     },
-    agentMode: {
+    specializedModes: {
       debug: {
         status: Status.NotSupported,
-        collectionId: "junie/agentmode/debug",
+        collectionId: "junie/specializedmodes/debug",
       },
       ask: {
         status: Status.Supported,
-        collectionId: "junie/agentmode/ask",
+        collectionId: "junie/specializedmodes/ask",
       },
     },
     subscriptions: [],

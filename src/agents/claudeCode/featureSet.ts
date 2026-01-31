@@ -16,11 +16,17 @@ export const claudeCode = declareAgent(
         status: Status.NotSupported,
         collectionId: "claude-code/planmode/dual-model",
       },
-      questions: Status.NotVerified,
-      "plan-editing": Status.NotVerified,
-      "orchestrator-mode": Status.NotVerified,
-      todos: {
+      questions: {
+        status: Status.PartiallySupported,
+        collectionId: "claude-code/planmode/questions",
+      },
+      "plan-editing": {
         status: Status.Supported,
+        collectionId: "claude-code/planmode/plan-editing",
+      },
+      "orchestrator-mode": Status.NotSupported,
+      todos: {
+        status: Status.PartiallySupported,
         collectionId: "claude-code/planmode/todos",
       },
     },
@@ -32,8 +38,11 @@ export const claudeCode = declareAgent(
       tree: Status.Supported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
-      "auto-merge": Status.NotSupported,
-      skills: Status.NotVerified,
+
+      skills: {
+        status: Status.Supported,
+        collectionId: "claude-code/documentation/skills",
+      },
       "web-to-docs": Status.NotSupported,
     },
     tools: {
@@ -42,27 +51,36 @@ export const claudeCode = declareAgent(
         status: Status.Supported,
         collectionId: "claude-code/tools/fetch-data",
       },
-      browser: Status.NotVerified,
-      linters: Status.NotVerified,
+      browser: {
+        status: Status.NotSupported,
+        collectionId: "claude-code/tools/browser",
+      },
+      linters: {
+        status: Status.NotSupported,
+        collectionId: "claude-code/tools/linters",
+      },
     },
     commands: Status.Supported,
     cliCalling: {
-      "infinite-tasks-timeout": Status.NotVerified,
-      "processes-explorer": Status.NotVerified,
+      "infinite-tasks-timeout": {
+        status: Status.Supported,
+        collectionId: "claude-code/cli-calling/infinite-tasks-timeout",
+      },
+      "processes-explorer": {
+        status: Status.PartiallySupported,
+        collectionId: "claude-code/cli-calling/processes-explorer",
+      },
     },
     modelManagement: {
       filtering: Status.NotSupported,
       "region-tuning": Status.NotSupported,
     },
-    agentMode: {
+    specializedModes: {
       debug: {
         status: Status.NotSupported,
-        collectionId: "claude-code/agentmode/debug",
+        collectionId: "claude-code/specializedmodes/debug",
       },
-      ask: {
-        status: Status.PartiallySupported,
-        collectionId: "claude-code/agentmode/ask",
-      },
+      ask: Status.NotSupported,
     },
     subscriptions: [zai, claudeMax],
   },

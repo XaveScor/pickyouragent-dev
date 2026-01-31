@@ -35,7 +35,7 @@ export const cursor = declareAgent(
       tree: Status.Supported,
       "multi-file": Status.Supported,
       "llms-txt": Status.Supported,
-      "auto-merge": Status.NotSupported,
+
       skills: Status.Supported,
       "web-to-docs": {
         status: Status.Supported,
@@ -67,14 +67,14 @@ export const cursor = declareAgent(
         collectionId: "cursor/modelmanagement/region-tuning",
       },
     },
-    agentMode: {
+    specializedModes: {
       debug: {
         status: Status.Supported,
-        collectionId: "cursor/agentmode/debug",
+        collectionId: "cursor/specializedmodes/debug",
       },
       ask: {
         status: Status.Supported,
-        collectionId: "cursor/agentmode/ask",
+        collectionId: "cursor/specializedmodes/ask",
       },
     },
     subscriptions: [zai],
