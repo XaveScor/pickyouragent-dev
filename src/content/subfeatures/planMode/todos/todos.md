@@ -20,17 +20,3 @@ When you build a plan and click execute. The agent creates a numbered list of su
 - Easier to review and approve before execution;
 - Agent can create checkpoints between steps for easy rollback if needed. You don't need rollback all the work if some step was finished incorrectly.
 
-**Supported agents:**
-
-- Claude Code (creates todos automatically when you execute a plan)
-- Cursor (creates todos automatically when you build a plan)
-
-**Partially supported agents:**
-
-- Kilo Code (you need to explicitly ask it to create todos; not automatic. I recommend to write "create todos and execute" for Architect mode implementation)
-- OpenCode (you need to explicitly ask it to create todos; not automatic. I recommend to write "create todos and execute" for plan execution)
-
-**Not supported agents:**
-
-- Codex (plan mode not implemented)
-- Junie (plan mode not implemented)

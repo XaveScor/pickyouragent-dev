@@ -3,9 +3,10 @@ import { Status } from '../cms';
 
 interface Props {
   status: Status;
+  noText?: boolean;
 }
 
-const { status } = Astro.props;
+const { status, noText = false } = Astro.props;
 
 // Helper function to get status text
 function getStatusText(status: Status): string {
@@ -44,9 +45,9 @@ const icon = (status === Status.NotSupported)
   : '✓';
 ---
 
-<span class={`badge ${statusClass}`}>
+<span class={`badge ${statusClass} ${noText ? 'badge-icon-only' : ''}`}>
   <span class="badge-icon">{icon}</span>
-  {statusText}
+  {!noText && statusText}
 </span>
 
 <style>
@@ -83,6 +84,10 @@ const icon = (status === Status.NotSupported)
   .badge-icon {
     font-size: 0.75rem;
     font-weight: 700;
+  }
+
+  .badge-icon-only {
+    padding: 0.2rem 0.4rem;
   }
 
   .badge.supported {

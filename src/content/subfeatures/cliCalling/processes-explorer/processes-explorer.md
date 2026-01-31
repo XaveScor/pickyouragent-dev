@@ -15,18 +15,3 @@ Features:
 - Displays resource usage for these processes
 - Helps you identify and stop anything the agent leaves running
 
-**Supported agents:**
-
-None
-
-**Not supported agents:**
-
-- Cursor
-- Kilo Code
-- Codex
-- Junie
-- OpenCode
-
-**Not verified yet:**
-
-- Claude Code

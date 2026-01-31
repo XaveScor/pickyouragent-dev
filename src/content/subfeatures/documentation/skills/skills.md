@@ -20,17 +20,3 @@ If you want only to tune the deployment process, you don't need to include the l
 
 Read more about the standard: https://agentskills.io/home
 
-**Supported agents:**
-
-- Cursor
-- Kilo Code (https://kilo.ai/docs/features/skills)
-- Codex (https://developers.openai.com/codex/skills)
-- OpenCode (https://opencode.ai/docs/skills/)
-
-**Not supported agents:**
-
-- Junie
-
-**Not verified yet:**
-
-- Claude Code

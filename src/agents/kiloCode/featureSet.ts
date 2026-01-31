@@ -9,25 +9,49 @@ export const kiloCode = declareAgent(
   },
   {
     planMode: {
-      "dual-model": Status.Supported,
-      questions: Status.Supported,
+      "dual-model": {
+        status: Status.Supported,
+        collectionId: "kilocode/planmode/dual-model",
+      },
+      questions: {
+        status: Status.Supported,
+        collectionId: "kilocode/planmode/questions",
+      },
       "plan-editing": Status.NotSupported,
-      "orchestrator-mode": Status.Supported,
-      todos: Status.PartiallySupported,
+      "orchestrator-mode": {
+        status: Status.Supported,
+        collectionId: "kilocode/planmode/orchestrator-mode",
+      },
+      todos: {
+        status: Status.PartiallySupported,
+        collectionId: "kilocode/planmode/todos",
+      },
     },
     documentation: {
-      filesystem: Status.Supported,
-      tree: Status.Supported,
+      filesystem: {
+        status: Status.Supported,
+        collectionId: "kilocode/documentation/filesystem",
+      },
+      tree: {
+        status: Status.Supported,
+        collectionId: "kilocode/documentation/tree",
+      },
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
       "auto-merge": Status.NotSupported,
-      skills: Status.Supported,
+      skills: {
+        status: Status.Supported,
+        collectionId: "kilocode/documentation/skills",
+      },
       "web-to-docs": Status.NotSupported,
     },
     tools: {
       "web-search-engine": Status.NotSupported,
       "fetch-data": Status.NotSupported,
-      browser: Status.NotSupported,
+      browser: {
+        status: Status.NotSupported,
+        collectionId: "kilocode/tools/browser",
+      },
       linters: Status.NotSupported,
     },
     commands: Status.Supported,
@@ -40,8 +64,14 @@ export const kiloCode = declareAgent(
       "region-tuning": Status.Supported,
     },
     agentMode: {
-      debug: Status.Supported,
-      ask: Status.Supported,
+      debug: {
+        status: Status.Supported,
+        collectionId: "kilocode/agentmode/debug",
+      },
+      ask: {
+        status: Status.Supported,
+        collectionId: "kilocode/agentmode/ask",
+      },
     },
     subscriptions: [zai],
   },

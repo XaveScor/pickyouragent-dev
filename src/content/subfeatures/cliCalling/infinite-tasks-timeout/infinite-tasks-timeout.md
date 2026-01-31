@@ -13,18 +13,3 @@ For example:
 devserver | head -50
 ```
 
-**Supported agents:**
-
-None
-
-**Not supported agents:**
-
-- Cursor
-- Kilo Code
-- Codex
-- Junie
-- OpenCode
-
-**Not verified yet:**
-
-- Claude Code

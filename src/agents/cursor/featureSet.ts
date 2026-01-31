@@ -9,27 +9,51 @@ export const cursor = declareAgent(
   },
   {
     planMode: {
-      "dual-model": Status.Supported,
-      questions: Status.Supported,
-      "plan-editing": Status.Supported,
+      "dual-model": {
+        status: Status.Supported,
+        collectionId: "cursor/planmode/dual-model",
+      },
+      questions: {
+        status: Status.Supported,
+        collectionId: "cursor/planmode/questions",
+      },
+      "plan-editing": {
+        status: Status.Supported,
+        collectionId: "cursor/planmode/plan-editing",
+      },
       "orchestrator-mode": Status.NotSupported,
-      todos: Status.Supported,
+      todos: {
+        status: Status.Supported,
+        collectionId: "cursor/planmode/todos",
+      },
     },
     documentation: {
-      filesystem: Status.Supported,
+      filesystem: {
+        status: Status.Supported,
+        collectionId: "cursor/documentation/filesystem",
+      },
       tree: Status.Supported,
       "multi-file": Status.Supported,
       "llms-txt": Status.Supported,
       "auto-merge": Status.NotSupported,
       skills: Status.Supported,
-      "web-to-docs": Status.Supported,
+      "web-to-docs": {
+        status: Status.Supported,
+        collectionId: "cursor/documentation/web-to-docs",
+      },
     },
     tools: {
       "web-search-engine": Status.Supported,
       // https://forum.cursor.com/t/agent-cant-web-search-properly/132658/17
       "fetch-data": Status.NotSupported,
-      browser: Status.PartiallySupported,
-      linters: Status.PartiallySupported,
+      browser: {
+        status: Status.PartiallySupported,
+        collectionId: "cursor/tools/browser",
+      },
+      linters: {
+        status: Status.PartiallySupported,
+        collectionId: "cursor/tools/linters",
+      },
     },
     commands: Status.Supported,
     cliCalling: {
@@ -38,11 +62,20 @@ export const cursor = declareAgent(
     },
     modelManagement: {
       filtering: Status.Supported,
-      "region-tuning": Status.PartiallySupported,
+      "region-tuning": {
+        status: Status.PartiallySupported,
+        collectionId: "cursor/modelmanagement/region-tuning",
+      },
     },
     agentMode: {
-      debug: Status.Supported,
-      ask: Status.Supported,
+      debug: {
+        status: Status.Supported,
+        collectionId: "cursor/agentmode/debug",
+      },
+      ask: {
+        status: Status.Supported,
+        collectionId: "cursor/agentmode/ask",
+      },
     },
     subscriptions: [zai],
   },

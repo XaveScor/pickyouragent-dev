@@ -8,8 +8,11 @@ import {
   parseFeatureStatus,
   aggregateSubfeatureStatuses,
   StatusSubfeature,
+  extractStatus,
+  extractCollectionId,
   type ParsedStatusSubfeature,
   type SubfeaturesObject,
+  type SubfeatureValue,
 } from "./StatusSubfeature";
 import { lazyAstroFactory } from "../../../lazyAstroComponent/lazyAstroComponent";
 
@@ -102,6 +105,7 @@ function parseStatuses<Subfeatures extends Record<string, StatusSubfeature>>(
       return value;
     }
 
+    // value is SubfeaturesObject<Subfeatures>, which may contain SubfeatureValue entries
     return parseFeatureStatus(value);
   });
 }
@@ -122,19 +126,19 @@ export class StatusFeature<
 
     for (const [key, subfeatureDef] of subfeatureEntries) {
       // Build per-agent values for this subfeature
-      const subfeatureValues: Array<AgentValue<Status>> = [];
+      const subfeatureValues: Array<AgentValue<SubfeatureValue>> = [];
       for (const { value, agentId, agentName } of agentValues) {
-        let subfeatureStatus: Status;
+        let subfeatureValue: SubfeatureValue;
         if (typeof value === "string") {
           // Agent provided a Status string instead of subfeature object
           // Use the same status for all subfeatures to maintain column alignment
-          subfeatureStatus = value;
+          subfeatureValue = value;
         } else {
           const subfeatureObj = value as SubfeaturesObject<Subfeatures>;
-          subfeatureStatus = subfeatureObj[key as keyof Subfeatures] as Status;
+          subfeatureValue = subfeatureObj[key as keyof Subfeatures];
         }
         subfeatureValues.push({
-          value: subfeatureStatus,
+          value: subfeatureValue,
           agentId,
           agentName,
         });
@@ -148,8 +152,19 @@ export class StatusFeature<
         // Content not found, leave as null
       }
 
-      // Load per-agent content (not implemented yet, would need detailsId in agent data)
+      // Load per-agent content based on collectionId from agent's subfeature declaration
       const agentContentById = new Map<string, AstroComponentFactory>();
+      for (const { value, agentId } of subfeatureValues) {
+        const collectionId = extractCollectionId(value);
+        if (collectionId) {
+          try {
+            const agentContent = await lazyAstroFactory("agentSubfeatures", collectionId);
+            agentContentById.set(agentId, agentContent);
+          } catch (e) {
+            // Content not found for this agent, skip
+          }
+        }
+      }
 
       const parsed = await subfeatureDef.parseAsync(subfeatureValues, Content, agentContentById);
       parsedSubfeatures.push(parsed);

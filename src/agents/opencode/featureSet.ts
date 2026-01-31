@@ -1,6 +1,10 @@
 import { declareAgent } from "../featureSetSchema";
 import { Status } from "../../cms";
-import { zai, openai, copilot } from "../../cms/features/SubscriptionsFeature/subscriptions";
+import {
+  zai,
+  openai,
+  copilot,
+} from "../../cms/features/SubscriptionsFeature/subscriptions";
 
 export const opencode = declareAgent(
   {
@@ -9,26 +13,47 @@ export const opencode = declareAgent(
   },
   {
     planMode: {
-      "dual-model": Status.Supported,
-      questions: Status.Supported,
+      "dual-model": {
+        status: Status.Supported,
+        collectionId: "opencode/planmode/dual-model",
+      },
+      questions: {
+        status: Status.Supported,
+        collectionId: "opencode/planmode/questions",
+      },
       "plan-editing": Status.NotSupported,
       "orchestrator-mode": Status.NotSupported,
-      todos: Status.PartiallySupported,
+      todos: {
+        status: Status.PartiallySupported,
+        collectionId: "opencode/planmode/todos",
+      },
     },
     documentation: {
-      filesystem: Status.Supported,
+      filesystem: {
+        status: Status.Supported,
+        collectionId: "opencode/documentation/filesystem",
+      },
       tree: Status.NotSupported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
       "auto-merge": Status.NotSupported,
-      skills: Status.Supported,
+      skills: {
+        status: Status.Supported,
+        collectionId: "opencode/documentation/skills",
+      },
       "web-to-docs": Status.NotSupported,
     },
     tools: {
       "web-search-engine": Status.NotSupported,
-      "fetch-data": Status.Supported,
+      "fetch-data": {
+        status: Status.Supported,
+        collectionId: "opencode/tools/fetch-data",
+      },
       browser: Status.NotSupported,
-      linters: Status.Supported,
+      linters: {
+        status: Status.Supported,
+        collectionId: "opencode/tools/linters",
+      },
     },
     commands: Status.Supported,
     cliCalling: {
@@ -36,12 +61,18 @@ export const opencode = declareAgent(
       "processes-explorer": Status.NotSupported,
     },
     modelManagement: {
-      filtering: Status.Supported,
+      filtering: {
+        status: Status.Supported,
+        collectionId: "opencode/modelmanagement/filtering",
+      },
       "region-tuning": Status.NotSupported,
     },
     agentMode: {
       debug: Status.NotSupported,
-      ask: Status.PartiallySupported,
+      ask: {
+        status: Status.PartiallySupported,
+        collectionId: "opencode/agentmode/ask",
+      },
     },
     subscriptions: [zai, openai, copilot],
   },

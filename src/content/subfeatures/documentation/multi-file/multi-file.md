@@ -42,14 +42,3 @@ If `root/code.source` uses `root/lib1/lib1.source`, the system context will be l
 
 `root/lib2/Claude.md` is skipped because it is not part of imported files.
 
-**Supported agents:**
-
-- Cursor
-
-**Not supported agents:**
-
-- Claude Code
-- Codex
-- Kilo Code
-- Junie
-- OpenCode

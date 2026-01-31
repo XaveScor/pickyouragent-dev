@@ -7,9 +7,24 @@ export const junie = declareAgent(
     name: "Junie",
   },
   {
-    planMode: Status.NotSupported,
+    planMode: {
+      "dual-model": {
+        status: Status.NotSupported,
+        collectionId: "junie/planmode/dual-model",
+      },
+      questions: Status.NotSupported,
+      "plan-editing": Status.NotSupported,
+      "orchestrator-mode": Status.NotSupported,
+      todos: {
+        status: Status.NotSupported,
+        collectionId: "junie/planmode/todos",
+      },
+    },
     documentation: {
-      filesystem: Status.Supported,
+      filesystem: {
+        status: Status.Supported,
+        collectionId: "junie/documentation/filesystem",
+      },
       tree: Status.NotSupported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
@@ -23,10 +38,22 @@ export const junie = declareAgent(
       "infinite-tasks-timeout": Status.NotSupported,
       "processes-explorer": Status.NotSupported,
     },
-    modelManagement: Status.NotSupported,
+    modelManagement: {
+      filtering: {
+        status: Status.NotSupported,
+        collectionId: "junie/modelmanagement/filtering",
+      },
+      "region-tuning": Status.NotSupported,
+    },
     agentMode: {
-      debug: Status.NotSupported,
-      ask: Status.Supported,
+      debug: {
+        status: Status.NotSupported,
+        collectionId: "junie/agentmode/debug",
+      },
+      ask: {
+        status: Status.Supported,
+        collectionId: "junie/agentmode/ask",
+      },
     },
     subscriptions: [],
   },

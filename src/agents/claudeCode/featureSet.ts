@@ -1,6 +1,9 @@
 import { declareAgent } from "../featureSetSchema";
 import { Status } from "../../cms";
-import { zai, claudeMax } from "../../cms/features/SubscriptionsFeature/subscriptions";
+import {
+  zai,
+  claudeMax,
+} from "../../cms/features/SubscriptionsFeature/subscriptions";
 
 export const claudeCode = declareAgent(
   {
@@ -9,14 +12,23 @@ export const claudeCode = declareAgent(
   },
   {
     planMode: {
-      "dual-model": Status.Supported,
+      "dual-model": {
+        status: Status.NotSupported,
+        collectionId: "claude-code/planmode/dual-model",
+      },
       questions: Status.NotVerified,
       "plan-editing": Status.NotVerified,
       "orchestrator-mode": Status.NotVerified,
-      todos: Status.Supported,
+      todos: {
+        status: Status.Supported,
+        collectionId: "claude-code/planmode/todos",
+      },
     },
     documentation: {
-      filesystem: Status.Supported,
+      filesystem: {
+        status: Status.Supported,
+        collectionId: "claude-code/documentation/filesystem",
+      },
       tree: Status.Supported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
@@ -26,7 +38,10 @@ export const claudeCode = declareAgent(
     },
     tools: {
       "web-search-engine": Status.Supported,
-      "fetch-data": Status.Supported,
+      "fetch-data": {
+        status: Status.Supported,
+        collectionId: "claude-code/tools/fetch-data",
+      },
       browser: Status.NotVerified,
       linters: Status.NotVerified,
     },
@@ -40,8 +55,14 @@ export const claudeCode = declareAgent(
       "region-tuning": Status.NotSupported,
     },
     agentMode: {
-      debug: Status.NotSupported,
-      ask: Status.PartiallySupported,
+      debug: {
+        status: Status.NotSupported,
+        collectionId: "claude-code/agentmode/debug",
+      },
+      ask: {
+        status: Status.PartiallySupported,
+        collectionId: "claude-code/agentmode/ask",
+      },
     },
     subscriptions: [zai, claudeMax],
   },
