@@ -1,0 +1,18 @@
+---
+agentId: claude-code
+featureName: cli-calling
+subfeatureName: infinite-tasks-timeout
+---
+
+import ResponsiveImage from "../../../../components/ResponsiveImage.astro";
+import infiniteTasksExample from "./infinite-tasks-answers.png";
+
+Claude Code has separate modes for long-running processes (like dev servers) and finite commands (like `ls`).
+
+The default timeout is 2 minutes, with a maximum of 10 minutes. For long-running processes such as dev servers, file watchers, or test runners in watch mode, Claude Code provides a special `run_in_background` flag in its built-in bash tool.
+
+<ResponsiveImage
+  src={infiniteTasksExample}
+  alt="Claude Code explaining the run_in_background parameter for long-running processes"
+  caption="Claude Code's bash tool supports running long-running processes in the background."
+/>

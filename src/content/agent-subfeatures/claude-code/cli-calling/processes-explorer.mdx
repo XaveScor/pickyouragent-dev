@@ -1,0 +1,16 @@
+---
+agentId: claude-code
+featureName: cli-calling
+subfeatureName: processes-explorer
+---
+
+import ResponsiveImage from "../../../../components/ResponsiveImage.astro";
+import processExplorerExample from "./process-explorer.png";
+
+Claude Code can run tasks in the background and display them. However, you cannot see exactly what is running or shut down processes without the model's help.
+
+<ResponsiveImage
+  src={processExplorerExample}
+  alt="Claude Code showing a background task running with 1 bash process indicator"
+  caption="Claude Code displays background tasks in the status bar, but lacks a detailed process explorer."
+/>

@@ -32,7 +32,7 @@ export const codex = declareAgent(
       tree: Status.NotSupported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
-      "auto-merge": Status.NotSupported,
+
       skills: {
         status: Status.Supported,
         collectionId: "codex/documentation/skills",
@@ -54,14 +54,14 @@ export const codex = declareAgent(
       filtering: Status.NotSupported,
       "region-tuning": Status.NotSupported,
     },
-    agentMode: {
+    specializedModes: {
       debug: {
         status: Status.NotSupported,
-        collectionId: "codex/agentmode/debug",
+        collectionId: "codex/specializedmodes/debug",
       },
       ask: {
         status: Status.PartiallySupported,
-        collectionId: "codex/agentmode/ask",
+        collectionId: "codex/specializedmodes/ask",
       },
     },
     subscriptions: [openai],

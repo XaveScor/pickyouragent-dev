@@ -38,7 +38,7 @@ export const kiloCode = declareAgent(
       },
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
-      "auto-merge": Status.NotSupported,
+
       skills: {
         status: Status.Supported,
         collectionId: "kilocode/documentation/skills",
@@ -63,14 +63,14 @@ export const kiloCode = declareAgent(
       filtering: Status.NotSupported,
       "region-tuning": Status.Supported,
     },
-    agentMode: {
+    specializedModes: {
       debug: {
         status: Status.Supported,
-        collectionId: "kilocode/agentmode/debug",
+        collectionId: "kilocode/specializedmodes/debug",
       },
       ask: {
         status: Status.Supported,
-        collectionId: "kilocode/agentmode/ask",
+        collectionId: "kilocode/specializedmodes/ask",
       },
     },
     subscriptions: [zai],
