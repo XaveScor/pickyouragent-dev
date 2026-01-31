@@ -20,19 +20,3 @@ The agent should suggest including the Astro llms-txt file in the context.
 I see you're using the Astro framework. Would you like to add their llms-txt file to your context?
 ```
 
-**Supported agents:**
-
-- None
-
-**Not supported agents:**
-
-- Cursor
-- Claude Code
-- Codex
-- Kilo Code
-- Junie
-- OpenCode
-
-**Not verified yet:**
-
-- None

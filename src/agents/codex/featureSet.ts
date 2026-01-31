@@ -8,14 +8,35 @@ export const codex = declareAgent(
     name: "Codex",
   },
   {
-    planMode: Status.NotSupported,
+    planMode: {
+      "dual-model": {
+        status: Status.NotSupported,
+        collectionId: "codex/planmode/dual-model",
+      },
+      questions: {
+        status: Status.NotSupported,
+        collectionId: "codex/planmode/questions",
+      },
+      "plan-editing": Status.NotSupported,
+      "orchestrator-mode": Status.NotSupported,
+      todos: {
+        status: Status.NotSupported,
+        collectionId: "codex/planmode/todos",
+      },
+    },
     documentation: {
-      filesystem: Status.Supported,
+      filesystem: {
+        status: Status.Supported,
+        collectionId: "codex/documentation/filesystem",
+      },
       tree: Status.NotSupported,
       "multi-file": Status.NotSupported,
       "llms-txt": Status.NotSupported,
       "auto-merge": Status.NotSupported,
-      skills: Status.Supported,
+      skills: {
+        status: Status.Supported,
+        collectionId: "codex/documentation/skills",
+      },
       "web-to-docs": Status.NotSupported,
     },
     tools: {
@@ -34,8 +55,14 @@ export const codex = declareAgent(
       "region-tuning": Status.NotSupported,
     },
     agentMode: {
-      debug: Status.NotSupported,
-      ask: Status.PartiallySupported,
+      debug: {
+        status: Status.NotSupported,
+        collectionId: "codex/agentmode/debug",
+      },
+      ask: {
+        status: Status.PartiallySupported,
+        collectionId: "codex/agentmode/ask",
+      },
     },
     subscriptions: [openai],
   },

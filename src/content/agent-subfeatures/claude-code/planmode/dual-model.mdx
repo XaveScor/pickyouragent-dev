@@ -4,40 +4,8 @@ featureName: planmode
 subfeatureName: dual-model
 ---
 
-Claude Code supports dual-model configuration through the model selector. You can choose separate models for planning and execution phases, allowing you to balance quality and cost.
+Claude Code previously supported dual-model configuration. However, this feature has been removed.
 
-**How to configure:**
+**Evidence of previous support:**
 
-1. Open the Claude Code settings panel
-2. Navigate to the "Models" section
-3. Select your preferred planning model (e.g., Claude 3.5 Sonnet)
-4. Select your preferred execution model (e.g., Claude 3 Haiku for cost efficiency)
-
-**Recommendations:**
-
-- Use a more capable model (like Sonnet) for planning to ensure high-quality task breakdown
-- Use a faster, cheaper model (like Haiku) for execution to reduce overall costs
-- The planning model determines the quality and thoroughness of your task breakdown
-- The execution model affects how well individual tasks are completed
-
-**Example workflow:**
-
-```typescript
-// In planning mode (Claude 3.5 Sonnet):
-"Build a REST API with Express";
-
-// Generates detailed steps and task list:
-// 1. Set up Express project structure
-// 2. Define API routes
-// 3. Add middleware for security
-// 4. Connect to database
-// 5. Add error handling
-// 6. Write tests
-
-// In execution mode (Claude 3 Haiku):
-// Each task is executed efficiently using the plan from above
-```
-
-**Cost optimization tip:**
-
-For most development tasks, using Claude 3.5 Sonnet for planning and Claude 3 Haiku for execution provides the best balance of quality and cost. The planning phase typically requires a few high-quality responses, while execution may involve many smaller tasks.
+- [Tweet showing dual-model feature](TWEET_URL_HERE) - demonstrates the feature when it was available

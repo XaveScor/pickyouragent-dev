@@ -13,11 +13,3 @@ Common documentation files include:
 - `CLAUDE.md` - Claude Code's alternative to AGENTS.md
 - `.cursor/rules/` - Cursor's folder for project-specific rules and context. More info: https://cursor.com/docs/context/rules
 
-**Supported agents:**
-
-- Cursor (supports AGENTS.md, CLAUDE.md and .cursor/rules/)
-- Claude Code (supports CLAUDE.md)
-- Kilo Code (supports AGENTS.md)
-- Codex (supports AGENTS.md)
-- Junie (supports AGENTS.md and .junie/guidelines.md)
-- OpenCode (supports AGENTS.md) https://opencode.ai/docs/rules/

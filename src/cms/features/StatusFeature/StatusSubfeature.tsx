@@ -2,7 +2,22 @@ import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import type { AgentValue, ParsedSubfeature } from "../../feature";
 import { Status } from "./status";
 
-type SubfeatureParams = Status;
+type SubfeatureValueObject = {
+  status: Status;
+  collectionId?: string;
+};
+
+export type SubfeatureValue = Status | SubfeatureValueObject;
+
+export function extractStatus(value: SubfeatureValue): Status {
+  return typeof value === "string" ? value : value.status;
+}
+
+export function extractCollectionId(value: SubfeatureValue): string | undefined {
+  return typeof value === "string" ? undefined : value.collectionId;
+}
+
+type SubfeatureParams = SubfeatureValue;
 
 export type ParsedStatusSubfeature = ParsedSubfeature & {
   statusByAgent: Map<string, Status>;
@@ -14,18 +29,20 @@ export type ParsedStatusSubfeature = ParsedSubfeature & {
 export type SubfeaturesObject<
   Subfeatures extends Record<string, StatusSubfeature>,
 > = {
-  [k in keyof Subfeatures]: SubfeatureParams;
+  [k in keyof Subfeatures]: SubfeatureValue;
 };
 
 export function parseFeatureStatus<
   Subfeatures extends Record<string, StatusSubfeature>,
 >(subfeatures: SubfeaturesObject<Subfeatures>): Status {
   const values = Object.values(subfeatures);
-  if (values.every((value) => value === Status.Supported)) {
+  const statuses = values.map(extractStatus);
+
+  if (statuses.every((status) => status === Status.Supported)) {
     return Status.Supported;
   }
 
-  if (values.every((value) => value === Status.NotSupported)) {
+  if (statuses.every((status) => status === Status.NotSupported)) {
     return Status.NotSupported;
   }
 
@@ -74,13 +91,13 @@ export class StatusSubfeature {
   }
 
   async parseAsync(
-    values: Array<AgentValue<SubfeatureParams>>,
+    values: Array<AgentValue<SubfeatureValue>>,
     Content: AstroComponentFactory | null,
     agentContentById: Map<string, AstroComponentFactory>,
   ): Promise<ParsedStatusSubfeature> {
     const statusByAgent = new Map<string, Status>();
     for (const { value, agentId } of values) {
-      statusByAgent.set(agentId, value);
+      statusByAgent.set(agentId, extractStatus(value));
     }
 
     const statuses = Array.from(statusByAgent.values());

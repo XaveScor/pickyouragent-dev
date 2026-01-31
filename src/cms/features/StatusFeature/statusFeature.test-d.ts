@@ -58,12 +58,39 @@ describe("statusFeature", () => {
       }),
     });
 
-    test("has subfeature", () => {
+    test("has subfeature with plain status", () => {
       expectTypeOf<typeof result.declareAgent>().toBeCallableWith(
         { id: "test", name: "Test" },
         {
           a: {
             testSubfeature: Status.Supported,
+          },
+        },
+      );
+    });
+
+    test("has subfeature with object containing status and collectionId", () => {
+      expectTypeOf<typeof result.declareAgent>().toBeCallableWith(
+        { id: "test", name: "Test" },
+        {
+          a: {
+            testSubfeature: {
+              status: Status.Supported,
+              collectionId: "agent-name/feature/subfeature",
+            },
+          },
+        },
+      );
+    });
+
+    test("has subfeature with object containing only status", () => {
+      expectTypeOf<typeof result.declareAgent>().toBeCallableWith(
+        { id: "test", name: "Test" },
+        {
+          a: {
+            testSubfeature: {
+              status: Status.Supported,
+            },
           },
         },
       );

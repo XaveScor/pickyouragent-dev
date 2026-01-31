@@ -18,14 +18,3 @@ However, these files are typically very large and cannot be fully loaded into an
 
 One approach is RAG (https://en.wikipedia.org/wiki/Retrieval-augmented-generation), which allows the agent to include only the relevant sections from the entire llms-full.txt file as needed.
 
-**Supported agents:**
-
-- Cursor
-
-**Not supported agents:**
-
-- Claude Code
-- Codex
-- Kilo Code
-- Junie
-- OpenCode

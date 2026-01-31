@@ -1,6 +1,5 @@
 ---
 import type { Agent } from '../cms';
-import { Status } from '../cms';
 import Badge from './Badge.astro';
 
 interface Props {
@@ -37,6 +36,7 @@ const defaultAgentId = agents[0]?.id || '';
         tabindex={index === 0 ? '0' : '-1'}
       >
         {panel.agent.name}
+        <Badge status={panel.status} noText />
       </button>
     ))}
   </div>
@@ -50,18 +50,12 @@ const defaultAgentId = agents[0]?.id || '';
         aria-labelledby={`tab-${panel.agent.id}`}
         hidden={index !== 0}
       >
-        <div class="support-table">
-          <div class="support-row">
-            <span class="support-label">Status</span>
-            <div class="support-value">
-              <Badge status={panel.status} />
-            </div>
-          </div>
-        </div>
-        {panel.content && (
+        {panel.content ? (
           <div class="agent-specific-content">
             <panel.content />
           </div>
+        ) : (
+          <p class="no-content">No additional details for this agent.</p>
         )}
       </div>
     ))}
@@ -70,23 +64,24 @@ const defaultAgentId = agents[0]?.id || '';
 
 <style>
   .tabbed-area {
+    display: flex;
     margin: 2rem 0;
     background-color: #ffffff;
-    border-radius: 12px;
     border: 1px solid var(--border-light);
   }
 
   .tab-list {
     display: flex;
-    border-bottom: 1px solid var(--border-light);
+    flex-direction: column;
+    border-right: 1px solid var(--border-light);
     background-color: #f5f5f7;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
     scrollbar-width: thin;
+    flex-shrink: 0;
   }
 
   .tab-list::-webkit-scrollbar {
-    height: 4px;
+    width: 4px;
   }
 
   .tab-list::-webkit-scrollbar-track {
@@ -99,16 +94,20 @@ const defaultAgentId = agents[0]?.id || '';
   }
 
   .tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.875rem 1.25rem;
     background: none;
     border: none;
-    border-bottom: 3px solid transparent;
+    border-left: 3px solid transparent;
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-secondary);
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s ease;
+    text-align: left;
   }
 
   .tab:hover {
@@ -123,13 +122,15 @@ const defaultAgentId = agents[0]?.id || '';
 
   .tab-active {
     color: var(--main-feature-color);
-    border-bottom-color: var(--main-feature-color);
+    border-left-color: var(--main-feature-color);
     background-color: #ffffff;
   }
 
   .panels {
+    flex: 1;
     padding: 1.5rem;
     background-color: #ffffff;
+    min-width: 0;
   }
 
   .panel {
@@ -150,33 +151,10 @@ const defaultAgentId = agents[0]?.id || '';
     }
   }
 
-  .support-table {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .support-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .support-label {
-    font-size: 0.9rem;
-    font-weight: 500;
+  .no-content {
     color: var(--text-secondary);
-    min-width: 60px;
-  }
-
-  .support-value {
-    flex: 1;
-  }
-
-  .agent-specific-content {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-light);
+    font-size: 0.9rem;
+    margin: 0;
   }
 
   .agent-specific-content :global(p) {
@@ -225,41 +203,40 @@ const defaultAgentId = agents[0]?.id || '';
     line-height: 1.6;
   }
 
-  /* Responsive */
-  @media (max-width: 900px) {
-    .panels {
-      padding: 1.25rem;
-    }
-
-    .tab {
-      padding: 0.75rem 1rem;
-      font-size: 0.85rem;
-    }
-  }
-
+  /* Responsive - stack vertically on mobile */
   @media (max-width: 600px) {
     .tabbed-area {
+      flex-direction: column;
       margin: 1.5rem 0;
-      border-radius: 8px;
-      background-color: #ffffff;
     }
 
-    .panels {
-      padding: 1rem;
+    .tab-list {
+      flex-direction: row;
+      border-right: none;
+      border-bottom: 1px solid var(--border-light);
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .tab-list::-webkit-scrollbar {
+      height: 4px;
+      width: auto;
     }
 
     .tab {
+      border-left: none;
+      border-bottom: 3px solid transparent;
       padding: 0.625rem 0.875rem;
       font-size: 0.8rem;
     }
 
-    .support-row {
-      gap: 0.75rem;
+    .tab-active {
+      border-left-color: transparent;
+      border-bottom-color: var(--main-feature-color);
     }
 
-    .support-label {
-      min-width: 50px;
-      font-size: 0.85rem;
+    .panels {
+      padding: 1rem;
     }
   }
 </style>
