@@ -12,6 +12,7 @@ describe("statusFeature", () => {
         slug: "testSlug",
         mainColor: "#000",
         secondaryColor: "#cc0000",
+        weight: 5,
       }),
     });
 
@@ -48,11 +49,13 @@ describe("statusFeature", () => {
         slug: "testSlug",
         mainColor: "#000",
         secondaryColor: "#cc0000",
+        weight: 5,
         subfeatures: {
           testSubfeature: new StatusSubfeature({
             displayName: "Subfeature Name",
             slug: "subfeatureName",
             subfeatureCollectionId: "subfeatureName",
+            weight: 2,
           }),
         },
       }),

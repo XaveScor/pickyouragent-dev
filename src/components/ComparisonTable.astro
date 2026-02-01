@@ -2,6 +2,7 @@
 import { compileTable } from '../agents/featureSetSchema';
 import type { Agent } from '../cms';
 import FeatureRow from './FeatureRow.astro';
+import ScoreBadge from './ScoreBadge.astro';
 
 interface Props {
   agents: Agent<any>[];
@@ -10,11 +11,7 @@ interface Props {
 const { agents } = Astro.props;
 
 const table = compileTable(agents);
-const features = await table.getFeatures();
-
-const featureRenderData = await Promise.all(
-  features.map((feature) => feature.getTableLineAsync())
-);
+const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTableRenderData();
 ---
 
 <div class="table-card">
@@ -22,13 +19,16 @@ const featureRenderData = await Promise.all(
     <thead>
       <tr>
         <th class="feature-col">Feature</th>
-        {agents.map((agent) => (
-          <th class="agent-col">{agent.name}</th>
+        {sortedAgents.map((agent) => (
+          <th class="agent-col">
+            <span class="agent-name">{agent.name}</span>
+            <ScoreBadge score={scoreByAgentId.get(agent.id)!} maxScore={maxScore} />
+          </th>
         ))}
       </tr>
     </thead>
     <tbody>
-      {featureRenderData.map((data) => (
+      {features.map((data) => (
         <FeatureRow data={data} />
       ))}
     </tbody>
@@ -73,6 +73,13 @@ const featureRenderData = await Promise.all(
   th.agent-col {
     text-align: center;
     min-width: 100px;
+  }
+
+  .agent-name {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
   }
 
   /* Table body - borders only between categories */

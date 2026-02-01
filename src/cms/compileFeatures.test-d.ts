@@ -1,5 +1,11 @@
 import { expectTypeOf, test, describe } from "vitest";
-import type { Feature, ParsedFeature, AgentValue, TableLineRenderData } from "./feature";
+import type {
+  Feature,
+  ParsedFeature,
+  AgentValue,
+  TableLineRenderData,
+  DescriptionPageRenderData,
+} from "./feature";
 import { compileFeatures } from "./compileFeatures";
 
 class SimpleFeature<T> implements Feature<T> {
@@ -9,8 +15,17 @@ class SimpleFeature<T> implements Feature<T> {
       name: "Test",
       mainColor: "#000",
       secondaryColor: "#fff",
-      async getTableLineAsync(): Promise<TableLineRenderData> {
+      weight: 0,
+      async getTableLineAsync(
+        _sortedAgentIds: string[],
+      ): Promise<TableLineRenderData> {
         throw new Error();
+      },
+      getDescriptionPage(_sortedAgentIds: string[]): DescriptionPageRenderData {
+        throw new Error();
+      },
+      getScoreForAgent(_agentId: string): number {
+        return 0;
       },
     };
   }

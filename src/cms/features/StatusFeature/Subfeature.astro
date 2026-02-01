@@ -1,6 +1,8 @@
 ---
 import { Status } from "./status";
 import FeatureCell from "./FeatureCell.astro";
+import PointsBadge from "../../../components/PointsBadge.astro";
+
 interface Props {
   mainColor: string;
   secondaryColor: string;
@@ -8,9 +10,10 @@ interface Props {
   slug: string;
   name: string;
   statuses: Array<Status>;
+  weight: number;
 }
 
-const {featureLink, name, slug, secondaryColor, mainColor, statuses} = Astro.props;
+const {featureLink, name, slug, secondaryColor, mainColor, statuses, weight} = Astro.props;
 ---
 
 <tr class="feature-row" style={`--main-feature-color: ${mainColor}; --secondary-feature-color: ${secondaryColor}`}>
@@ -18,6 +21,7 @@ const {featureLink, name, slug, secondaryColor, mainColor, statuses} = Astro.pro
     <a href={`${featureLink}#${slug}`} class="feature-name feature-link">
       {name}
     </a>
+    <PointsBadge points={weight} size="small" />
   </td>
   {statuses.map((status) => {
     return (

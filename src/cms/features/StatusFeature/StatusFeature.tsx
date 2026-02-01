@@ -1,9 +1,15 @@
-import type { Feature, ParsedFeature, AgentValue, TableLineRenderData, DescriptionPageRenderData } from "../../feature";
+import type {
+  Feature,
+  ParsedFeature,
+  AgentValue,
+  TableLineRenderData,
+  DescriptionPageRenderData,
+} from "../../feature";
 import StatusFeatureComponent from "./StatusFeature.astro";
 import SubfeatureComponent from "./Subfeature.astro";
 import DescriptionPageComponent from "./DescriptionPage.astro";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
-import { Status } from "./status";
+import { Status, STATUS_POINTS } from "./status";
 import {
   parseFeatureStatus,
   aggregateSubfeatureStatuses,
@@ -25,6 +31,7 @@ type StatusFeatureArgs<Subfeatures extends Record<string, StatusSubfeature>> = {
   mainColor: string;
   secondaryColor: string;
   slug: string;
+  weight: number;
   subfeatures?: Subfeatures;
 };
 
@@ -33,7 +40,7 @@ class ParsedStatusFeature<
 > implements ParsedFeature {
   constructor(
     private readonly meta: StatusFeatureArgs<Subfeatures>,
-    private readonly featureStatuses: Array<Status>,
+    private readonly statusByAgentId: Map<string, Status>,
     private readonly parsedSubfeatures: Array<ParsedStatusSubfeature>,
     private readonly agents: Array<{ id: string; name: string }>,
   ) {}
@@ -54,23 +61,48 @@ class ParsedStatusFeature<
     return this.meta.secondaryColor;
   }
 
+  get weight(): number {
+    return this.meta.weight;
+  }
+
   getSubfeatures(): Array<ParsedStatusSubfeature> {
     return this.parsedSubfeatures;
   }
 
-  getDescriptionPage(): DescriptionPageRenderData {
+  getScoreForAgent(agentId: string): number {
+    const featureStatus =
+      this.statusByAgentId.get(agentId) ?? Status.NotSupported;
+
+    // Base score from feature weight
+    const baseScore = this.meta.weight * STATUS_POINTS.feature[featureStatus];
+
+    // Subfeature scores
+    const subfeatureScore = this.parsedSubfeatures.reduce(
+      (sum, sf) => sum + sf.getScoreForAgent(agentId),
+      0,
+    );
+
+    return baseScore + subfeatureScore;
+  }
+
+  getDescriptionPage(sortedAgentIds: string[]): DescriptionPageRenderData {
+    const sortedAgents = sortedAgentIds.map(
+      (id) => this.agents.find((a) => a.id === id)!,
+    );
     return {
       Component: DescriptionPageComponent,
       props: {
         name: this.meta.name,
         mainColor: this.meta.mainColor,
         subfeatures: this.parsedSubfeatures,
-        agents: this.agents,
+        agents: sortedAgents,
       },
     };
   }
 
-  async getTableLineAsync(): Promise<TableLineRenderData> {
+  async getTableLineAsync(
+    sortedAgentIds: string[],
+  ): Promise<TableLineRenderData> {
     const featureLink = `/features/${this.meta.slug}`;
 
     return {
@@ -80,7 +112,10 @@ class ParsedStatusFeature<
         slug: this.meta.slug,
         mainColor: this.meta.mainColor,
         secondaryColor: this.meta.secondaryColor,
-        statuses: this.featureStatuses,
+        statuses: sortedAgentIds.map(
+          (id) => this.statusByAgentId.get(id) ?? Status.NotSupported,
+        ),
+        weight: this.meta.weight,
       },
       subfeatures: this.parsedSubfeatures.map((subfeature) => ({
         Component: SubfeatureComponent,
@@ -90,7 +125,10 @@ class ParsedStatusFeature<
           featureLink,
           slug: subfeature.slug,
           name: subfeature.displayName,
-          statuses: Array.from(subfeature.statusByAgent.values()),
+          statuses: sortedAgentIds.map(
+            (id) => subfeature.statusByAgent.get(id) ?? Status.NotSupported,
+          ),
+          weight: subfeature.weight,
         },
       })),
     };
@@ -99,15 +137,14 @@ class ParsedStatusFeature<
 
 function parseStatuses<Subfeatures extends Record<string, StatusSubfeature>>(
   values: Array<AgentValue<StatusFeatureValue<Subfeatures>>>,
-): Array<Status> {
-  return values.map(({ value }) => {
-    if (typeof value === "string") {
-      return value;
-    }
-
-    // value is SubfeaturesObject<Subfeatures>, which may contain SubfeatureValue entries
-    return parseFeatureStatus(value);
-  });
+): Map<string, Status> {
+  const result = new Map<string, Status>();
+  for (const { value, agentId } of values) {
+    const status =
+      typeof value === "string" ? value : parseFeatureStatus(value);
+    result.set(agentId, status);
+  }
+  return result;
 }
 
 export class StatusFeature<
@@ -115,12 +152,14 @@ export class StatusFeature<
 > implements Feature<StatusFeatureValue<Subfeatures>> {
   constructor(private readonly args: StatusFeatureArgs<Subfeatures>) {}
 
-  async parseAsync(agentValues: Array<AgentValue<StatusFeatureValue<Subfeatures>>>) {
-    const featureStatuses = parseStatuses(agentValues);
+  async parseAsync(
+    agentValues: Array<AgentValue<StatusFeatureValue<Subfeatures>>>,
+  ) {
+    const statusByAgentId = parseStatuses(agentValues);
 
-    const subfeatureEntries = Object.entries(this.args.subfeatures ?? {}) as Array<
-      [string, StatusSubfeature]
-    >;
+    const subfeatureEntries = Object.entries(
+      this.args.subfeatures ?? {},
+    ) as Array<[string, StatusSubfeature]>;
 
     const parsedSubfeatures: ParsedStatusSubfeature[] = [];
 
@@ -147,7 +186,10 @@ export class StatusFeature<
       // Load main content for this subfeature
       let Content: AstroComponentFactory | null = null;
       try {
-        Content = await lazyAstroFactory("subfeatures", subfeatureDef.subfeatureCollectionId);
+        Content = await lazyAstroFactory(
+          "subfeatures",
+          subfeatureDef.subfeatureCollectionId,
+        );
       } catch (e) {
         // Content not found, leave as null
       }
@@ -158,7 +200,10 @@ export class StatusFeature<
         const collectionId = extractCollectionId(value);
         if (collectionId) {
           try {
-            const agentContent = await lazyAstroFactory("agentSubfeatures", collectionId);
+            const agentContent = await lazyAstroFactory(
+              "agentSubfeatures",
+              collectionId,
+            );
             agentContentById.set(agentId, agentContent);
           } catch (e) {
             // Content not found for this agent, skip
@@ -166,7 +211,11 @@ export class StatusFeature<
         }
       }
 
-      const parsed = await subfeatureDef.parseAsync(subfeatureValues, Content, agentContentById);
+      const parsed = await subfeatureDef.parseAsync(
+        subfeatureValues,
+        Content,
+        agentContentById,
+      );
       parsedSubfeatures.push(parsed);
     }
 
@@ -175,6 +224,11 @@ export class StatusFeature<
       name: agentName,
     }));
 
-    return new ParsedStatusFeature(this.args, featureStatuses, parsedSubfeatures, agents);
+    return new ParsedStatusFeature(
+      this.args,
+      statusByAgentId,
+      parsedSubfeatures,
+      agents,
+    );
   }
 }

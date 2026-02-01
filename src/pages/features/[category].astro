@@ -22,8 +22,9 @@ if (!feature) {
   return new Response('Feature not found', { status: 404 });
 }
 
+const sortedAgentIds = await table.getSortedAgentIds();
 const mainColor = feature.mainColor || '#3b82f6';
-const descriptionPage = feature.getDescriptionPage();
+const descriptionPage = feature.getDescriptionPage(sortedAgentIds);
 ---
 
 <html lang="en">

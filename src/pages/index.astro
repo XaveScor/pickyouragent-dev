@@ -1,13 +1,13 @@
 ---
 // Main comparison table page
 import '../styles/global.css';
-import type { Agent } from '../agents/featureSetSchema';
+import type { Agent } from '../cms';
 import { allAgents } from '../agents/allAgents';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import Head from '../components/Head.astro';
 
 // Load all agents from allAgents.ts
-const agents: Agent[] = allAgents;
+const agents: Agent<any>[] = allAgents;
 ---
 
 <html lang="en">
