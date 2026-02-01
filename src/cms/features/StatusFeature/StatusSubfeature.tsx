@@ -1,6 +1,6 @@
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import type { AgentValue, ParsedSubfeature } from "../../feature";
-import { Status } from "./status";
+import { Status, STATUS_POINTS } from "./status";
 
 type SubfeatureValueObject = {
   status: Status;
@@ -13,7 +13,9 @@ export function extractStatus(value: SubfeatureValue): Status {
   return typeof value === "string" ? value : value.status;
 }
 
-export function extractCollectionId(value: SubfeatureValue): string | undefined {
+export function extractCollectionId(
+  value: SubfeatureValue,
+): string | undefined {
   return typeof value === "string" ? undefined : value.collectionId;
 }
 
@@ -73,6 +75,7 @@ type SubfeatureArg = {
   displayName: string;
   slug: string;
   subfeatureCollectionId: string;
+  weight: number;
 };
 
 export class StatusSubfeature {
@@ -90,6 +93,10 @@ export class StatusSubfeature {
     return this.arg.subfeatureCollectionId;
   }
 
+  get weight(): number {
+    return this.arg.weight;
+  }
+
   async parseAsync(
     values: Array<AgentValue<SubfeatureValue>>,
     Content: AstroComponentFactory | null,
@@ -103,15 +110,22 @@ export class StatusSubfeature {
     const statuses = Array.from(statusByAgent.values());
     const aggregatedStatus = aggregateSubfeatureStatuses(statuses);
 
+    const weight = this.arg.weight;
+
     return {
       key: this.arg.slug,
       displayName: this.arg.displayName,
       slug: this.arg.slug,
+      weight,
       statusByAgent,
       aggregatedStatus,
       Content,
       getAgentContent(agentId: string): AstroComponentFactory | undefined {
         return agentContentById.get(agentId);
+      },
+      getScoreForAgent(agentId: string): number {
+        const status = statusByAgent.get(agentId) ?? Status.NotSupported;
+        return weight * STATUS_POINTS.subfeature[status];
       },
     };
   }

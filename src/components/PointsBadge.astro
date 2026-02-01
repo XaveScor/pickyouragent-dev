@@ -1,0 +1,49 @@
+---
+/**
+ * A badge component that displays points/weight for features.
+ * Uses the feature's main color for styling via CSS custom property.
+ * 
+ * Usage:
+ * <PointsBadge points={8} />
+ * 
+ * The color is inherited from --main-feature-color CSS variable set on parent.
+ */
+interface Props {
+  points: number;
+  /** Size variant: 'default' for category rows, 'small' for subfeature rows */
+  size?: 'default' | 'small';
+}
+
+const { points, size = 'default' } = Astro.props;
+---
+
+{points > 0 && (
+  <span class:list={['points-badge', { 'points-badge--small': size === 'small' }]}>
+    ({points} pts)
+  </span>
+)}
+
+<style>
+  .points-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+    padding: 0.15rem 0.45rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--main-feature-color);
+    background-color: color-mix(in srgb, var(--main-feature-color) 12%, transparent);
+    border-radius: 10px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .points-badge--small {
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.6rem;
+    border-radius: 8px;
+    background-color: color-mix(in srgb, var(--main-feature-color) 10%, transparent);
+  }
+</style>

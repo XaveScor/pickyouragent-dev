@@ -25,19 +25,23 @@ export interface ParsedFeature {
   name: string;
   mainColor: string;
   secondaryColor: string;
-  getTableLineAsync(): Promise<TableLineRenderData>;
-  getDescriptionPage(): DescriptionPageRenderData;
+  weight: number;
+  getTableLineAsync(sortedAgentIds: string[]): Promise<TableLineRenderData>;
+  getDescriptionPage(sortedAgentIds: string[]): DescriptionPageRenderData;
   getSubfeatures?(): Array<ParsedSubfeature>;
+  getScoreForAgent(agentId: string): number;
 }
 
 export interface ParsedSubfeature {
   key: string;
   displayName: string;
   slug: string;
+  weight: number;
   statusByAgent: Map<string, unknown>;
   aggregatedStatus: unknown;
   Content: AstroComponentFactory | null;
   getAgentContent(agentId: string): AstroComponentFactory | undefined;
+  getScoreForAgent(agentId: string): number;
 }
 
 export interface Feature<Value> {

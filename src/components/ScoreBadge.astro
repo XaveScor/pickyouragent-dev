@@ -1,0 +1,40 @@
+---
+/**
+ * A badge component that displays agent scores in the table header.
+ * Shows the agent's score out of the maximum possible score.
+ * 
+ * Usage:
+ * <ScoreBadge score={74.5} maxScore={91} />
+ */
+interface Props {
+  score: number;
+  maxScore: number;
+  /** Optional accent color. Defaults to --accent-color or blue. */
+  color?: string;
+}
+
+const { score, maxScore, color } = Astro.props;
+const styleAttr = color ? `--badge-color: ${color}` : undefined;
+---
+
+<span class="score-badge" style={styleAttr}>
+  {score}/{maxScore} pts
+</span>
+
+<style>
+  .score-badge {
+    --badge-color: var(--accent-color, #3b82f6);
+    
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--badge-color);
+    background-color: color-mix(in srgb, var(--badge-color) 10%, transparent);
+    border-radius: 10px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+</style>
