@@ -4,4 +4,23 @@ featureName: planmode
 subfeatureName: questions
 ---
 
-Not implemented.
+import ResponsiveImage from "../../../../components/ResponsiveImage.astro";
+import questionsExample from "./questions.png";
+
+<ResponsiveImage
+  src={questionsExample}
+  alt="Example of the Codex questions interface"
+  caption="Codex questions interface with multiple choice options"
+/>
+
+Codex has excellent support for clarifying questions.
+
+**Supported:**
+
+- Multiple questions in sequence
+- Preview all questions before answering
+- Add notes to any answer for additional clarification
+
+**Not supported:**
+
+- @-autocomplete in the notes field

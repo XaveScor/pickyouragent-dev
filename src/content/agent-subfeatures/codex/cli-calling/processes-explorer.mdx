@@ -1,0 +1,16 @@
+---
+agentId: codex
+featureName: cli-calling
+subfeatureName: processes-explorer
+---
+
+import ResponsiveImage from "../../../../components/ResponsiveImage.astro";
+import exampleRunning from "./example-of-running.png";
+
+<ResponsiveImage
+  src={exampleRunning}
+  alt="Codex stopping a long-running dev server"
+  caption="Codex automatically stops long-running processes like dev servers"
+/>
+
+Codex cannot run long-running processes such as dev servers indefinitely. There is no built-in interface to view or manage background processes, as Codex automatically terminates them after a short timeout.

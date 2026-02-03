@@ -1,0 +1,18 @@
+---
+agentId: codex
+featureName: planmode
+subfeatureName: plan-editing
+---
+
+import ResponsiveImage from "../../../../components/ResponsiveImage.astro";
+import editExample from "./edit.png";
+
+<ResponsiveImage
+  src={editExample}
+  alt="Codex external editor shortcut"
+  caption="Codex shows ctrl+g for external editor editing"
+/>
+
+Codex advertises external editor support for plan editing, but this feature does not work as expected.
+
+When running `VISUAL=zed codex` and pressing `ctrl+g`, only an empty file is opened rather than the current plan or prompt content.

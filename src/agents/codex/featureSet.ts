@@ -8,7 +8,19 @@ export const codex = declareAgent(
     name: "Codex",
   },
   {
-    planMode: Status.NotSupported,
+    planMode: {
+      "dual-model": Status.NotSupported,
+      questions: {
+        status: Status.Supported,
+        collectionId: "codex/planmode/questions",
+      },
+      "plan-editing": {
+        status: Status.NotSupported,
+        collectionId: "codex/planmode/plan-editing",
+      },
+      "orchestrator-mode": Status.NotSupported,
+      todos: Status.NotSupported,
+    },
     documentation: {
       filesystem: {
         status: Status.Supported,
@@ -26,23 +38,29 @@ export const codex = declareAgent(
     },
     tools: {
       "web-search-engine": Status.Supported,
-      "fetch-data": Status.NotSupported,
+      "fetch-data": {
+        status: Status.Supported,
+        collectionId: "codex/tools/fetch-data",
+      },
       browser: Status.NotSupported,
       linters: Status.NotSupported,
     },
     commands: Status.Supported,
-    cliCalling: Status.NotSupported,
-    modelManagement: Status.NotSupported,
-    specializedModes: {
-      debug: {
+    cliCalling: {
+      "infinite-tasks-timeout": {
         status: Status.NotSupported,
-        collectionId: "codex/specializedmodes/debug",
+        collectionId: "codex/cli-calling/infinite-tasks-timeout",
       },
-      ask: {
-        status: Status.PartiallySupported,
-        collectionId: "codex/specializedmodes/ask",
+      "processes-explorer": {
+        status: Status.NotSupported,
+        collectionId: "codex/cli-calling/processes-explorer",
       },
     },
+    modelManagement: {
+      filtering: Status.NotSupported,
+      "region-tuning": Status.NotSupported,
+    },
+    specializedModes: Status.NotSupported,
     subscriptions: [openai],
   },
 );
