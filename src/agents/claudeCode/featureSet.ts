@@ -67,7 +67,7 @@ export const claudeCode = declareAgent(
         collectionId: "claude-code/cli-calling/infinite-tasks-timeout",
       },
       "processes-explorer": {
-        status: Status.PartiallySupported,
+        status: Status.Supported,
         collectionId: "claude-code/cli-calling/processes-explorer",
       },
     },
@@ -75,13 +75,7 @@ export const claudeCode = declareAgent(
       filtering: Status.NotSupported,
       "region-tuning": Status.NotSupported,
     },
-    specializedModes: {
-      debug: {
-        status: Status.NotSupported,
-        collectionId: "claude-code/specializedmodes/debug",
-      },
-      ask: Status.NotSupported,
-    },
+    specializedModes: Status.NotSupported,
     subscriptions: [zai, claudeMax],
   },
 );

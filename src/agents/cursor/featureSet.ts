@@ -56,10 +56,7 @@ export const cursor = declareAgent(
       },
     },
     commands: Status.Supported,
-    cliCalling: {
-      "infinite-tasks-timeout": Status.NotSupported,
-      "processes-explorer": Status.NotSupported,
-    },
+    cliCalling: Status.NotSupported,
     modelManagement: {
       filtering: Status.Supported,
       "region-tuning": {

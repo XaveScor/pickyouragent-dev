@@ -7,19 +7,7 @@ export const junie = declareAgent(
     name: "Junie",
   },
   {
-    planMode: {
-      "dual-model": {
-        status: Status.NotSupported,
-        collectionId: "junie/planmode/dual-model",
-      },
-      questions: Status.NotSupported,
-      "plan-editing": Status.NotSupported,
-      "orchestrator-mode": Status.NotSupported,
-      todos: {
-        status: Status.NotSupported,
-        collectionId: "junie/planmode/todos",
-      },
-    },
+    planMode: Status.NotSupported,
     documentation: {
       filesystem: {
         status: Status.Supported,
@@ -34,17 +22,8 @@ export const junie = declareAgent(
     },
     tools: Status.NotSupported,
     commands: Status.NotSupported,
-    cliCalling: {
-      "infinite-tasks-timeout": Status.NotSupported,
-      "processes-explorer": Status.NotSupported,
-    },
-    modelManagement: {
-      filtering: {
-        status: Status.NotSupported,
-        collectionId: "junie/modelmanagement/filtering",
-      },
-      "region-tuning": Status.NotSupported,
-    },
+    cliCalling: Status.NotSupported,
+    modelManagement: Status.NotSupported,
     specializedModes: {
       debug: {
         status: Status.NotSupported,
