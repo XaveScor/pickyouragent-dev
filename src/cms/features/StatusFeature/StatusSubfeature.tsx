@@ -45,7 +45,8 @@ export function parseFeatureStatus<
   }
 
   if (statuses.every((status) => status === Status.NotSupported)) {
-    return Status.NotSupported;
+    // Feature exists but no subfeatures work yet - still partially supported
+    return Status.PartiallySupported;
   }
 
   return Status.PartiallySupported;

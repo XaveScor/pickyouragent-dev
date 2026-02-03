@@ -56,10 +56,7 @@ export const opencode = declareAgent(
       },
     },
     commands: Status.Supported,
-    cliCalling: {
-      "infinite-tasks-timeout": Status.NotSupported,
-      "processes-explorer": Status.NotSupported,
-    },
+    cliCalling: Status.NotSupported,
     modelManagement: {
       filtering: {
         status: Status.Supported,

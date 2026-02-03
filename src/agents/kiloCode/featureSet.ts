@@ -45,20 +45,9 @@ export const kiloCode = declareAgent(
       },
       "web-to-docs": Status.NotSupported,
     },
-    tools: {
-      "web-search-engine": Status.NotSupported,
-      "fetch-data": Status.NotSupported,
-      browser: {
-        status: Status.NotSupported,
-        collectionId: "kilocode/tools/browser",
-      },
-      linters: Status.NotSupported,
-    },
+    tools: Status.NotSupported,
     commands: Status.Supported,
-    cliCalling: {
-      "infinite-tasks-timeout": Status.NotSupported,
-      "processes-explorer": Status.NotSupported,
-    },
+    cliCalling: Status.NotSupported,
     modelManagement: {
       filtering: Status.NotSupported,
       "region-tuning": Status.Supported,

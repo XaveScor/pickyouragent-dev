@@ -8,22 +8,7 @@ export const codex = declareAgent(
     name: "Codex",
   },
   {
-    planMode: {
-      "dual-model": {
-        status: Status.NotSupported,
-        collectionId: "codex/planmode/dual-model",
-      },
-      questions: {
-        status: Status.NotSupported,
-        collectionId: "codex/planmode/questions",
-      },
-      "plan-editing": Status.NotSupported,
-      "orchestrator-mode": Status.NotSupported,
-      todos: {
-        status: Status.NotSupported,
-        collectionId: "codex/planmode/todos",
-      },
-    },
+    planMode: Status.NotSupported,
     documentation: {
       filesystem: {
         status: Status.Supported,
@@ -46,14 +31,8 @@ export const codex = declareAgent(
       linters: Status.NotSupported,
     },
     commands: Status.Supported,
-    cliCalling: {
-      "infinite-tasks-timeout": Status.NotSupported,
-      "processes-explorer": Status.NotSupported,
-    },
-    modelManagement: {
-      filtering: Status.NotSupported,
-      "region-tuning": Status.NotSupported,
-    },
+    cliCalling: Status.NotSupported,
+    modelManagement: Status.NotSupported,
     specializedModes: {
       debug: {
         status: Status.NotSupported,
