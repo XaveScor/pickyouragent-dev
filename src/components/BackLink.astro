@@ -1,0 +1,24 @@
+---
+/**
+ * BackLink component for navigation back to previous pages.
+ * Wraps InternalLink with consistent styling (margin-bottom for spacing).
+ */
+import InternalLink from './InternalLink.astro';
+
+interface Props {
+  href?: string;
+  text?: string;
+}
+
+const { href = '/', text = '← Back to comparison' } = Astro.props;
+---
+
+<div class="back-link-wrapper">
+  <InternalLink href={href}>{text}</InternalLink>
+</div>
+
+<style>
+  .back-link-wrapper {
+    margin-bottom: 1.5rem;
+  }
+</style>

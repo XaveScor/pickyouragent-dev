@@ -2,6 +2,7 @@
 import { Status } from "./status";
 import FeatureCell from "./FeatureCell.astro";
 import PointsBadge from "../../../components/PointsBadge.astro";
+import InternalLink from "../../../components/InternalLink.astro";
 
 interface Props {
   mainColor: string;
@@ -18,9 +19,9 @@ const {featureLink, name, slug, secondaryColor, mainColor, statuses, weight} = A
 
 <tr class="feature-row" style={`--main-feature-color: ${mainColor}; --secondary-feature-color: ${secondaryColor}`}>
   <td class="feature-cell">
-    <a href={`${featureLink}#${slug}`} class="feature-name feature-link">
+    <InternalLink href={`${featureLink}#${slug}`} class="feature-name" variant="subfeature">
       {name}
-    </a>
+    </InternalLink>
     <PointsBadge points={weight} size="small" />
   </td>
   {statuses.map((status) => {
@@ -35,7 +36,7 @@ const {featureLink, name, slug, secondaryColor, mainColor, statuses, weight} = A
 <style>
   .feature-row .feature-cell {
     position: relative;
-    padding-left: 1.75rem;
+    padding-left: 2.75rem;
   }
 
   .feature-row .feature-cell::before {
@@ -54,8 +55,6 @@ const {featureLink, name, slug, secondaryColor, mainColor, statuses, weight} = A
   }
 
   .feature-name {
-    font-size: 0.82rem;
-    color: var(--text-secondary);
     padding-left: 1.25rem;
   }
 

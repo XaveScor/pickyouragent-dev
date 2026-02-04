@@ -2,6 +2,8 @@
 // 404 error page
 import '../styles/global.css';
 import Head from '../components/Head.astro';
+import Navbar from '../components/Navbar.astro';
+import InternalLink from '../components/InternalLink.astro';
 ---
 
 <html lang="en">
@@ -12,13 +14,7 @@ import Head from '../components/Head.astro';
     />
   </head>
   <body>
-    <nav class="navbar">
-      <a href="/" class="logo">pickyouragent.dev</a>
-      <div class="nav-links">
-        <a href="/about">About</a>
-        <a href="/about#how-to-use">How to use</a>
-      </div>
-    </nav>
+    <Navbar />
 
     <main>
       <section class="hero error-hero">
@@ -29,7 +25,7 @@ import Head from '../components/Head.astro';
             The page you're looking for might have been moved or doesn't exist.
             Try going back to the homepage or use the navigation above.
           </p>
-          <a href="/" class="home-button">Return to Homepage</a>
+          <InternalLink href="/">Return to Homepage</InternalLink>
         </div>
       </section>
     </main>
@@ -79,27 +75,6 @@ import Head from '../components/Head.astro';
     margin-bottom: 2rem;
   }
 
-  .home-button {
-    display: inline-block;
-    background-color: var(--main-feature-color);
-    color: white;
-    text-decoration: none;
-    padding: 0.75rem 2rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-  }
-
-  .home-button:hover {
-    background-color: var(--secondary-feature-color);
-    transform: translateY(-1px);
-  }
-
-  .home-button:active {
-    transform: translateY(0);
-  }
-
   /* Responsive */
   @media (max-width: 900px) {
     .error-content {
@@ -131,12 +106,6 @@ import Head from '../components/Head.astro';
 
     .error-message {
       font-size: 0.95rem;
-    }
-
-    .home-button {
-      width: 100%;
-      text-align: center;
-      padding: 0.875rem 2rem;
     }
   }
 </style>

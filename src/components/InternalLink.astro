@@ -1,0 +1,53 @@
+---
+/**
+ * InternalLink component for internal navigation links.
+ * Uses underline style with consistent color from CSS variable.
+ *
+ * Note: Do NOT use this for the logo link - it has distinct branding styling.
+ *
+ * Variants:
+ * - 'default': Gray color, for navbar, back links
+ * - 'feature': Bold + primary color, for category/feature rows
+ * - 'subfeature': Smaller text, gray color, for subfeature rows
+ */
+interface Props {
+  href: string;
+  class?: string;
+  variant?: 'default' | 'feature' | 'subfeature';
+}
+
+const { href, class: className, variant = 'default' } = Astro.props;
+---
+
+<a href={href} class:list={['internal-link', { 'internal-link--feature': variant === 'feature' }, { 'internal-link--subfeature': variant === 'subfeature' }, className]}>
+  <slot />
+</a>
+
+<style>
+  .internal-link {
+    color: var(--internal-link-color);
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.15);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+
+  .internal-link:hover {
+    color: var(--text-primary);
+    text-decoration-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .internal-link--feature {
+    color: var(--internal-link-feature-color);
+    font-weight: 600;
+  }
+
+  .internal-link--feature:hover {
+    color: var(--internal-link-feature-color);
+  }
+
+  .internal-link--subfeature {
+    font-size: 0.875rem;
+  }
+</style>
