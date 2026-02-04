@@ -1,0 +1,18 @@
+---
+/**
+ * Navbar component - shared navigation header across all pages.
+ *
+ * Note: The logo uses a plain <a> tag, not InternalLink,
+ * because it has distinct branding styling.
+ */
+import InternalLink from './InternalLink.astro';
+---
+
+<nav class="navbar">
+  <!-- Logo uses plain <a> tag - do NOT use InternalLink here -->
+  <a href="/" class="logo">pickyouragent.dev</a>
+  <div class="nav-links">
+    <InternalLink href="/about">About</InternalLink>
+    <InternalLink href="/about#how-to-use">How to use</InternalLink>
+  </div>
+</nav>

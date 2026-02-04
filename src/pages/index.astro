@@ -5,6 +5,7 @@ import type { Agent } from '../cms';
 import { allAgents } from '../agents/allAgents';
 import ComparisonTable from '../components/ComparisonTable.astro';
 import Head from '../components/Head.astro';
+import Navbar from '../components/Navbar.astro';
 
 // Load all agents from allAgents.ts
 const agents: Agent<any>[] = allAgents;
@@ -18,13 +19,7 @@ const agents: Agent<any>[] = allAgents;
     />
   </head>
   <body>
-    <nav class="navbar">
-      <a href="/" class="logo">pickyouragent.dev</a>
-      <div class="nav-links">
-        <a href="/about">About</a>
-        <a href="/about#how-to-use">How to use</a>
-      </div>
-    </nav>
+    <Navbar />
 
     <main>
       <section class="hero">
