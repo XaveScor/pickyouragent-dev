@@ -1,0 +1,655 @@
+{
+  "metadata": {
+    "date": "2026-02-04",
+    "commitHash": "2c37da0",
+    "fullCommitHash": "2c37da0c42fc2a922ad160f510a7642f2646c89a",
+    "timestamp": "2026-02-04T21:33:47.066Z",
+    "githubRunId": "21689217075",
+    "totalAgents": 6
+  },
+  "features": {
+    "subscriptions": {
+      "name": "Subscriptions",
+      "slug": "subscriptions",
+      "mainColor": "#f43f5e",
+      "secondaryColor": "#fb7185",
+      "subfeatures": []
+    },
+    "planmode": {
+      "name": "Plan Mode",
+      "slug": "planmode",
+      "mainColor": "#3b82f6",
+      "secondaryColor": "#60a5fa",
+      "subfeatures": [
+        "dual-mode",
+        "questions",
+        "plan-editing",
+        "orchestrator-mode",
+        "todos"
+      ]
+    },
+    "documentation": {
+      "name": "Documentation",
+      "slug": "documentation",
+      "mainColor": "#8b5cf6",
+      "secondaryColor": "#a78bfa",
+      "subfeatures": [
+        "filesystem-documentation",
+        "hierarchical-tree",
+        "multi-file",
+        "llms-txt",
+        "Partial/Skills.md",
+        "web-to-docs"
+      ]
+    },
+    "tools": {
+      "name": "Tools",
+      "slug": "tools",
+      "mainColor": "#06b6d4",
+      "secondaryColor": "#22d3ee",
+      "subfeatures": [
+        "web-search-engine",
+        "fetch-data",
+        "browser",
+        "linters"
+      ]
+    },
+    "commands": {
+      "name": "Commands",
+      "slug": "commands",
+      "mainColor": "#10b981",
+      "secondaryColor": "#34d399",
+      "subfeatures": []
+    },
+    "cli-calling": {
+      "name": "CLI Calling",
+      "slug": "cli-calling",
+      "mainColor": "#f97316",
+      "secondaryColor": "#fb923c",
+      "subfeatures": [
+        "infinite-tasks-timeout",
+        "processes-explorer"
+      ]
+    },
+    "model-management": {
+      "name": "Model management",
+      "slug": "model-management",
+      "mainColor": "#ec4899",
+      "secondaryColor": "#f472b6",
+      "subfeatures": [
+        "filtering",
+        "region-tuning"
+      ]
+    },
+    "specialized-modes": {
+      "name": "Specialized Modes",
+      "slug": "specialized-modes",
+      "mainColor": "#ef4444",
+      "secondaryColor": "#f87171",
+      "subfeatures": [
+        "debug",
+        "ask"
+      ]
+    }
+  },
+  "agents": [
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "features": {
+        "planMode": {
+          "dual-model": {
+            "status": "supported",
+            "collectionId": "cursor/planmode/dual-model"
+          },
+          "questions": {
+            "status": "supported",
+            "collectionId": "cursor/planmode/questions"
+          },
+          "plan-editing": {
+            "status": "supported",
+            "collectionId": "cursor/planmode/plan-editing"
+          },
+          "orchestrator-mode": "not-supported",
+          "todos": {
+            "status": "supported",
+            "collectionId": "cursor/planmode/todos"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "status": "supported",
+            "collectionId": "cursor/documentation/filesystem"
+          },
+          "tree": "supported",
+          "multi-file": "supported",
+          "llms-txt": "supported",
+          "skills": "supported",
+          "web-to-docs": {
+            "status": "supported",
+            "collectionId": "cursor/documentation/web-to-docs"
+          }
+        },
+        "tools": {
+          "web-search-engine": "supported",
+          "fetch-data": "not-supported",
+          "browser": {
+            "status": "partially-supported",
+            "collectionId": "cursor/tools/browser"
+          },
+          "linters": {
+            "status": "partially-supported",
+            "collectionId": "cursor/tools/linters"
+          }
+        },
+        "commands": "supported",
+        "cliCalling": "not-supported",
+        "modelManagement": {
+          "filtering": "supported",
+          "region-tuning": {
+            "status": "partially-supported",
+            "collectionId": "cursor/modelmanagement/region-tuning"
+          }
+        },
+        "specializedModes": {
+          "debug": {
+            "status": "supported",
+            "collectionId": "cursor/specializedmodes/debug"
+          },
+          "ask": {
+            "status": "supported",
+            "collectionId": "cursor/specializedmodes/ask"
+          }
+        },
+        "subscriptions": [
+          {
+            "id": "zai",
+            "name": "z.ai",
+            "url": "https://z.ai/subscribe?ic=9GRH0KS07Z",
+            "description": "Creator of the <a href=\"https://z.ai/blog/glm-4.7\" target=\"_blank\" rel=\"noopener noreferrer\">GLM model family<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg></a>. Offers all GLM models via OpenAI/Anthropic-compatible APIs. Subscription includes web-search and web-parse MCPs.",
+            "pros": [
+              "Very generous token limits (up to ~800M tokens)",
+              "Strong coding capabilities (73.8% SWE-bench)"
+            ],
+            "cons": [
+              "Model slightly weaker than Opus 4.5/GPT-5.2",
+              "Higher latency (3-10s to first token)"
+            ],
+            "limits": [
+              {
+                "tier": "Lite",
+                "fiveHours": "40M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Pro",
+                "fiveHours": "200M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Max",
+                "fiveHours": "800M tokens",
+                "oneWeek": "unlimited"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "features": {
+        "planMode": {
+          "dual-model": {
+            "status": "not-supported",
+            "collectionId": "claude-code/planmode/dual-model"
+          },
+          "questions": {
+            "status": "partially-supported",
+            "collectionId": "claude-code/planmode/questions"
+          },
+          "plan-editing": {
+            "status": "supported",
+            "collectionId": "claude-code/planmode/plan-editing"
+          },
+          "orchestrator-mode": "not-supported",
+          "todos": {
+            "status": "partially-supported",
+            "collectionId": "claude-code/planmode/todos"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "status": "supported",
+            "collectionId": "claude-code/documentation/filesystem"
+          },
+          "tree": "supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "skills": {
+            "status": "supported",
+            "collectionId": "claude-code/documentation/skills"
+          },
+          "web-to-docs": "not-supported"
+        },
+        "tools": {
+          "web-search-engine": "supported",
+          "fetch-data": {
+            "status": "supported",
+            "collectionId": "claude-code/tools/fetch-data"
+          },
+          "browser": {
+            "status": "not-supported",
+            "collectionId": "claude-code/tools/browser"
+          },
+          "linters": {
+            "status": "not-supported",
+            "collectionId": "claude-code/tools/linters"
+          }
+        },
+        "commands": "supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "status": "supported",
+            "collectionId": "claude-code/cli-calling/infinite-tasks-timeout"
+          },
+          "processes-explorer": {
+            "status": "supported",
+            "collectionId": "claude-code/cli-calling/processes-explorer"
+          }
+        },
+        "modelManagement": {
+          "filtering": "not-supported",
+          "region-tuning": "not-supported"
+        },
+        "specializedModes": "not-supported",
+        "subscriptions": [
+          {
+            "id": "zai",
+            "name": "z.ai",
+            "url": "https://z.ai/subscribe?ic=9GRH0KS07Z",
+            "description": "Creator of the <a href=\"https://z.ai/blog/glm-4.7\" target=\"_blank\" rel=\"noopener noreferrer\">GLM model family<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg></a>. Offers all GLM models via OpenAI/Anthropic-compatible APIs. Subscription includes web-search and web-parse MCPs.",
+            "pros": [
+              "Very generous token limits (up to ~800M tokens)",
+              "Strong coding capabilities (73.8% SWE-bench)"
+            ],
+            "cons": [
+              "Model slightly weaker than Opus 4.5/GPT-5.2",
+              "Higher latency (3-10s to first token)"
+            ],
+            "limits": [
+              {
+                "tier": "Lite",
+                "fiveHours": "40M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Pro",
+                "fiveHours": "200M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Max",
+                "fiveHours": "800M tokens",
+                "oneWeek": "unlimited"
+              }
+            ]
+          },
+          {
+            "id": "claude-max",
+            "name": "Claude Max",
+            "url": "https://claude.com/pricing/max",
+            "description": "Creator of SOTA Opus/Sonnet models. Offers <a href=\"https://she-llac.com/claude-limits\" target=\"_blank\" rel=\"noopener noreferrer\">generous limits<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg></a> compared to API token costs.",
+            "pros": [
+              "SOTA models (Opus 4.5, Sonnet 4)",
+              "~80% cheaper than API usage"
+            ],
+            "cons": [
+              "Restricted to Claude Code only"
+            ],
+            "limits": [
+              {
+                "tier": "Pro",
+                "fiveHours": "550K credits (1×)",
+                "oneWeek": "5M credits (1×)"
+              },
+              {
+                "tier": "Max 5×",
+                "fiveHours": "3.3M credits (6×)",
+                "oneWeek": "41.7M credits (8.3×)"
+              },
+              {
+                "tier": "Max 20×",
+                "fiveHours": "11M credits (20×)",
+                "oneWeek": "83.3M credits (16.7×)"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "codex",
+      "name": "Codex",
+      "features": {
+        "planMode": {
+          "dual-model": "not-supported",
+          "questions": {
+            "status": "supported",
+            "collectionId": "codex/planmode/questions"
+          },
+          "plan-editing": {
+            "status": "not-supported",
+            "collectionId": "codex/planmode/plan-editing"
+          },
+          "orchestrator-mode": "not-supported",
+          "todos": "not-supported"
+        },
+        "documentation": {
+          "filesystem": {
+            "status": "supported",
+            "collectionId": "codex/documentation/filesystem"
+          },
+          "tree": "not-supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "skills": {
+            "status": "supported",
+            "collectionId": "codex/documentation/skills"
+          },
+          "web-to-docs": "not-supported"
+        },
+        "tools": {
+          "web-search-engine": "supported",
+          "fetch-data": {
+            "status": "supported",
+            "collectionId": "codex/tools/fetch-data"
+          },
+          "browser": "not-supported",
+          "linters": "not-supported"
+        },
+        "commands": "supported",
+        "cliCalling": {
+          "infinite-tasks-timeout": {
+            "status": "not-supported",
+            "collectionId": "codex/cli-calling/infinite-tasks-timeout"
+          },
+          "processes-explorer": {
+            "status": "not-supported",
+            "collectionId": "codex/cli-calling/processes-explorer"
+          }
+        },
+        "modelManagement": {
+          "filtering": "not-supported",
+          "region-tuning": "not-supported"
+        },
+        "specializedModes": "not-supported",
+        "subscriptions": [
+          {
+            "id": "openai",
+            "name": "OpenAI",
+            "url": "https://chatgpt.com/pricing/",
+            "description": "Creator of SOTA GPT-family models. Offers generous limits compared to API costs.",
+            "pros": [
+              "Works with any agent",
+              "Specialized coding model (Codex)",
+              "~80% cheaper than API usage"
+            ],
+            "cons": [
+              "No $100 tier — only $20 or $200 plans"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "kilo-code",
+      "name": "Kilo Code",
+      "features": {
+        "planMode": {
+          "dual-model": {
+            "status": "supported",
+            "collectionId": "kilocode/planmode/dual-model"
+          },
+          "questions": {
+            "status": "supported",
+            "collectionId": "kilocode/planmode/questions"
+          },
+          "plan-editing": "not-supported",
+          "orchestrator-mode": {
+            "status": "supported",
+            "collectionId": "kilocode/planmode/orchestrator-mode"
+          },
+          "todos": {
+            "status": "partially-supported",
+            "collectionId": "kilocode/planmode/todos"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "status": "supported",
+            "collectionId": "kilocode/documentation/filesystem"
+          },
+          "tree": {
+            "status": "supported",
+            "collectionId": "kilocode/documentation/tree"
+          },
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "skills": {
+            "status": "supported",
+            "collectionId": "kilocode/documentation/skills"
+          },
+          "web-to-docs": "not-supported"
+        },
+        "tools": "not-supported",
+        "commands": "supported",
+        "cliCalling": "not-supported",
+        "modelManagement": {
+          "filtering": "not-supported",
+          "region-tuning": "supported"
+        },
+        "specializedModes": {
+          "debug": {
+            "status": "supported",
+            "collectionId": "kilocode/specializedmodes/debug"
+          },
+          "ask": {
+            "status": "supported",
+            "collectionId": "kilocode/specializedmodes/ask"
+          }
+        },
+        "subscriptions": [
+          {
+            "id": "zai",
+            "name": "z.ai",
+            "url": "https://z.ai/subscribe?ic=9GRH0KS07Z",
+            "description": "Creator of the <a href=\"https://z.ai/blog/glm-4.7\" target=\"_blank\" rel=\"noopener noreferrer\">GLM model family<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg></a>. Offers all GLM models via OpenAI/Anthropic-compatible APIs. Subscription includes web-search and web-parse MCPs.",
+            "pros": [
+              "Very generous token limits (up to ~800M tokens)",
+              "Strong coding capabilities (73.8% SWE-bench)"
+            ],
+            "cons": [
+              "Model slightly weaker than Opus 4.5/GPT-5.2",
+              "Higher latency (3-10s to first token)"
+            ],
+            "limits": [
+              {
+                "tier": "Lite",
+                "fiveHours": "40M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Pro",
+                "fiveHours": "200M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Max",
+                "fiveHours": "800M tokens",
+                "oneWeek": "unlimited"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "junie",
+      "name": "Junie",
+      "features": {
+        "planMode": "not-supported",
+        "documentation": {
+          "filesystem": {
+            "status": "supported",
+            "collectionId": "junie/documentation/filesystem"
+          },
+          "tree": "not-supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "skills": "not-supported",
+          "web-to-docs": "not-supported"
+        },
+        "tools": "not-supported",
+        "commands": "not-supported",
+        "cliCalling": "not-supported",
+        "modelManagement": "not-supported",
+        "specializedModes": {
+          "debug": {
+            "status": "not-supported",
+            "collectionId": "junie/specializedmodes/debug"
+          },
+          "ask": {
+            "status": "supported",
+            "collectionId": "junie/specializedmodes/ask"
+          }
+        },
+        "subscriptions": []
+      }
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "features": {
+        "planMode": {
+          "dual-model": {
+            "status": "supported",
+            "collectionId": "opencode/planmode/dual-model"
+          },
+          "questions": {
+            "status": "supported",
+            "collectionId": "opencode/planmode/questions"
+          },
+          "plan-editing": "not-supported",
+          "orchestrator-mode": "not-supported",
+          "todos": {
+            "status": "partially-supported",
+            "collectionId": "opencode/planmode/todos"
+          }
+        },
+        "documentation": {
+          "filesystem": {
+            "status": "supported",
+            "collectionId": "opencode/documentation/filesystem"
+          },
+          "tree": "not-supported",
+          "multi-file": "not-supported",
+          "llms-txt": "not-supported",
+          "skills": {
+            "status": "supported",
+            "collectionId": "opencode/documentation/skills"
+          },
+          "web-to-docs": "not-supported"
+        },
+        "tools": {
+          "web-search-engine": "not-supported",
+          "fetch-data": {
+            "status": "supported",
+            "collectionId": "opencode/tools/fetch-data"
+          },
+          "browser": "not-supported",
+          "linters": {
+            "status": "supported",
+            "collectionId": "opencode/tools/linters"
+          }
+        },
+        "commands": "supported",
+        "cliCalling": "not-supported",
+        "modelManagement": {
+          "filtering": {
+            "status": "supported",
+            "collectionId": "opencode/modelmanagement/filtering"
+          },
+          "region-tuning": "not-supported"
+        },
+        "specializedModes": {
+          "debug": "not-supported",
+          "ask": {
+            "status": "partially-supported",
+            "collectionId": "opencode/specializedmodes/ask"
+          }
+        },
+        "subscriptions": [
+          {
+            "id": "zai",
+            "name": "z.ai",
+            "url": "https://z.ai/subscribe?ic=9GRH0KS07Z",
+            "description": "Creator of the <a href=\"https://z.ai/blog/glm-4.7\" target=\"_blank\" rel=\"noopener noreferrer\">GLM model family<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6\"></path><polyline points=\"15 3 21 3 21 9\"></polyline><line x1=\"10\" y1=\"14\" x2=\"21\" y2=\"3\"></line></svg></a>. Offers all GLM models via OpenAI/Anthropic-compatible APIs. Subscription includes web-search and web-parse MCPs.",
+            "pros": [
+              "Very generous token limits (up to ~800M tokens)",
+              "Strong coding capabilities (73.8% SWE-bench)"
+            ],
+            "cons": [
+              "Model slightly weaker than Opus 4.5/GPT-5.2",
+              "Higher latency (3-10s to first token)"
+            ],
+            "limits": [
+              {
+                "tier": "Lite",
+                "fiveHours": "40M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Pro",
+                "fiveHours": "200M tokens",
+                "oneWeek": "unlimited"
+              },
+              {
+                "tier": "Max",
+                "fiveHours": "800M tokens",
+                "oneWeek": "unlimited"
+              }
+            ]
+          },
+          {
+            "id": "openai",
+            "name": "OpenAI",
+            "url": "https://chatgpt.com/pricing/",
+            "description": "Creator of SOTA GPT-family models. Offers generous limits compared to API costs.",
+            "pros": [
+              "Works with any agent",
+              "Specialized coding model (Codex)",
+              "~80% cheaper than API usage"
+            ],
+            "cons": [
+              "No $100 tier — only $20 or $200 plans"
+            ]
+          },
+          {
+            "id": "copilot",
+            "name": "GitHub Copilot",
+            "url": "https://github.com/features/copilot/plans",
+            "description": "GitHub's AI coding assistant",
+            "pros": [
+              "TBD - add your pros here"
+            ],
+            "cons": [
+              "TBD - add your cons here"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
