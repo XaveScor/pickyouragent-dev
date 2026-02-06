@@ -20,7 +20,7 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
       <tr>
         <th class="feature-col">Feature</th>
         {sortedAgents.map((agent) => (
-          <th class="agent-col">
+          <th class="agent-col" data-agent-id={agent.id}>
             <span class="agent-name">{agent.name}</span>
             <ScoreBadge score={scoreByAgentId.get(agent.id)!} maxScore={maxScore} />
           </th>
@@ -105,7 +105,201 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
   td {
     padding: 0.875rem 1.25rem;
     vertical-align: middle;
+    transition: opacity 0.15s ease;
   }
+
+  /* <DOCUMENTATION-SKILL:table-hover> */
+  /* Column hover — subtle highlight on header and body cells */
+  :global(th.agent-col.column-hover) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  :global(td.column-hover) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Row hover — background on all cells */
+  :global(tbody tr:hover td) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  /* Cross intersection — cell in both hovered row and hovered column */
+  :global(tbody tr:hover td.column-hover) {
+    background-color: rgba(0, 0, 0, 0.09);
+  }
+
+  /* Dim cells outside the cross */
+  :global(table.cross-active tbody td) {
+    opacity: 0.4;
+  }
+
+  /* Un-dim cells in the hovered column */
+  :global(table.cross-active tbody td.column-hover) {
+    opacity: 1;
+  }
+
+  /* Un-dim cells in the hovered row */
+  :global(table.cross-active tbody tr:hover td) {
+    opacity: 1;
+  }
+
+  /* First column (feature names) always visible */
+  :global(table.cross-active tbody td:first-child) {
+    opacity: 1;
+  }
+  /* </DOCUMENTATION-SKILL:table-hover> */
+
+  /* <DOCUMENTATION-SKILL:cell-permalink> */
+  /* Agent cells need relative positioning for the permalink button */
+  :global(tbody td[data-agent-id]) {
+    position: relative;
+  }
+
+  /* Permalink '#' button — appears on cell hover */
+  :global(.cell-permalink) {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    font-family: monospace;
+    color: var(--text-secondary);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease, background-color 0.12s ease, color 0.12s ease;
+    z-index: 2;
+    text-decoration: none;
+    padding: 0;
+  }
+
+  :global(tbody td[data-agent-id]:hover .cell-permalink) {
+    opacity: 0.6;
+    pointer-events: auto;
+  }
+
+  :global(.cell-permalink:hover) {
+    opacity: 1 !important;
+    background-color: var(--text-primary);
+    color: var(--bg-card);
+  }
+
+  :global(.cell-permalink.copied) {
+    opacity: 1 !important;
+    background-color: #22c55e;
+    color: #fff;
+    border-color: #22c55e;
+  }
+
+  /* "Copied to clipboard" tooltip above the '#' button */
+  :global(.cell-permalink-tooltip) {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    right: 0;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+    background-color: #22c55e;
+    padding: 4px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 3;
+  }
+
+  :global(.cell-permalink-tooltip.visible) {
+    opacity: 1;
+  }
+
+  /* Hash-based highlight — applied when page loads with a cell hash */
+  :global(td.hash-highlight) {
+    background-color: rgba(0, 0, 0, 0.09);
+  }
+
+  /* Hash row highlight — mirrors tr:hover behavior for programmatic highlight */
+  :global(tbody tr.hash-row td) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  :global(tbody tr.hash-row td.column-hover) {
+    background-color: rgba(0, 0, 0, 0.09);
+  }
+
+  :global(table.cross-active tbody tr.hash-row td) {
+    opacity: 1;
+  }
+
+  /* Selected cell: zero out padding and switch to flex-column.
+     The wrapper inherits the original padding, and the remove bar spans edge-to-edge. */
+  :global(td.has-selection) {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
+  }
+
+  /* Wrapper around the original cell content, inherits the cell's normal padding */
+  :global(.cell-content-wrap) {
+    flex: 1;
+    padding: 0.875rem 1.25rem;
+  }
+
+  /* "× Remove highlight" bar — in-flow full-width strip at bottom of selected cell */
+  :global(.remove-highlight) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 22px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--text-primary);
+    background-color: rgba(0, 0, 0, 0.13);
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+  }
+
+  :global(.remove-highlight:hover) {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  /* Responsive: match wrapper padding to the original cell padding at each breakpoint */
+  @media (max-width: 900px) {
+    :global(.cell-content-wrap) {
+      padding: 0.75rem 0.75rem;
+    }
+
+    :global(.category-row .cell-content-wrap) {
+      padding: 0.9rem 0.75rem;
+    }
+
+    :global(.feature-row .cell-content-wrap) {
+      padding: 0.4rem 0.75rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    :global(.category-row .cell-content-wrap) {
+      padding: 0.8rem 0.6rem;
+    }
+
+    :global(.feature-row .cell-content-wrap) {
+      padding: 0.35rem 0.6rem;
+    }
+  }
+  /* </DOCUMENTATION-SKILL:cell-permalink> */
 
   /* Responsive */
   @media (max-width: 900px) {
@@ -156,3 +350,427 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
     }
   }
 </style>
+
+<script>
+  // <DOCUMENTATION-SKILL:cell-permalink>
+  // --- Persistent cell selection state (shared between hover and permalink systems) ---
+  let selectedCellInfo: {
+    agentId: string;
+    feature: string;
+    colIndex: number;
+  } | null = null;
+
+  // Shared "× Remove highlight" bar element (reused, repositioned between cells)
+  const removeBar = document.createElement('div');
+  removeBar.className = 'remove-highlight';
+  removeBar.textContent = '\u00d7 Remove highlight';
+  removeBar.setAttribute('role', 'button');
+  removeBar.setAttribute('aria-label', 'Remove cell highlight');
+
+  // Static versions of hover-logic helpers (used by selection highlight, outside initTableHover scope)
+  function getCellStatusStatic(cell: HTMLTableCellElement): string | null {
+    const badge = cell.querySelector('.badge');
+    if (badge) {
+      if (badge.classList.contains('supported')) return 'supported';
+      if (badge.classList.contains('partially-supported')) return 'partially-supported';
+      if (badge.classList.contains('not-supported')) return 'not-supported';
+      if (badge.classList.contains('not-verified')) return 'not-verified';
+    }
+    if (cell.querySelector('.links-list')) return 'supported';
+    return null;
+  }
+
+  function statusMatchesThresholdStatic(cellStatus: string | null, hoveredStatus: string): boolean {
+    if (!cellStatus) return false;
+    if (hoveredStatus === 'supported') {
+      return cellStatus === 'supported';
+    }
+    return cellStatus === 'supported' || cellStatus === 'partially-supported';
+  }
+
+  /**
+   * Wrap existing cell children in a .cell-content-wrap div so the cell
+   * can use flex-column layout with the remove bar as a second child.
+   * Skips the remove bar and permalink button if present. No-ops if already wrapped.
+   */
+  function wrapCellContent(cell: HTMLTableCellElement) {
+    if (cell.querySelector('.cell-content-wrap')) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'cell-content-wrap';
+    // Collect children to wrap (exclude remove bar and permalink button)
+    const children = Array.from(cell.childNodes).filter(
+      (n) => n !== removeBar && !(n instanceof HTMLElement && n.classList.contains('cell-permalink'))
+    );
+    for (const child of children) {
+      wrapper.appendChild(child);
+    }
+    cell.insertBefore(wrapper, cell.firstChild);
+  }
+
+  /**
+   * Unwrap cell content: move children out of .cell-content-wrap back
+   * into the cell directly, then remove the wrapper.
+   */
+  function unwrapCellContent(cell: HTMLTableCellElement) {
+    const wrapper = cell.querySelector('.cell-content-wrap');
+    if (!wrapper) return;
+    while (wrapper.firstChild) {
+      cell.insertBefore(wrapper.firstChild, wrapper);
+    }
+    wrapper.remove();
+  }
+
+  /**
+   * Apply the full cross-highlight for the currently selected cell.
+   * Reads selectedCellInfo and applies column-hover, row-highlight,
+   * cross-active, hash-highlight, hash-row, and the in-flow remove bar.
+   */
+  function applySelectedHighlight(table: HTMLTableElement) {
+    if (!selectedCellInfo) return;
+
+    const { agentId, feature, colIndex } = selectedCellInfo;
+    const targetCell = table.querySelector(
+      `td[data-agent-id="${CSS.escape(agentId)}"][data-feature="${CSS.escape(feature)}"]`
+    ) as HTMLTableCellElement | null;
+    if (!targetCell) return;
+
+    const row = targetCell.closest('tr') as HTMLTableRowElement | null;
+    if (!row) return;
+
+    // Cross-active dimming
+    table.classList.add('cross-active');
+
+    // Column highlight
+    const allRows = table.querySelectorAll('tr');
+    allRows.forEach((r) => {
+      const cell = (r as HTMLTableRowElement).cells[colIndex];
+      if (cell) cell.classList.add('column-hover');
+    });
+
+    // Smart row highlight
+    const hoveredStatus = getCellStatusStatic(targetCell);
+    if (hoveredStatus) {
+      const featureCell = row.cells[0];
+      if (featureCell) featureCell.classList.add('row-highlight');
+      for (let i = 1; i < row.cells.length; i++) {
+        const sibling = row.cells[i];
+        const siblingStatus = getCellStatusStatic(sibling);
+        if (siblingStatus && statusMatchesThresholdStatic(siblingStatus, hoveredStatus)) {
+          sibling.classList.add('row-highlight');
+        }
+      }
+    }
+
+    // Hash-specific classes
+    targetCell.classList.add('hash-highlight');
+    row.classList.add('hash-row');
+
+    // Switch cell to flex-column layout and append the in-flow remove bar
+    wrapCellContent(targetCell);
+    targetCell.classList.add('has-selection');
+    targetCell.appendChild(removeBar);
+  }
+
+  /**
+   * Temporarily remove hash-highlight visual classes without clearing selectedCellInfo.
+   * Called when the hover system takes over (user hovers another cell).
+   * The remove bar stays in the selected cell — it is only removed on full dismiss.
+   */
+  function clearSelectedHighlight(table: HTMLTableElement) {
+    table.querySelectorAll('.hash-highlight').forEach((el) => el.classList.remove('hash-highlight'));
+    table.querySelectorAll('.hash-row').forEach((el) => el.classList.remove('hash-row'));
+  }
+
+  /**
+   * Fully dismiss the selection: clear selectedCellInfo, remove all highlight
+   * classes, restore the cell DOM, and clean the URL hash.
+   */
+  function dismissSelection(table: HTMLTableElement) {
+    // Restore the selected cell's DOM before clearing state
+    const prevCell = table.querySelector('td.has-selection') as HTMLTableCellElement | null;
+    if (prevCell) {
+      removeBar.remove();
+      prevCell.classList.remove('has-selection');
+      unwrapCellContent(prevCell);
+    }
+
+    selectedCellInfo = null;
+    table.querySelectorAll('.column-hover').forEach((el) => el.classList.remove('column-hover'));
+    table.querySelectorAll('.row-highlight').forEach((el) => el.classList.remove('row-highlight'));
+    table.querySelectorAll('.hash-highlight').forEach((el) => el.classList.remove('hash-highlight'));
+    table.querySelectorAll('.hash-row').forEach((el) => el.classList.remove('hash-row'));
+    table.classList.remove('cross-active');
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+  // </DOCUMENTATION-SKILL:cell-permalink>
+
+  // <DOCUMENTATION-SKILL:table-hover>
+  function initTableHover() {
+    const table = document.querySelector('.table-card table');
+    if (!table) return;
+
+    let currentCol = -1;
+    let currentRow: HTMLTableRowElement | null = null;
+
+    function getCellStatus(cell: HTMLTableCellElement): string | null {
+      const badge = cell.querySelector('.badge');
+      if (badge) {
+        if (badge.classList.contains('supported')) return 'supported';
+        if (badge.classList.contains('partially-supported')) return 'partially-supported';
+        if (badge.classList.contains('not-supported')) return 'not-supported';
+        if (badge.classList.contains('not-verified')) return 'not-verified';
+      }
+      // Subscription cells with links count as supported
+      if (cell.querySelector('.links-list')) return 'supported';
+      return null;
+    }
+
+    function statusMatchesThreshold(cellStatus: string | null, hoveredStatus: string): boolean {
+      if (!cellStatus) return false;
+      if (hoveredStatus === 'supported') {
+        return cellStatus === 'supported';
+      }
+      // For not-supported, not-verified, partially-supported: highlight partial + supported
+      return cellStatus === 'supported' || cellStatus === 'partially-supported';
+    }
+
+    function clearColumnHover() {
+      const hovered = table!.querySelectorAll('.column-hover');
+      hovered.forEach((el) => el.classList.remove('column-hover'));
+      currentCol = -1;
+    }
+
+    function clearRowHighlight() {
+      const highlighted = table!.querySelectorAll('.row-highlight');
+      highlighted.forEach((el) => el.classList.remove('row-highlight'));
+      currentRow = null;
+    }
+
+    function applyColumnHover(colIndex: number) {
+      if (colIndex === currentCol) return;
+      clearColumnHover();
+      if (colIndex <= 0) return;
+      currentCol = colIndex;
+
+      const rows = table!.querySelectorAll('tr');
+      rows.forEach((row) => {
+        const cell = row.cells[colIndex];
+        if (cell) cell.classList.add('column-hover');
+      });
+    }
+
+    function applyRowHighlight(td: HTMLTableCellElement, row: HTMLTableRowElement) {
+      if (row === currentRow) return;
+      clearRowHighlight();
+      currentRow = row;
+
+      const hoveredStatus = getCellStatus(td);
+      if (!hoveredStatus) return;
+
+      // Always highlight the feature-name cell (column 0)
+      const featureCell = row.cells[0];
+      if (featureCell) featureCell.classList.add('row-highlight');
+
+      // Check each sibling agent cell
+      for (let i = 1; i < row.cells.length; i++) {
+        const sibling = row.cells[i];
+        const siblingStatus = getCellStatus(sibling);
+        if (statusMatchesThreshold(siblingStatus, hoveredStatus)) {
+          sibling.classList.add('row-highlight');
+        }
+      }
+    }
+
+    table.addEventListener('mouseover', (e) => {
+      const cell = (e.target as HTMLElement).closest('td, th') as HTMLTableCellElement | null;
+      if (!cell) return;
+
+      // When a selection is active, temporarily clear its visual classes
+      // so the hover system can highlight the currently hovered cell instead.
+      if (selectedCellInfo) {
+        clearSelectedHighlight(table as HTMLTableElement);
+      }
+
+      const colIndex = cell.cellIndex;
+      applyColumnHover(colIndex);
+
+      // Toggle cross-active dim effect when hovering agent columns
+      if (colIndex > 0) {
+        table!.classList.add('cross-active');
+      } else {
+        table!.classList.remove('cross-active');
+      }
+
+      // Row highlight only for body cells in agent columns
+      const row = cell.closest('tbody tr') as HTMLTableRowElement | null;
+      if (row && colIndex > 0) {
+        applyRowHighlight(cell, row);
+      } else {
+        clearRowHighlight();
+      }
+    });
+
+    table.addEventListener('mouseleave', () => {
+      clearColumnHover();
+      clearRowHighlight();
+      table!.classList.remove('cross-active');
+
+      // When the mouse leaves the table, re-apply the selected cell highlight
+      if (selectedCellInfo) {
+        applySelectedHighlight(table as HTMLTableElement);
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initTableHover);
+  initTableHover();
+  // </DOCUMENTATION-SKILL:table-hover>
+
+  // <DOCUMENTATION-SKILL:cell-permalink>
+  /**
+   * Cell permalink button ("#"), persistent selection, and hash-based highlight restore.
+   *
+   * - On hover over an agent cell, shows a small "#" button in the top-right corner.
+   * - Clicking it copies a stable URL (with hash) to the clipboard.
+   * - When the page loads with a hash like #claude-code!planmode/dual-mode,
+   *   the table applies a persistent cross-highlight on that cell.
+   * - The highlight persists until the user clicks "× Remove highlight" in the cell,
+   *   or is temporarily replaced when hovering another cell.
+   */
+  function initCellPermalink() {
+    const table = document.querySelector('.table-card table') as HTMLTableElement | null;
+    if (!table) return;
+
+    // --- Shared permalink button + tooltip elements (reused across cells) ---
+    const permalinkBtn = document.createElement('button');
+    permalinkBtn.className = 'cell-permalink';
+    permalinkBtn.textContent = '#';
+    permalinkBtn.setAttribute('aria-label', 'Copy link to this cell');
+
+    const tooltip = document.createElement('span');
+    tooltip.className = 'cell-permalink-tooltip';
+    tooltip.textContent = 'Copied to clipboard';
+    permalinkBtn.appendChild(tooltip);
+
+    let currentPermalinkCell: HTMLTableCellElement | null = null;
+    let copiedTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    function showPermalink(cell: HTMLTableCellElement) {
+      if (cell === currentPermalinkCell) return;
+      // Only show on agent body cells (those with data-agent-id and data-feature)
+      if (!cell.dataset.agentId || !cell.dataset.feature) return;
+
+      currentPermalinkCell = cell;
+      // Reset visual state
+      permalinkBtn.classList.remove('copied');
+      tooltip.classList.remove('visible');
+      cell.appendChild(permalinkBtn);
+    }
+
+    function hidePermalink() {
+      if (currentPermalinkCell) {
+        permalinkBtn.remove();
+        currentPermalinkCell = null;
+      }
+    }
+
+    // Attach to table mouseover for showing the button
+    table.addEventListener('mouseover', (e) => {
+      const cell = (e.target as HTMLElement).closest('td[data-agent-id]') as HTMLTableCellElement | null;
+      if (cell) {
+        showPermalink(cell);
+      }
+    });
+
+    table.addEventListener('mouseleave', () => {
+      hidePermalink();
+    });
+
+    // Click handler for the permalink button
+    permalinkBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      if (!currentPermalinkCell) return;
+      const agentId = currentPermalinkCell.dataset.agentId;
+      const feature = currentPermalinkCell.dataset.feature;
+      if (!agentId || !feature) return;
+
+      const hash = `#${agentId}!${feature}`;
+      const url = `${location.origin}${location.pathname}${hash}`;
+
+      // Activate persistent selection on the clicked cell
+      const colIndex = currentPermalinkCell.cellIndex;
+      if (colIndex > 0) {
+        // Dismiss any previous selection first
+        if (selectedCellInfo) {
+          dismissSelection(table);
+        }
+        selectedCellInfo = { agentId, feature, colIndex };
+        // Wrap content and add the remove bar now; the full cross-highlight
+        // will apply once the user moves away from the table (mouseleave).
+        wrapCellContent(currentPermalinkCell);
+        currentPermalinkCell.classList.add('has-selection');
+        currentPermalinkCell.appendChild(removeBar);
+      }
+
+      navigator.clipboard.writeText(url).then(() => {
+        // Visual feedback on button
+        permalinkBtn.classList.add('copied');
+
+        // Show tooltip
+        tooltip.classList.add('visible');
+
+        if (copiedTimeout) clearTimeout(copiedTimeout);
+        copiedTimeout = setTimeout(() => {
+          permalinkBtn.classList.remove('copied');
+          tooltip.classList.remove('visible');
+        }, 1500);
+      });
+    });
+
+    // Click handler for the "× Remove highlight" bar
+    removeBar.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      dismissSelection(table);
+    });
+
+    // --- Hash-based highlight restore on page load ---
+    restoreHashHighlight(table);
+  }
+
+  function restoreHashHighlight(table: HTMLTableElement) {
+    const hash = location.hash;
+    if (!hash) return;
+
+    // Parse hash: #agentId!featureSlug or #agentId!featureSlug/subfeatureSlug
+    const match = hash.slice(1).match(/^([^!]+)!(.+)$/);
+    if (!match) return;
+
+    const [, agentId, feature] = match;
+
+    // Find the target cell by data attributes to validate the hash
+    const targetCell = table.querySelector(
+      `td[data-agent-id="${CSS.escape(agentId)}"][data-feature="${CSS.escape(feature)}"]`
+    ) as HTMLTableCellElement | null;
+    if (!targetCell) return;
+
+    const row = targetCell.closest('tr') as HTMLTableRowElement | null;
+    if (!row) return;
+
+    const colIndex = targetCell.cellIndex;
+    if (colIndex <= 0) return;
+
+    // Store the selection and apply the persistent highlight
+    selectedCellInfo = { agentId, feature, colIndex };
+    applySelectedHighlight(table);
+
+    // Scroll the target cell into view
+    targetCell.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+  }
+
+  document.addEventListener('astro:page-load', initCellPermalink);
+  initCellPermalink();
+  // </DOCUMENTATION-SKILL:cell-permalink>
+</script>

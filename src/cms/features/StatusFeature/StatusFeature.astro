@@ -11,9 +11,10 @@ interface Props {
   slug: string;
   statuses: Array<Status>;
   weight: number;
+  agentIds: string[];
 }
 
-const { name, mainColor, secondaryColor, slug, statuses, weight } = Astro.props;
+const { name, mainColor, secondaryColor, slug, statuses, weight, agentIds } = Astro.props;
 ---
 
 <tr class="category-row" style={`--main-feature-color: ${mainColor}; --secondary-feature-color: ${secondaryColor}`}>
@@ -23,9 +24,9 @@ const { name, mainColor, secondaryColor, slug, statuses, weight } = Astro.props;
       </InternalLink>
       <PointsBadge points={weight} />
     </td>
-    {statuses.map((status) => {
+    {statuses.map((status, i) => {
       return (
-        <td>
+        <td data-agent-id={agentIds[i]} data-feature={slug}>
           <FeatureCell status={status} />
         </td>
       );

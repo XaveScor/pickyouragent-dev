@@ -8,13 +8,15 @@ interface Props {
   mainColor: string;
   secondaryColor: string;
   featureLink: string;
+  featureSlug: string;
   slug: string;
   name: string;
   statuses: Array<Status>;
   weight: number;
+  agentIds: string[];
 }
 
-const {featureLink, name, slug, secondaryColor, mainColor, statuses, weight} = Astro.props;
+const {featureLink, featureSlug, name, slug, secondaryColor, mainColor, statuses, weight, agentIds} = Astro.props;
 ---
 
 <tr class="feature-row" style={`--main-feature-color: ${mainColor}; --secondary-feature-color: ${secondaryColor}`}>
@@ -24,9 +26,9 @@ const {featureLink, name, slug, secondaryColor, mainColor, statuses, weight} = A
     </InternalLink>
     <PointsBadge points={weight} size="small" />
   </td>
-  {statuses.map((status) => {
+  {statuses.map((status, i) => {
     return (
-      <td>
+      <td data-agent-id={agentIds[i]} data-feature={`${featureSlug}/${slug}`}>
         <FeatureCell status={status} />
       </td>
     );

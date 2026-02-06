@@ -9,9 +9,10 @@ interface Props {
   secondaryColor: string;
   slug: string;
   linksByAgent: Array<SubscriptionLink[]>;
+  agentIds: string[];
 }
 
-const { name, mainColor, secondaryColor, slug, linksByAgent } = Astro.props;
+const { name, mainColor, secondaryColor, slug, linksByAgent, agentIds } = Astro.props;
 ---
 
 <tr class="category-row" style={`--main-feature-color: ${mainColor}; --secondary-feature-color: ${secondaryColor}`}>
@@ -20,9 +21,9 @@ const { name, mainColor, secondaryColor, slug, linksByAgent } = Astro.props;
         {name}
       </InternalLink>
     </td>
-    {linksByAgent.map((links) => {
+    {linksByAgent.map((links, i) => {
       return (
-        <td>
+        <td data-agent-id={agentIds[i]} data-feature={slug}>
           <FeatureCell links={links} mainColor={mainColor} />
         </td>
       );
