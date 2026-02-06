@@ -79,6 +79,10 @@ const icon = (status === Status.NotSupported)
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
+    /* <DOCUMENTATION-SKILL:table-hover> */
+    border: 2px solid transparent;
+    transition: border-color 0.15s ease;
+    /* </DOCUMENTATION-SKILL:table-hover> */
   }
 
   .badge-icon {
@@ -125,6 +129,19 @@ const icon = (status === Status.NotSupported)
   .badge.not-verified .badge-icon {
     color: var(--badge-not-verified-icon);
   }
+
+  /* <DOCUMENTATION-SKILL:table-hover> */
+  /* Column/row hover contrast mode — bold border on supported/partial badges */
+  :global(.column-hover) .badge.supported,
+  :global(.row-highlight) .badge.supported {
+    border-color: var(--badge-supported-icon);
+  }
+
+  :global(.column-hover) .badge.partially-supported,
+  :global(.row-highlight) .badge.partially-supported {
+    border-color: var(--badge-partial-icon);
+  }
+  /* </DOCUMENTATION-SKILL:table-hover> */
 
   /* Smaller badges for feature rows */
   :global(.feature-row) .badge {

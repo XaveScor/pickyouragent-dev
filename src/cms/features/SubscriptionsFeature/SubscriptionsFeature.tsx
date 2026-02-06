@@ -82,6 +82,7 @@ class ParsedSubscriptionsFeature implements ParsedFeature {
         linksByAgent: sortedAgentIds.map(
           (id) => this.linksByAgentId.get(id) ?? [],
         ),
+        agentIds: sortedAgentIds,
       },
     };
   }

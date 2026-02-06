@@ -116,6 +116,7 @@ class ParsedStatusFeature<
           (id) => this.statusByAgentId.get(id) ?? Status.NotSupported,
         ),
         weight: this.meta.weight,
+        agentIds: sortedAgentIds,
       },
       subfeatures: this.parsedSubfeatures.map((subfeature) => ({
         Component: SubfeatureComponent,
@@ -123,12 +124,14 @@ class ParsedStatusFeature<
           mainColor: this.meta.mainColor,
           secondaryColor: this.meta.secondaryColor,
           featureLink,
+          featureSlug: this.meta.slug,
           slug: subfeature.slug,
           name: subfeature.displayName,
           statuses: sortedAgentIds.map(
             (id) => subfeature.statusByAgent.get(id) ?? Status.NotSupported,
           ),
           weight: subfeature.weight,
+          agentIds: sortedAgentIds,
         },
       })),
     };
