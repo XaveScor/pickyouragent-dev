@@ -241,22 +241,17 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
     opacity: 1;
   }
 
-  /* Selected cell: zero out padding and switch to flex-column.
-     The wrapper inherits the original padding, and the remove bar spans edge-to-edge. */
+  /* Selected cell: keep table-cell display, add bottom padding for the remove bar. */
   :global(td.has-selection) {
-    display: flex;
-    flex-direction: column;
-    padding: 0 !important;
+    padding-bottom: 22px !important;
   }
 
-  /* Wrapper around the original cell content, inherits the cell's normal padding */
-  :global(.cell-content-wrap) {
-    flex: 1;
-    padding: 0.875rem 1.25rem;
-  }
-
-  /* "× Remove highlight" bar — in-flow full-width strip at bottom of selected cell */
+  /* "× Remove highlight" bar — absolutely positioned at cell bottom edge */
   :global(.remove-highlight) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -273,31 +268,6 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
 
   :global(.remove-highlight:hover) {
     background-color: rgba(0, 0, 0, 0.2);
-  }
-
-  /* Responsive: match wrapper padding to the original cell padding at each breakpoint */
-  @media (max-width: 900px) {
-    :global(.cell-content-wrap) {
-      padding: 0.75rem 0.75rem;
-    }
-
-    :global(.category-row .cell-content-wrap) {
-      padding: 0.9rem 0.75rem;
-    }
-
-    :global(.feature-row .cell-content-wrap) {
-      padding: 0.4rem 0.75rem;
-    }
-  }
-
-  @media (max-width: 600px) {
-    :global(.category-row .cell-content-wrap) {
-      padding: 0.8rem 0.6rem;
-    }
-
-    :global(.feature-row .cell-content-wrap) {
-      padding: 0.35rem 0.6rem;
-    }
   }
   /* </DOCUMENTATION-SKILL:cell-permalink> */
 
@@ -389,38 +359,6 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
   }
 
   /**
-   * Wrap existing cell children in a .cell-content-wrap div so the cell
-   * can use flex-column layout with the remove bar as a second child.
-   * Skips the remove bar and permalink button if present. No-ops if already wrapped.
-   */
-  function wrapCellContent(cell: HTMLTableCellElement) {
-    if (cell.querySelector('.cell-content-wrap')) return;
-    const wrapper = document.createElement('div');
-    wrapper.className = 'cell-content-wrap';
-    // Collect children to wrap (exclude remove bar and permalink button)
-    const children = Array.from(cell.childNodes).filter(
-      (n) => n !== removeBar && !(n instanceof HTMLElement && n.classList.contains('cell-permalink'))
-    );
-    for (const child of children) {
-      wrapper.appendChild(child);
-    }
-    cell.insertBefore(wrapper, cell.firstChild);
-  }
-
-  /**
-   * Unwrap cell content: move children out of .cell-content-wrap back
-   * into the cell directly, then remove the wrapper.
-   */
-  function unwrapCellContent(cell: HTMLTableCellElement) {
-    const wrapper = cell.querySelector('.cell-content-wrap');
-    if (!wrapper) return;
-    while (wrapper.firstChild) {
-      cell.insertBefore(wrapper.firstChild, wrapper);
-    }
-    wrapper.remove();
-  }
-
-  /**
    * Apply the full cross-highlight for the currently selected cell.
    * Reads selectedCellInfo and applies column-hover, row-highlight,
    * cross-active, hash-highlight, hash-row, and the in-flow remove bar.
@@ -465,8 +403,7 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
     targetCell.classList.add('hash-highlight');
     row.classList.add('hash-row');
 
-    // Switch cell to flex-column layout and append the in-flow remove bar
-    wrapCellContent(targetCell);
+    // Add selection class and append the absolutely-positioned remove bar
     targetCell.classList.add('has-selection');
     targetCell.appendChild(removeBar);
   }
@@ -491,7 +428,6 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
     if (prevCell) {
       removeBar.remove();
       prevCell.classList.remove('has-selection');
-      unwrapCellContent(prevCell);
     }
 
     selectedCellInfo = null;
@@ -707,9 +643,8 @@ const { sortedAgents, features, maxScore, scoreByAgentId } = await table.getTabl
           dismissSelection(table);
         }
         selectedCellInfo = { agentId, feature, colIndex };
-        // Wrap content and add the remove bar now; the full cross-highlight
+        // Add the remove bar now; the full cross-highlight
         // will apply once the user moves away from the table (mouseleave).
-        wrapCellContent(currentPermalinkCell);
         currentPermalinkCell.classList.add('has-selection');
         currentPermalinkCell.appendChild(removeBar);
       }

@@ -32,7 +32,7 @@ After a successful copy, the "#" button turns green with a checkmark, and a "Cop
 
 ### Persistent Cell Selection
 
-Both the "#" button click and loading a page with a hash activate a **persistent selection** on the target cell. The selection is visible as the full cross-highlight effect (column hover, smart row highlight, cross dimming, extra background) plus an in-flow "× Remove highlight" bar at the bottom of the cell.
+Both the "#" button click and loading a page with a hash activate a **persistent selection** on the target cell. The selection is visible as the full cross-highlight effect (column hover, smart row highlight, cross dimming, extra background) plus a "× Remove highlight" bar at the bottom of the cell.
 
 The selection behaves as follows:
 
@@ -42,13 +42,12 @@ The selection behaves as follows:
 
 ### "× Remove highlight" Bar
 
-The bar is an in-flow element inside the selected cell (not an overlay). When a cell is selected:
+The bar is absolutely positioned at the bottom edge of the selected cell. When a cell is selected:
 
-1. The cell's existing children are wrapped in a `.cell-content-wrap` div.
-2. The cell switches to `display: flex; flex-direction: column` (via `.has-selection` class) with zero padding. The wrapper inherits the original cell padding.
-3. The remove bar is appended as a second flex child, spanning the full cell width edge-to-edge.
+1. The cell gains the `.has-selection` class, which adds extra bottom padding (22px) to prevent content from overlapping the bar.
+2. The remove bar is appended to the cell and positioned via `position: absolute; bottom: 0; left: 0; right: 0`, spanning the full cell width edge-to-edge.
 
-This makes the cell visually split into two areas: the content area on top and the remove bar at the bottom.
+The cell stays as `display: table-cell` (no layout change), so it naturally stretches to match the row height set by taller sibling cells. The bar always sits at the very bottom of the cell regardless of how tall the row is.
 
 ### Hash-Based Highlight Restore
 
@@ -76,8 +75,7 @@ These attributes are threaded from the data layer (`StatusFeature.tsx`, `Subscri
 - **Single shared remove bar element**: One `<div>` is created and moved into the selected cell. Only one cell can be selected at a time.
 - **URL not modified on copy**: Clicking "#" only copies to clipboard. The browser address bar stays unchanged so users don't accumulate unwanted history entries.
 - **Persistent selection with hover coordination**: The selection highlight coexists with the hover system. On `mouseover`, the hash-specific classes (`.hash-highlight`, `.hash-row`) are temporarily cleared so the hover system can highlight the hovered cell. On `mouseleave`, the selection highlight is re-applied via `applySelectedHighlight()`. The "× Remove highlight" bar remains visible at all times (even during hover).
-- **In-flow remove bar**: The bar is part of the cell's normal document flow (not absolutely positioned). The cell uses flex-column layout (`.has-selection`) with a content wrapper (`.cell-content-wrap`) and the bar as siblings. This ensures the bar is a true part of the cell rather than an overlay.
-- **Content wrapping/unwrapping**: `wrapCellContent()` moves the cell's children into a `.cell-content-wrap` div. `unwrapCellContent()` reverses this. The wrapper excludes the remove bar and permalink button elements.
+- **Absolutely positioned remove bar**: The bar uses `position: absolute; bottom: 0` inside the already-relative cell (`tbody td[data-agent-id]` has `position: relative`). The `.has-selection` class adds bottom padding to prevent content from being hidden behind the bar. This approach keeps the cell as `display: table-cell`, so it naturally stretches to match the row height — solving the bug where flex layout caused the cell to collapse to its content height when sibling cells were taller.
 - **Smooth scroll to center**: `scrollIntoView({ behavior: 'smooth', block: 'center' })` positions the cell in the middle of the viewport so the user sees surrounding context.
 - **Hash row class**: Since `:hover` CSS pseudo-class doesn't apply to programmatic highlights, a `.hash-row` class on the `<tr>` mirrors the `tr:hover td` background and opacity rules.
 - **Static helper functions**: `getCellStatusStatic` and `statusMatchesThresholdStatic` duplicate the hover system's logic because the originals are scoped inside `initTableHover`. This keeps the two systems decoupled.
